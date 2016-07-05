@@ -1,0 +1,22 @@
+{
+	"chart": {
+		"caption": "Caption",
+		"subcaption": "Sub caption",
+		"xAxisName": "time",
+		"time": ["Jan", "Feb", "March", "April", "May", "June"],
+		"plot": [
+
+			{
+				"yAxisName": "title1",
+				"data": ["123", "234", "567", "987", "123", "234"]
+
+			}, {
+				"yAxisName": "title2",
+				"data": ["11000", "14000", "10500", "15000", "11000", "15000"]
+			}, {
+				"yAxisName": "title3",
+				"data": ["110", "140", "105", "150", "110", "140"]
+			}
+		]
+	}
+}
