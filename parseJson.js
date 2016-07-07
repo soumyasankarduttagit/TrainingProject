@@ -105,7 +105,8 @@ function parseJsonData(json)
 			//Creation of Tick Object to store individual chart Y-Axis tick values
 			var yAxisTick = new Object();
  			yAxisTick.numOfYTickValues;
-			//yAxisTick.DivLineValues= new Array();
+ 			//Defining an array to hold different divline(tick) values.
+			yAxisTick.DivLineValues= new Array();
 			yAxisTick.stepValue;
 			yAxisTick.niceMaxExactDivValue;
  			yAxisTick.niceMinExactDivValue;
@@ -229,7 +230,8 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	yAxisTick.niceMaxExactDivValue=exactNiceMaxValue;
  	yAxisTick.niceMinExactDivValue= exactNiceMinValue;
 	yAxisTick.stepValue=stepValue;
- 	//yAxisTick.DivLineValues=divLineValues;
+	//Storing divline(tick) values in the yAxisTick object property.
+ 	yAxisTick.DivLineValues=divLineValues;
  	yAxisTick.numOfYTickValues=divLineValues.length;
 
 }
