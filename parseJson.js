@@ -107,7 +107,8 @@ function parseJsonData(json)
  			yAxisTick.numOfYTickValues;
  			//Declaration of Array to hold different divline(tick) values
 			yAxisTick.DivLineValues= new Array();
-			//holding the step values.
+ 			//Defining an array to hold different divline(tick) values.
+			yAxisTick.DivLineValues= new Array();
 			yAxisTick.stepValue;
 			yAxisTick.niceMaxExactDivValue;
  			yAxisTick.niceMinExactDivValue;
@@ -148,7 +149,6 @@ function getXAxisTicks(chartObject,xAxisTick)
 function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 {
 
-	//Declaration variables
 	var maxValue = maxYAxisValue;
 	var minValue = minYAxisValue;
 	//Rounding-up maximum and minimum values
@@ -177,7 +177,6 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	var niceMaxRangeValue,niceMinRangeValue;
 	var mininterval="1";
 	var maxinterval="1";
-	//calculating number of digits
 	var niceMaxValueDigit = parseInt(String(niceMaxValue).length);
 	var niceMinValueDigit = parseInt(String(niceMinValue).length);
 	var i,j;
@@ -233,7 +232,11 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	yAxisTick.niceMaxExactDivValue=exactNiceMaxValue;
  	yAxisTick.niceMinExactDivValue= exactNiceMinValue;
 	yAxisTick.stepValue=stepValue;
+<<<<<<< HEAD
 	//assigning different divline(tick) values.
+=======
+	//Storing divline(tick) values in the yAxisTick object property.
+>>>>>>> develop
  	yAxisTick.DivLineValues=divLineValues;
  	yAxisTick.numOfYTickValues=divLineValues.length;
 
