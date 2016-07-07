@@ -177,6 +177,7 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	var niceMaxRangeValue,niceMinRangeValue;
 	var mininterval="1";
 	var maxinterval="1";
+	//calculating number of digits
 	var niceMaxValueDigit = parseInt(String(niceMaxValue).length);
 	var niceMinValueDigit = parseInt(String(niceMinValue).length);
 	var i,j;
