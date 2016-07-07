@@ -232,11 +232,10 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	yAxisTick.niceMaxExactDivValue=exactNiceMaxValue;
  	yAxisTick.niceMinExactDivValue= exactNiceMinValue;
 	yAxisTick.stepValue=stepValue;
-<<<<<<< HEAD
+
 	//assigning different divline(tick) values.
-=======
 	//Storing divline(tick) values in the yAxisTick object property.
->>>>>>> develop
+
  	yAxisTick.DivLineValues=divLineValues;
  	yAxisTick.numOfYTickValues=divLineValues.length;
 
