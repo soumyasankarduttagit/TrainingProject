@@ -257,10 +257,21 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 
 }
 //
-function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle)
+function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,caption,subCaption)
 			{
+				
 				var height =chartheight;
 				var width = chartwidth;
+				var xCordArr = new Array();
+				var yCordarr = new Array();
+				var plotSliceCollection = new Array();
+				
+				
+				
+				for(var g = 0;g<plotSliceCollection.length;g++)
+				{
+					console.log("$$$$$$$$$$$$$$$min value"+plotSliceCollection[g].minValue);
+				}
 
 				var NS="http://www.w3.org/2000/svg";
 				var svg=document.createElementNS(NS,"svg");
@@ -300,7 +311,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				text.setAttribute("font-size","'"+hfontsize+"'");
 				text.textContent = xTitle;
 				var text1 = document.createElementNS(NS,"text");
-				text1.setAttribute("x",10);
+				text1.setAttribute("x",width/4);
 				text1.setAttribute("y",(7*height)/12);
 				text1.setAttribute("fill", "#000000");
 		
@@ -308,7 +319,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				text1.textContent = yTitle;
 				text1.classList.add("rotate");
 				var divLineValues= yTickDetails.DivLineValues;
-				console.log("----------"+divLineValues+"---------");
+				
 				var niceMaxDivLineValues = yTickDetails.niceMaxExactDivValue;
 				var niceMinDivLineValue = yTickDetails.niceMinExactDivValue;
 				var numTickValue= yTickDetails.numOfYTickValues;
@@ -334,11 +345,15 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					yLabel.setAttribute("fill", "#000000");
 					yLabel.setAttribute("font-size","'"+hfontsize+"'");
 					yLabel.textContent = divLineValues[k];
-					console.log( divLineValues[j]);
+					var yMapping = new Object();
+					yMapping.yCordinate= l2y1val-(k*step);
+					yMapping.value= divLineValues[k];
+					yCordarr.push(yMapping);
 					svg.appendChild(divln);
 					svg.appendChild(yLabel);
 
 				}
+
 
 				for(var j=0;j<(numOfXTick+1);j++)
 				{
@@ -359,24 +374,74 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					var tickCordinate = new Object();
 					tickCordinate.X= l2x1val+(j*step);
 					tickCordinate.Y= (height*7)/10;
-					var xLabel = createXLabel(j,tickCordinate,xLabels);
+					var xMapping = new Object();
+					xMapping.xCordinate;
+					xMapping.Value;
+					
+					var xLabel = createXLabel(j,tickCordinate,xLabels,xMapping);
+
+					xCordArr.push(xMapping);
+
 					svg.appendChild(xTick);
 					svg.appendChild(xLabel);
-				}
 
+				}
+				
+				for(var t =0,u=1;t<yCordarr.length-1;t++,u++)
+				{
+					console.log("y value"+yCordarr[t].value);
+					 console.log("y cordinate"+yCordarr[t].yCordinate);
+					var plotSlice = new Object();
+					plotSlice.minValue= yCordarr[t].value;
+					plotSlice.maxValue= yCordarr[u].value;
+					plotSlice.minCordinate= yCordarr[t].yCordinate;
+					plotSlice.maxCordinate= yCordarr[u].yCordinate;
+					plotSliceCollection.push(plotSlice);
+				}
+				
+
+				var plotCircles =drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData);
+				
+				var prevX=0;
+				var prevY=0;
+				for(var c =0;c<plotCircles.length;c++)
+				{
+
+					var plotCircle = document.createElementNS(NS,"circle");
+					plotCircle.setAttributeNS(null, "cx", plotCircles[c].x);
+					plotCircle.setAttributeNS(null, "cy", plotCircles[c].y);
+					plotCircle.setAttributeNS(null, "r",  4);
+					plotCircle.setAttributeNS(null, "fill", "green");
+					svg.appendChild(plotCircle);
+					if((prevX!=0)&&(prevY!=0))
+					{
+					var linkLine = document.createElementNS(NS,"line");
+					 linkLine.setAttribute("x1",prevX);
+					 linkLine.setAttribute("x2",plotCircles[c].x);
+					linkLine.setAttribute("y1",prevY);
+					linkLine.setAttribute("y2",plotCircles[c].y);
+					linkLine.setAttribute("stroke","green");
+					svg.appendChild(linkLine);
+					}
+					prevX=plotCircles[c].x;
+					prevY= plotCircles[c].y;
+					
+
+				}
+				
 				svg.appendChild(text);
 				svg.appendChild(text1);
 				svg.appendChild(line);
 				svg.appendChild(line1);
 				var div = document.createElement("div");
-				  div.style.position = "relative";
-				 div.style.left = (width/5)+"px";
+				 div.style.position = "relative";
+				div.style.left = (width/5)+"px";
 				div.style.top =  (height/6)+"px";
 				div.appendChild(svg);
 				document.body.appendChild(div);
 				
 			}
-			function createXLabel(j,tickCordinate,xLabels)
+			function createXLabel(j,tickCordinate,xLabels,xMapping)
 			{	var NS="http://www.w3.org/2000/svg";
 				var hfontsize = width/40;
 					var xLabel = document.createElementNS(NS,"text");
@@ -386,8 +451,77 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					xLabel.setAttribute("font-size","'"+hfontsize+"'");
 					xLabel.textContent = xLabels[j-1];
 					xLabel.classList.add("rotate");
+					xMapping.Value=xLabels[j-1];
+					xMapping.xCordinate=tickCordinate.X;
+					
 					return xLabel;
 			}
+			
+
+			function drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData)
+			{
+				var dataPlotCollection = new Array();
+				
+				for(var d=0;d<plotData.length;d++)
+				{
+
+					var plotXValue = plotData[d].label;
+					var plotYValue = plotData[d].value;
+					var plotXCordinate=0;
+					var plotYCordinate=0;
+					for(var t=0;t<xCordArr.length;t++)
+					{
+						if(xCordArr[t].Value==plotXValue)
+						{
+							plotXCordinate= xCordArr[t].xCordinate;
+							
+							break;
+						}
+						
+						
+					}
+					for(var p=0;p<plotSliceCollection.length;p++)
+					{
+						console.log("max"+plotSliceCollection[p].maxValue);
+						console.log("min"+plotSliceCollection[p].minValue);
+						if(plotYValue>plotSliceCollection[p].minValue || plotYValue<plotSliceCollection[p].maxValue)
+						{
+							//console.log("max"+plotSliceCollection[p].maxValue);
+							//console.log("min"+plotSliceCollection[p].minCordinate)
+							var valueRange = plotSliceCollection[p].maxValue-plotSliceCollection[p].minValue;
+							console.log("valuerange"+valueRange);
+							var cordinateRange = plotSliceCollection[p].maxCordinate-plotSliceCollection[p].minCordinate;
+							console.log("cordinate range"+cordinateRange);
+
+							var pixcelValue = valueRange/cordinateRange;
+							var valueValue = 1/pixcelValue;
+							console.log("pixcelrange"+pixcelValue);
+							console.log("plot min value"+plotSliceCollection[p].minValue);
+							plotYCordinate= plotSliceCollection[p].minCordinate+(valueValue*plotYValue);
+							
+							break;
+
+						}
+
+					}
+					
+					var plotcord = new Object();
+					plotcord.x = plotXCordinate;
+					plotcord.y = plotYCordinate;
+					console.log("plot x"+ plotcord.x);
+					console.log("plot y"+ plotcord.y );
+
+					dataPlotCollection.push(plotcord);
+
+				}
+				
+					
+				
+
+				return dataPlotCollection;
+
+			}
+
 //Defining function for rendering chart.
 function render()
 {			
@@ -399,11 +533,12 @@ function render()
 function renderEngine(entireChartObject)
 {
 			var computedChartObject=entireChartObject;
-			//console.log(computedChartObject);
 			var chartheight= document.getElementById("height").value;
 			var chartwidth= document.getElementById("width").value;
 			var numOfChart = computedChartObject.chartobject.plot.length;
-
+			var plot = computedChartObject.chartobject.plot;
+			var caption = computedChartObject.chartobject.chartCaption;
+			var subCaption = computedChartObject.chartobject.chartSubCption;
 			
 			
 			for(var i=0;i<numOfChart;i++)
@@ -413,7 +548,8 @@ function renderEngine(entireChartObject)
 				var yTitle= computedChartObject.chartobject.plot[i].plotyAxisTitle;
 				var xLabels= computedChartObject.xaxistickvalues.xAxisLabels;
 				var xTitle = computedChartObject.chartobject.xaxisName;
-				svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle);
+				var plotData= plot[i].data;
+				svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,caption,subCaption);
 			}
 			
 
