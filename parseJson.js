@@ -44,7 +44,7 @@ function loadJsonFile(url) {
 function parseJsonData(json)
 {
 
-    console.log(json);
+   
 	// declaring variable to hold chart-caption , Sub-Caption, X-Axis label, time values.
     var caption = json.chart.caption,
     subCaption= json.chart.subcaption,
@@ -129,26 +129,7 @@ function parseJsonData(json)
 		entireChartObject.xaxistickvalues= xAxisTick;
 		entireChartObject.yaxistickvaluesdetails= yAxisTickDetails;
 		renderEngine(entireChartObject);
-	//Logging the Y-Axis Tick object structure
-	console.log(yAxisTickDetails);
-
-
-	// showing newly created intermediate object's different propery values in console.
-
-	console.log(chartObject);	
-	/*console.log("------------- showing intermediate datastructure after persing and converting from multi-variate dataset----------------");
-	console.log(chartObject.chartCaption);
-	console.log(chartObject.chartSubCption);
-	console.log(chartObject.xaxisName);
-	for(var p in chartObject.plot)
-	{
-		console.log(chartObject.plot[p].plotyAxisTitle);
-		for(var d in chartObject.plot[p].data)
-		{
-			console.log(chartObject.plot[p].data[d].label);
-			console.log(chartObject.plot[p].data[d].value);
-		}
-    }*/
+	
     
 }
 //Function for getting number of tick values and labels for all x axis values.
@@ -209,11 +190,7 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	
 		
 	exactNiceMaxValue=roundedNiceMaxRangeValue;
-	//if(exactNiceMaxValue==niceMaxRangeValue)
-	//{
-	//	exactNiceMaxValue+=1;
-	//}
-	//calculating nice divline maximum and minimum values.
+	
 	exactNiceMaxValue*=parseInt(maxinterval);
 	
 	exactNiceMinValue*=parseInt(mininterval);
@@ -242,7 +219,7 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 
 }
 //
-function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,caption,subCaption)
+function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,caption,subCaption,i)
 			{
 				
 				var height =chartheight;
@@ -252,16 +229,29 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				var plotSliceCollection = new Array();
 				
 				
-				/*
-				for(var g = 0;g<plotSliceCollection.length;g++)
-				{
-					console.log("$$$$$$$$$$$$$$$min value"+plotSliceCollection[g].minValue);
-				}*/
 
 				var NS="http://www.w3.org/2000/svg";
 				var svg=document.createElementNS(NS,"svg");
  				 svg.setAttribute("height",height);
  				 svg.setAttribute("width",width);
+ 				 if(i==0)
+ 				 {
+ 				 var captionOnWall = document.createElementNS(NS,"text");
+				captionOnWall.setAttribute("x",(width*5)/8);
+				captionOnWall.setAttribute("y",(height)/40);
+				captionOnWall.setAttribute("fill", "#000000");
+				captionOnWall.setAttribute("font-size","'"+hfontsize+"'");
+				captionOnWall.textContent = caption;
+				var subcaptionOnWall = document.createElementNS(NS,"text");
+				subcaptionOnWall.setAttribute("x",(width*3)/5);
+				subcaptionOnWall.setAttribute("y",(height)/15);
+				subcaptionOnWall.setAttribute("fill", "#000000");
+				subcaptionOnWall.setAttribute("font-size","'"+hfontsize-10+"'");
+				subcaptionOnWall.textContent = subCaption;
+				
+				svg.appendChild(captionOnWall);
+				svg.appendChild(subcaptionOnWall);
+				}
  				 var l1x1val = width/3;
  			 	var l1x2val = width/3;
  			 	var l1y1val = 0;
@@ -290,16 +280,15 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				line1.setAttribute("stroke","#202020");
 				line1.setAttribute("stroke-width",5);
 				var text = document.createElementNS(NS,"text");
-				text.setAttribute("x",(7*width)/8);
+				text.setAttribute("x",(width*5)/8);
 				text.setAttribute("y",(19*height)/20);
 				text.setAttribute("fill", "#000000");
 				text.setAttribute("font-size","'"+hfontsize+"'");
 				text.textContent = xTitle;
 				var text1 = document.createElementNS(NS,"text");
-				text1.setAttribute("x",10);
-				text1.setAttribute("y",(7*height)/12);
+				text1.setAttribute("x",width/40);
+				text1.setAttribute("y",(height)/3);
 				text1.setAttribute("fill", "#000000");
-		
 				text1.setAttribute('font-size',"'"+vFontSize+"'");
 				text1.textContent = yTitle;
 				text1.classList.add("rotate");
@@ -325,7 +314,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 						continue;
 					}
 					var yLabel = document.createElementNS(NS,"text");
-					yLabel.setAttribute("x",50);
+					yLabel.setAttribute("x",width/8);
 					yLabel.setAttribute("y",l2y1val-(k*step));
 					yLabel.setAttribute("fill", "#000000");
 					yLabel.setAttribute("font-size","'"+hfontsize+"'");
@@ -374,8 +363,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				
 				for(var t =0,u=1;t<yCordarr.length-1;t++,u++)
 				{
-					//console.log("y value"+yCordarr[t].value);
-					// console.log("y cordinate"+yCordarr[t].yCordinate);
+					
 					var plotSlice = new Object();
 					plotSlice.minValue= yCordarr[t].value;
 					plotSlice.maxValue= yCordarr[u].value;
@@ -385,14 +373,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					plotSliceCollection.push(plotSlice);
 
 				}
-				for(var d =0; d<plotSliceCollection.length;d++)
-				{
-
-					console.log("***min value"+plotSliceCollection[d].minValue);
-					console.log("***max value"+plotSliceCollection[d].maxValue);
-					console.log("***min cordinate"+plotSliceCollection[d].minCordinate);
-					console.log("****max cordinate"+plotSliceCollection[d].maxCordinate);
-				}
+				
 				
 
 				var plotCircles =drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData);
@@ -431,7 +412,8 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				var div = document.createElement("div");
 				 div.style.position = "relative";
 				div.style.left = (width/5)+"px";
-				div.style.top =  (height/6)+"px";
+				div.style.top =  (height/4)+"px";
+				div.style.right =  (height/4)+"px";
 				div.appendChild(svg);
 				document.body.appendChild(div);
 				
@@ -451,7 +433,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					
 					return xLabel;
 			}
-			
+		
 
 			function drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData)
 			{
@@ -477,22 +459,19 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					}
 					for(var p=0;p<plotSliceCollection.length;p++)
 					{
-						//console.log("max"+plotSliceCollection[p].maxValue);
-						//console.log("min"+plotSliceCollection[p].minValue);
+						
 						if(plotYValue>plotSliceCollection[p].minValue || plotYValue<plotSliceCollection[p].maxValue)
 						{
-							//console.log("max"+plotSliceCollection[p].maxValue);
-							//console.log("min"+plotSliceCollection[p].minCordinate)
+							
 							var valueRange = plotSliceCollection[p].maxValue- plotSliceCollection[p].minValue;
-							console.log("valuerange"+valueRange);
+							
 							var cordinateRange = plotSliceCollection[p].minCordinate-plotSliceCollection[p].maxCordinate;
-							console.log("cordinate range"+cordinateRange);
+							
 
 							var pixcelValue = valueRange/cordinateRange;
-							console.log("***"+pixcelValue);
+							
 							var valueValue = 1/pixcelValue;
-							//console.log("pixcelrange"+pixcelValue);
-							//console.log("plot min value"+plotSliceCollection[p].minValue);
+							
 							plotYCordinate= plotSliceCollection[p].minCordinate-(valueValue*(plotYValue-plotSliceCollection[p].minValue));
 							
 							break;
@@ -505,8 +484,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					var plotcord = new Object();
 					plotcord.x = plotXCordinate;
 					plotcord.y = plotYCordinate;
-					//console.log("plot x"+ plotcord.x);
-					//console.log("plot y"+ plotcord.y );
+					
 
 					dataPlotCollection.push(plotcord);
 
@@ -546,7 +524,7 @@ function renderEngine(entireChartObject)
 				var xLabels= computedChartObject.xaxistickvalues.xAxisLabels;
 				var xTitle = computedChartObject.chartobject.xaxisName;
 				var plotData= plot[i].data;
-				svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,caption,subCaption);
+				svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,caption,subCaption,i);
 			}
 			
 
