@@ -31,20 +31,15 @@ function loadJsonFile(url) {
 		}
 
 	}
-
 	//Specifies the type of request
 	xmlhttp.open('GET', url, true);
 	//Sends the request to the server
 	xmlhttp.send();
-
-	
 }
 // Declaration of parseJsonData function starts here
 
 function parseJsonData(json)
 {
-
-   
 	// declaring variable to hold chart-caption , Sub-Caption, X-Axis label, time values.
     var caption = json.chart.caption,
     subCaption= json.chart.subcaption,
@@ -75,10 +70,9 @@ function parseJsonData(json)
 			var dataValue = new Object();
 			dataValue.label=time[j];
 			dataValue.value=json.chart.plot[i].data[j];
-			
 			plotData.data.push(dataValue);
 		}	
-
+		//Adding in array
 		chartObject.plot.push(plotData);
 	}
 	/*
@@ -103,7 +97,6 @@ function parseJsonData(json)
 			var yAxisValues = new Array();
 			for(var i=0;i<chartObject.plot[j].data.length;i++)
 			{
-		
 				yAxisValues.push(chartObject.plot[j].data[i].value);
 			}
 			//Calculation of maximum and minimum of Y-Axis values
@@ -123,14 +116,13 @@ function parseJsonData(json)
 			yAxisTickDetails.yAxisTickValues.push(yAxisTick);
 	}
 
-
+		//Creating another chart object to pass in render-engine
 	    var entireChartObject = new Object();
 		entireChartObject.chartobject = chartObject;
 		entireChartObject.xaxistickvalues= xAxisTick;
 		entireChartObject.yaxistickvaluesdetails= yAxisTickDetails;
+		//calling render-engine
 		renderEngine(entireChartObject);
-	
-    
 }
 //Function for getting number of tick values and labels for all x axis values.
 function getXAxisTicks(chartObject,xAxisTick)
@@ -141,6 +133,7 @@ function getXAxisTicks(chartObject,xAxisTick)
    		xAxisTick.numOfTickValues++;
 	}
 }
+//function to to calculate round up-t0 different decimal place
 function round(value, precision) {
     var multiplier = Math.pow(10, precision || 0);
     return Math.round(value * multiplier) / multiplier;
@@ -151,25 +144,23 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 
 	var maxValue = maxYAxisValue;
 	var minValue = minYAxisValue;
-	//Rounding-up maximum and minimum values
+	//flooring and cieling maximum and minimum values
 	var roundedMinValue=Math.floor(minValue);
 	var roundedMaxValue=Math.ceil(maxValue);
 	var niceMinValue,niceMaxValue;
-	//checking whether the rounded min value flooris greater than chart actual min value.
-	
 		niceMinValue=roundedMinValue;
-	
-	//checking whether the rounded max value is less than chart actual max value.
-	
 		niceMaxValue= roundedMaxValue;
 	
 	//Calculation of number of digits.
 	var niceMaxRangeValue,niceMinRangeValue;
 	var mininterval="1";
 	var maxinterval="1";
+	//calculating numberof digits.
 	var niceMaxValueDigit = parseInt(String(Math.abs(niceMaxValue)).length);
 	var niceMinValueDigit = parseInt(String(Math.abs(niceMinValue)).length);
+	//declaration of loop variable
 	var i,j;
+	//calculating minimum interval and maximum interval value.
 	for(i=1;i<niceMinValueDigit;i++)
 	{
 		mininterval+="0";
@@ -178,22 +169,19 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	{
 		maxinterval+="0";
 	}
+	//rounding value up-to one decimal place.
 	niceMinRangeValue= round(niceMinValue/parseInt(mininterval),1);
 	niceMaxRangeValue= round(niceMaxValue/parseInt(maxinterval),1);
 
 	var roundedNiceMinRangeValue= Math.floor(niceMinRangeValue);
 	var roundedNiceMaxRangeValue= Math.ceil(niceMaxRangeValue);
 	var exactNiceMaxValue,exactNiceMinValue;
-	
+	//exact Nice div values.
 	exactNiceMinValue=roundedNiceMinRangeValue;
-	
-	
-		
 	exactNiceMaxValue=roundedNiceMaxRangeValue;
-	
 	exactNiceMaxValue*=parseInt(maxinterval);
-	
 	exactNiceMinValue*=parseInt(mininterval);
+	//Array defination to hold Y-Axis divline properties
 	var divLineValues = new Array();
 	var stepValue=(exactNiceMaxValue-exactNiceMinValue)/5;
 	divLineValues.push(exactNiceMinValue);
@@ -205,54 +193,52 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 
 	}
 	divLineValues.push(exactNiceMaxValue);
-	//Assigning calculated values into yAxisTick object.
+	//Assigning calculated Y-Axis div-line properties into yAxisTick object.
 	yAxisTick.niceMaxExactDivValue=exactNiceMaxValue;
  	yAxisTick.niceMinExactDivValue= exactNiceMinValue;
 	yAxisTick.stepValue=stepValue;
-
 	//assigning different divline(tick) values.
 	//Storing divline(tick) values in the yAxisTick object property.
-
  	yAxisTick.DivLineValues=divLineValues;
  	yAxisTick.numOfYTickValues=divLineValues.length;
- 	
-
 }
-//
+//Function responsible for all SVG rendering fecility.
 function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,caption,subCaption,i)
 			{
-				
 				var height =chartheight;
 				var width = chartwidth;
 				var xCordArr = new Array();
 				var yCordarr = new Array();
+				//Defining array to hold all plot-slice attribute values.
 				var plotSliceCollection = new Array();
-				
-				
-
+				//Declaring SVG namespace.
 				var NS="http://www.w3.org/2000/svg";
+				//Creation of SVG object
 				var svg=document.createElementNS(NS,"svg");
  				 svg.setAttribute("height",height);
  				 svg.setAttribute("width",width);
+
+ 				 //rendering captions and Sub-caption
  				 if(i==0)
- 				 {
- 				 var captionOnWall = document.createElementNS(NS,"text");
-				captionOnWall.setAttribute("x",(width*5)/8);
-				captionOnWall.setAttribute("y",(height)/40);
-				captionOnWall.setAttribute("fill", "#000000");
-				captionOnWall.setAttribute("font-size","'"+hfontsize+"'");
-				captionOnWall.textContent = caption;
-				var subcaptionOnWall = document.createElementNS(NS,"text");
-				subcaptionOnWall.setAttribute("x",(width*3)/5);
-				subcaptionOnWall.setAttribute("y",(height)/15);
-				subcaptionOnWall.setAttribute("fill", "#000000");
-				subcaptionOnWall.setAttribute("font-size","'"+hfontsize-10+"'");
-				subcaptionOnWall.textContent = subCaption;
-				
-				svg.appendChild(captionOnWall);
-				svg.appendChild(subcaptionOnWall);
-				}
- 				 var l1x1val = width/3;
+ 				 	{
+ 					    var captionOnWall = document.createElementNS(NS,"text");
+						captionOnWall.setAttribute("x",(width*5)/8);
+						captionOnWall.setAttribute("y",(height)/40);
+						captionOnWall.setAttribute("fill", "#000000");
+						captionOnWall.setAttribute("font-size","'"+hfontsize+"'");
+						captionOnWall.textContent = caption;
+						var subcaptionOnWall = document.createElementNS(NS,"text");
+						subcaptionOnWall.setAttribute("x",(width*3)/5);
+						subcaptionOnWall.setAttribute("y",(height)/15);
+						subcaptionOnWall.setAttribute("fill", "#000000");
+						subcaptionOnWall.setAttribute("font-size","'"+hfontsize-10+"'");
+						subcaptionOnWall.textContent = subCaption;
+						svg.appendChild(captionOnWall);
+						svg.appendChild(subcaptionOnWall);
+					}
+				//Rendering axis lines
+				//defining cordinate variables
+ 				var l1x1val = width/3;
  			 	var l1x2val = width/3;
  			 	var l1y1val = 0;
  			 	var l1y2val = (height*2)/3;
@@ -262,7 +248,6 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
  				var l2y2val = (height*2)/3;
  			 	var hfontsize = width/20;
  			 	var vFontSize = width/60;
-
 				var NS="http://www.w3.org/2000/svg";
 				var line = document.createElementNS(NS,"line");
 				line.setAttribute("x1",l1x1val);
@@ -271,7 +256,6 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				line.setAttribute("y2",l1y2val);
 				line.setAttribute("stroke","#202020");
 				line.setAttribute("stroke-width",5);
-				
 				var line1 = document.createElementNS(NS,"line");
 				line1.setAttribute("x1",l2x1val);
 				line1.setAttribute("x2",l2x2val);
@@ -279,6 +263,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				line1.setAttribute("y2",l2y2val);
 				line1.setAttribute("stroke","#202020");
 				line1.setAttribute("stroke-width",5);
+				//Rendering X-Axis and Y-Axis titles
 				var text = document.createElementNS(NS,"text");
 				text.setAttribute("x",(width*5)/8);
 				text.setAttribute("y",(19*height)/20);
@@ -293,12 +278,11 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				text1.textContent = yTitle;
 				text1.classList.add("rotate");
 				var divLineValues= yTickDetails.DivLineValues;
-				
 				var niceMaxDivLineValues = yTickDetails.niceMaxExactDivValue;
 				var niceMinDivLineValue = yTickDetails.niceMinExactDivValue;
 				var numTickValue= yTickDetails.numOfYTickValues;
 				var stepValue = yTickDetails.stepValue;
-
+				//Rendering Tick values
 				for(var k =0;k<divLineValues.length;k++)
 				{
 					var step =(l1y2val-l1y1val)/numTickValue;
@@ -351,38 +335,28 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					var xMapping = new Object();
 					xMapping.xCordinate;
 					xMapping.Value;
-					
 					var xLabel = createXLabel(j,tickCordinate,xLabels,xMapping);
-
 					xCordArr.push(xMapping);
-
 					svg.appendChild(xTick);
 					svg.appendChild(xLabel);
-
 				}
-				
+			
 				for(var t =0,u=1;t<yCordarr.length-1;t++,u++)
 				{
-					
 					var plotSlice = new Object();
 					plotSlice.minValue= yCordarr[t].value;
 					plotSlice.maxValue= yCordarr[u].value;
 					plotSlice.minCordinate= yCordarr[t].yCordinate;
 					plotSlice.maxCordinate= yCordarr[u].yCordinate;
-
 					plotSliceCollection.push(plotSlice);
 
 				}
-				
-				
-
+				//Drawing Data-plot anchors
 				var plotCircles =drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData);
-				
 				var prevX=0;
 				var prevY=0;
 				for(var c =0;c<plotCircles.length;c++)
 				{
-
 					var plotCircle = document.createElementNS(NS,"circle");
 					plotCircle.setAttributeNS(null, "cx", plotCircles[c].x);
 					plotCircle.setAttributeNS(null, "cy", plotCircles[c].y);
@@ -391,18 +365,17 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					svg.appendChild(plotCircle);
 					if((prevX!=0)&&(prevY!=0))
 					{
-					var linkLine = document.createElementNS(NS,"line");
-					 linkLine.setAttribute("x1",prevX);
-					 linkLine.setAttribute("x2",plotCircles[c].x);
-					linkLine.setAttribute("y1",prevY);
-					linkLine.setAttribute("y2",plotCircles[c].y);
-					linkLine.setAttribute("stroke","green");
-					svg.appendChild(linkLine);
+						var linkLine = document.createElementNS(NS,"line");
+						linkLine.setAttribute("x1",prevX);
+					 	linkLine.setAttribute("x2",plotCircles[c].x);
+						linkLine.setAttribute("y1",prevY);
+						linkLine.setAttribute("y2",plotCircles[c].y);
+						linkLine.setAttribute("stroke","green");
+						svg.appendChild(linkLine);
 					}
 					prevX=plotCircles[c].x;
 					prevY= plotCircles[c].y;
 					
-
 				}
 				
 				svg.appendChild(text);
@@ -418,9 +391,10 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				document.body.appendChild(div);
 				
 			}
+			//Function which will render X-Axis labels
 			function createXLabel(j,tickCordinate,xLabels,xMapping)
-			{	var NS="http://www.w3.org/2000/svg";
-				var hfontsize = width/40;
+			{		var NS="http://www.w3.org/2000/svg";
+					var hfontsize = width/40;
 					var xLabel = document.createElementNS(NS,"text");
 					xLabel.setAttribute("x",tickCordinate.X);
 					xLabel.setAttribute("y",tickCordinate.Y+10);
@@ -430,18 +404,15 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					xLabel.classList.add("rotate");
 					xMapping.Value=xLabels[j-1];
 					xMapping.xCordinate=tickCordinate.X;
-					
 					return xLabel;
 			}
 		
-
+			//Function for calculating  Data-Plot Cordinates 
 			function drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData)
 			{
 				var dataPlotCollection = new Array();
-				
 				for(var d=0;d<plotData.length;d++)
 				{
-
 					var plotXValue = plotData[d].label;
 					var plotYValue = plotData[d].value;
 					var plotXCordinate=0;
@@ -462,37 +433,24 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 						
 						if(plotYValue>plotSliceCollection[p].minValue || plotYValue<plotSliceCollection[p].maxValue)
 						{
-							
 							var valueRange = plotSliceCollection[p].maxValue- plotSliceCollection[p].minValue;
-							
 							var cordinateRange = plotSliceCollection[p].minCordinate-plotSliceCollection[p].maxCordinate;
-							
-
 							var pixcelValue = valueRange/cordinateRange;
-							
 							var valueValue = 1/pixcelValue;
-							
 							plotYCordinate= plotSliceCollection[p].minCordinate-(valueValue*(plotYValue-plotSliceCollection[p].minValue));
-							
 							break;
 
 						}
 
 
 					}
-					
 					var plotcord = new Object();
 					plotcord.x = plotXCordinate;
 					plotcord.y = plotYCordinate;
-					
-
 					dataPlotCollection.push(plotcord);
 
 				}
 				
-					
-				
-
 				return dataPlotCollection;
 
 			}
@@ -504,7 +462,7 @@ function render()
 			
 
 }
-
+//Function for initiating all rendering fecility
 function renderEngine(entireChartObject)
 {
 			var computedChartObject=entireChartObject;
@@ -524,9 +482,11 @@ function renderEngine(entireChartObject)
 				var xLabels= computedChartObject.xaxistickvalues.xAxisLabels;
 				var xTitle = computedChartObject.chartobject.xaxisName;
 				var plotData= plot[i].data;
+				//calling function for rendering all Data-Visualization items
 				svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,caption,subCaption,i);
 			}
 			
 
 }
+//Loading Json file
 loadJsonFile("triLineChart.json");
