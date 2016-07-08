@@ -12,10 +12,12 @@ and convert it in internal data structure.
 // Starting of loadJsonFile function.
 
 function loadJsonFile(url) {
+	
 	//declaration of variable to hold XMLHttpRequest object.
 	//declaration of variable to hold parsed json file.
 	var xmlhttp = new XMLHttpRequest(),
             json;
+            
 	//Anonymous function declared to parse every time the readState changes.           
 	xmlhttp.onreadystatechange = function () {
 		//Checking whether status is OK or not and request finished and response is ready.
@@ -24,14 +26,18 @@ function loadJsonFile(url) {
        		 json = JSON.parse(xmlhttp.responseText);
 
 			//calling parseJsonData function to convert multi-variate data set into customized intermidiate data structure.     
-       		parseJsonData(json);
+       			parseJsonData(json);
+       		
 		}
+
 	}
 
 	//Specifies the type of request
 	xmlhttp.open('GET', url, true);
 	//Sends the request to the server
 	xmlhttp.send();
+
+	
 }
 // Declaration of parseJsonData function starts here
 
@@ -62,13 +68,14 @@ function parseJsonData(json)
 		//each object storedd in plot array is object.
 		var plotData = new Object();
 		//Defining and storing title attribute for each intermediate chart objects.
-		plotData.plotyAxisTitle=json.chart.plot[i].plotyAxisTitle;
+		plotData.plotyAxisTitle=json.chart.plot[i].yAxisName;
 		//data array will hold different data set values.
 		plotData.data = new Array();
 		for (var j = 0; j<time.length; j++) {
 			var dataValue = new Object();
 			dataValue.label=time[j];
 			dataValue.value=json.chart.plot[i].data[j];
+			
 			plotData.data.push(dataValue);
 		}	
 
@@ -115,6 +122,13 @@ function parseJsonData(json)
 			getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick);
 			yAxisTickDetails.yAxisTickValues.push(yAxisTick);
 	}
+
+
+	    var entireChartObject = new Object();
+		entireChartObject.chartobject = chartObject;
+		entireChartObject.xaxistickvalues= xAxisTick;
+		entireChartObject.yaxistickvaluesdetails= yAxisTickDetails;
+		renderEngine(entireChartObject);
 	//Logging the Y-Axis Tick object structure
 	console.log(yAxisTickDetails);
 
@@ -135,6 +149,7 @@ function parseJsonData(json)
 			console.log(chartObject.plot[p].data[d].value);
 		}
     }
+    
 }
 //Function for getting number of tick values and labels for all x axis values.
 function getXAxisTicks(chartObject,xAxisTick)
@@ -238,7 +253,169 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 
  	yAxisTick.DivLineValues=divLineValues;
  	yAxisTick.numOfYTickValues=divLineValues.length;
+ 	
 
 }
-//Calling  loadJsonFile function.
-loadJsonFile('triLineChart.json');
+//
+function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle)
+			{
+				var height =chartheight;
+				var width = chartwidth;
+
+				var NS="http://www.w3.org/2000/svg";
+				var svg=document.createElementNS(NS,"svg");
+ 				 svg.setAttribute("height",height);
+ 				 svg.setAttribute("width",width);
+ 				 var l1x1val = width/3;
+ 			 	var l1x2val = width/3;
+ 			 	var l1y1val = 0;
+ 			 	var l1y2val = (height*2)/3;
+ 				var l2x1val= width/3;
+ 			 	var l2x2val= width;
+ 			 	var l2y1val= (height*2)/3;
+ 				var l2y2val = (height*2)/3;
+ 			 	var hfontsize = width/20;
+ 			 	var vFontSize = width/60;
+
+				var NS="http://www.w3.org/2000/svg";
+				var line = document.createElementNS(NS,"line");
+				line.setAttribute("x1",l1x1val);
+				line.setAttribute("x2",l1x2val);
+				line.setAttribute("y1",l1y1val);
+				line.setAttribute("y2",l1y2val);
+				line.setAttribute("stroke","#202020");
+				line.setAttribute("stroke-width",5);
+				
+				var line1 = document.createElementNS(NS,"line");
+				line1.setAttribute("x1",l2x1val);
+				line1.setAttribute("x2",l2x2val);
+				line1.setAttribute("y1",l2y1val);
+				line1.setAttribute("y2",l2y2val);
+				line1.setAttribute("stroke","#202020");
+				line1.setAttribute("stroke-width",5);
+				var text = document.createElementNS(NS,"text");
+				text.setAttribute("x",(7*width)/8);
+				text.setAttribute("y",(19*height)/20);
+				text.setAttribute("fill", "#000000");
+				text.setAttribute("font-size","'"+hfontsize+"'");
+				text.textContent = xTitle;
+				var text1 = document.createElementNS(NS,"text");
+				text1.setAttribute("x",10);
+				text1.setAttribute("y",(7*height)/12);
+				text1.setAttribute("fill", "#000000");
+		
+				text1.setAttribute('font-size',"'"+vFontSize+"'");
+				text1.textContent = yTitle;
+				text1.classList.add("rotate");
+				var divLineValues= yTickDetails.DivLineValues;
+				console.log("----------"+divLineValues+"---------");
+				var niceMaxDivLineValues = yTickDetails.niceMaxExactDivValue;
+				var niceMinDivLineValue = yTickDetails.niceMinExactDivValue;
+				var numTickValue= yTickDetails.numOfYTickValues;
+				var stepValue = yTickDetails.stepValue;
+
+				for(var k =0;k<divLineValues.length;k++)
+				{
+					var step =(l1y2val-l1y1val)/numTickValue;
+					var divln = document.createElementNS(NS,"line");
+					divln.setAttribute("x1",l2x1val);
+					divln.setAttribute("x2",l2x2val);
+					divln.setAttribute("y1",l2y1val-(k*step));
+					divln.setAttribute("y2",l2y1val-(k*step));
+					divln.setAttribute("stroke","#202020");
+					divln.setAttribute("stroke-width",1);
+					if(j==0)
+					{
+						continue;
+					}
+					var yLabel = document.createElementNS(NS,"text");
+					yLabel.setAttribute("x",50);
+					yLabel.setAttribute("y",l2y1val-(k*step));
+					yLabel.setAttribute("fill", "#000000");
+					yLabel.setAttribute("font-size","'"+hfontsize+"'");
+					yLabel.textContent = divLineValues[k];
+					console.log( divLineValues[j]);
+					svg.appendChild(divln);
+					svg.appendChild(yLabel);
+
+				}
+
+				for(var j=0;j<(numOfXTick+1);j++)
+				{
+
+					var step = (l2x2val - l2x1val)/(numOfXTick+1);
+					var xTick =document.createElementNS(NS,"line");
+					xTick.setAttribute("x1",l2x1val+(j*step));
+					xTick.setAttribute("x2",l2x1val+(j*step));
+					xTick.setAttribute("y1",(height*2)/3);
+					xTick.setAttribute("y2",(height*7)/10);
+					xTick.setAttribute("stroke","#202020");
+					xTick.setAttribute("stroke-width",2);
+					
+					if(j==0)
+					{
+						continue;
+					}
+					var tickCordinate = new Object();
+					tickCordinate.X= l2x1val+(j*step);
+					tickCordinate.Y= (height*7)/10;
+					var xLabel = createXLabel(j,tickCordinate,xLabels);
+					svg.appendChild(xTick);
+					svg.appendChild(xLabel);
+				}
+
+				svg.appendChild(text);
+				svg.appendChild(text1);
+				svg.appendChild(line);
+				svg.appendChild(line1);
+				var div = document.createElement("div");
+				  div.style.position = "relative";
+				 div.style.left = (width/5)+"px";
+				div.style.top =  (height/6)+"px";
+				div.appendChild(svg);
+				document.body.appendChild(div);
+				
+			}
+			function createXLabel(j,tickCordinate,xLabels)
+			{	var NS="http://www.w3.org/2000/svg";
+				var hfontsize = width/40;
+					var xLabel = document.createElementNS(NS,"text");
+					xLabel.setAttribute("x",tickCordinate.X);
+					xLabel.setAttribute("y",tickCordinate.Y+10);
+					xLabel.setAttribute("fill", "#000000");
+					xLabel.setAttribute("font-size","'"+hfontsize+"'");
+					xLabel.textContent = xLabels[j-1];
+					xLabel.classList.add("rotate");
+					return xLabel;
+			}
+//Defining function for rendering chart.
+function render()
+{			
+			loadJsonFile("triLineChart.json");
+			
+
+}
+
+function renderEngine(entireChartObject)
+{
+			var computedChartObject=entireChartObject;
+			//console.log(computedChartObject);
+			var chartheight= document.getElementById("height").value;
+			var chartwidth= document.getElementById("width").value;
+			var numOfChart = computedChartObject.chartobject.plot.length;
+
+			
+			
+			for(var i=0;i<numOfChart;i++)
+			{
+				var numOfXTick = computedChartObject.xaxistickvalues.numOfTickValues;
+				var yTickDetails = computedChartObject.yaxistickvaluesdetails.yAxisTickValues[i];
+				var yTitle= computedChartObject.chartobject.plot[i].plotyAxisTitle;
+				var xLabels= computedChartObject.xaxistickvalues.xAxisLabels;
+				var xTitle = computedChartObject.chartobject.xaxisName;
+				svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle);
+			}
+			
+
+}
+loadJsonFile("triLineChart.json");
