@@ -92,7 +92,7 @@ function parseJsonData(json)
 	//Fetching number of tick values and labels for all x axis values.
 	getXAxisTicks(chartObject,xAxisTick);
 	//Logging xAxisTick Value
-	console.log(xAxisTick);
+	//console.log(xAxisTick);
 	//Declaration of object to store Y-Axis Tick Details
 	var yAxisTickDetails = new Object();
 	//Declaration of Object to store individual chart Y-Axis Details
@@ -136,7 +136,7 @@ function parseJsonData(json)
 	// showing newly created intermediate object's different propery values in console.
 
 	console.log(chartObject);	
-	console.log("------------- showing intermediate datastructure after persing and converting from multi-variate dataset----------------");
+	/*console.log("------------- showing intermediate datastructure after persing and converting from multi-variate dataset----------------");
 	console.log(chartObject.chartCaption);
 	console.log(chartObject.chartSubCption);
 	console.log(chartObject.xaxisName);
@@ -148,7 +148,7 @@ function parseJsonData(json)
 			console.log(chartObject.plot[p].data[d].label);
 			console.log(chartObject.plot[p].data[d].value);
 		}
-    }
+    }*/
     
 }
 //Function for getting number of tick values and labels for all x axis values.
@@ -160,6 +160,10 @@ function getXAxisTicks(chartObject,xAxisTick)
    		xAxisTick.numOfTickValues++;
 	}
 }
+function round(value, precision) {
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+}
 // Fuction for calculating Y-Axis Tick Values it will take maximum and minimum yAxis valueand defined tick object
 function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 {
@@ -167,80 +171,61 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	var maxValue = maxYAxisValue;
 	var minValue = minYAxisValue;
 	//Rounding-up maximum and minimum values
-	var roundedMinValue=Math.round(minValue);
-	var roundedMaxValue=Math.round(maxValue);
+	var roundedMinValue=Math.floor(minValue);
+	var roundedMaxValue=Math.ceil(maxValue);
 	var niceMinValue,niceMaxValue;
-	//checking whether the rounded min value is greater than chart actual min value.
-	if(roundedMinValue>minValue)
-	{
-		niceMinValue=roundedMinValue-(roundedMinValue-(minValue>>0));
-	}
-	else
-	{
+	//checking whether the rounded min value flooris greater than chart actual min value.
+	
 		niceMinValue=roundedMinValue;
-	}
+	
 	//checking whether the rounded max value is less than chart actual max value.
-	if(roundedMaxValue<maxValue)
-	{
-		niceMaxValue= roundedMaxValue+1;
-	}
-	else
-	{
-		niceMaxValue=roundedMaxValue;
-	}
+	
+		niceMaxValue= roundedMaxValue;
+	
 	//Calculation of number of digits.
 	var niceMaxRangeValue,niceMinRangeValue;
 	var mininterval="1";
 	var maxinterval="1";
-	var niceMaxValueDigit = parseInt(String(niceMaxValue).length);
-	var niceMinValueDigit = parseInt(String(niceMinValue).length);
+	var niceMaxValueDigit = parseInt(String(Math.abs(niceMaxValue)).length);
+	var niceMinValueDigit = parseInt(String(Math.abs(niceMinValue)).length);
 	var i,j;
-	for(i=0;i<niceMinValueDigit;i++)
+	for(i=1;i<niceMinValueDigit;i++)
 	{
 		mininterval+="0";
 	}
-	for(j=1;j<niceMaxValueDigit-i;j++)
+	for(j=2;j<niceMaxValueDigit;j++)
 	{
 		maxinterval+="0";
 	}
-	niceMinRangeValue= niceMinValue/parseInt(mininterval);
-	niceMaxRangeValue=(niceMaxValue/parseInt(mininterval))/parseInt(maxinterval);
+	niceMinRangeValue= round(niceMinValue/parseInt(mininterval),1);
+	niceMaxRangeValue= round(niceMaxValue/parseInt(maxinterval),1);
 
-	var roundedNiceMinRangeValue= Math.round(niceMinRangeValue);
-	var roundedNiceMaxRangeValue= Math.round(niceMaxRangeValue);
+	var roundedNiceMinRangeValue= Math.floor(niceMinRangeValue);
+	var roundedNiceMaxRangeValue= Math.ceil(niceMaxRangeValue);
 	var exactNiceMaxValue,exactNiceMinValue;
-	if(roundedNiceMinRangeValue>niceMinRangeValue)
-	{
-		exactNiceMinValue=roundedNiceMinRangeValue-(roundedNiceMinRangeValue-(niceMinRangeValue>>0));
-	}
-	else
-	{
-		exactNiceMinValue=roundedNiceMinRangeValue;
-	}
-	if(roundedNiceMaxRangeValue<niceMaxRangeValue)
-	{
-		exactNiceMaxValue= roundedNiceMaxRangeValue+1;
-	}
-	else
-	{
-		exactNiceMaxValue=roundedNiceMaxRangeValue;
-	}
-	if(exactNiceMaxValue==niceMaxRangeValue)
-	{
-		exactNiceMaxValue+=1;
-	}
+	
+	exactNiceMinValue=roundedNiceMinRangeValue;
+	
+	
+		
+	exactNiceMaxValue=roundedNiceMaxRangeValue;
+	//if(exactNiceMaxValue==niceMaxRangeValue)
+	//{
+	//	exactNiceMaxValue+=1;
+	//}
 	//calculating nice divline maximum and minimum values.
-	exactNiceMaxValue*=parseInt(mininterval);
 	exactNiceMaxValue*=parseInt(maxinterval);
+	
 	exactNiceMinValue*=parseInt(mininterval);
 	var divLineValues = new Array();
-	var stepValue=exactNiceMaxValue/5;
+	var stepValue=(exactNiceMaxValue-exactNiceMinValue)/5;
 	divLineValues.push(exactNiceMinValue);
-	divLineValues.push(stepValue);
-	for(var k =2;k<5;k++)
+	for(var k =1;k<5;k++)
 	{
 		
-		divLineValues.push(stepValue*k);
+		divLineValues.push(round((exactNiceMinValue+(k*stepValue)),1));
+
+
 	}
 	divLineValues.push(exactNiceMaxValue);
 	//Assigning calculated values into yAxisTick object.
@@ -267,11 +252,11 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				var plotSliceCollection = new Array();
 				
 				
-				
+				/*
 				for(var g = 0;g<plotSliceCollection.length;g++)
 				{
 					console.log("$$$$$$$$$$$$$$$min value"+plotSliceCollection[g].minValue);
-				}
+				}*/
 
 				var NS="http://www.w3.org/2000/svg";
 				var svg=document.createElementNS(NS,"svg");
@@ -311,7 +296,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				text.setAttribute("font-size","'"+hfontsize+"'");
 				text.textContent = xTitle;
 				var text1 = document.createElementNS(NS,"text");
-				text1.setAttribute("x",width/4);
+				text1.setAttribute("x",10);
 				text1.setAttribute("y",(7*height)/12);
 				text1.setAttribute("fill", "#000000");
 		
@@ -389,14 +374,24 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				
 				for(var t =0,u=1;t<yCordarr.length-1;t++,u++)
 				{
-					console.log("y value"+yCordarr[t].value);
-					 console.log("y cordinate"+yCordarr[t].yCordinate);
+					//console.log("y value"+yCordarr[t].value);
+					// console.log("y cordinate"+yCordarr[t].yCordinate);
 					var plotSlice = new Object();
 					plotSlice.minValue= yCordarr[t].value;
 					plotSlice.maxValue= yCordarr[u].value;
 					plotSlice.minCordinate= yCordarr[t].yCordinate;
 					plotSlice.maxCordinate= yCordarr[u].yCordinate;
+
 					plotSliceCollection.push(plotSlice);
+
+				}
+				for(var d =0; d<plotSliceCollection.length;d++)
+				{
+
+					console.log("***min value"+plotSliceCollection[d].minValue);
+					console.log("***max value"+plotSliceCollection[d].maxValue);
+					console.log("***min cordinate"+plotSliceCollection[d].minCordinate);
+					console.log("****max cordinate"+plotSliceCollection[d].maxCordinate);
 				}
 				
 
@@ -482,34 +477,36 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					}
 					for(var p=0;p<plotSliceCollection.length;p++)
 					{
-						console.log("max"+plotSliceCollection[p].maxValue);
-						console.log("min"+plotSliceCollection[p].minValue);
+						//console.log("max"+plotSliceCollection[p].maxValue);
+						//console.log("min"+plotSliceCollection[p].minValue);
 						if(plotYValue>plotSliceCollection[p].minValue || plotYValue<plotSliceCollection[p].maxValue)
 						{
 							//console.log("max"+plotSliceCollection[p].maxValue);
 							//console.log("min"+plotSliceCollection[p].minCordinate)
-							var valueRange = plotSliceCollection[p].maxValue-plotSliceCollection[p].minValue;
+							var valueRange = plotSliceCollection[p].maxValue- plotSliceCollection[p].minValue;
 							console.log("valuerange"+valueRange);
-							var cordinateRange = plotSliceCollection[p].maxCordinate-plotSliceCollection[p].minCordinate;
+							var cordinateRange = plotSliceCollection[p].minCordinate-plotSliceCollection[p].maxCordinate;
 							console.log("cordinate range"+cordinateRange);
 
 							var pixcelValue = valueRange/cordinateRange;
+							console.log("***"+pixcelValue);
 							var valueValue = 1/pixcelValue;
-							console.log("pixcelrange"+pixcelValue);
-							console.log("plot min value"+plotSliceCollection[p].minValue);
-							plotYCordinate= plotSliceCollection[p].minCordinate+(valueValue*plotYValue);
+							//console.log("pixcelrange"+pixcelValue);
+							//console.log("plot min value"+plotSliceCollection[p].minValue);
+							plotYCordinate= plotSliceCollection[p].minCordinate-(valueValue*(plotYValue-plotSliceCollection[p].minValue));
 							
 							break;
 
 						}
+
 
 					}
 					
 					var plotcord = new Object();
 					plotcord.x = plotXCordinate;
 					plotcord.y = plotYCordinate;
-					console.log("plot x"+ plotcord.x);
-					console.log("plot y"+ plotcord.y );
+					//console.log("plot x"+ plotcord.x);
+					//console.log("plot y"+ plotcord.y );
 
 					dataPlotCollection.push(plotcord);
 
