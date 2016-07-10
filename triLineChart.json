@@ -2,13 +2,13 @@
 	"chart": {
 		"caption": "Caption",
 		"subcaption": "Sub caption",
-		"xAxisName": "time",
+		"xAxisName": "Time",
 		"time": ["Jan", "Feb", "March", "April", "May", "June","july","August"],
 		"plot": [
 
 			{
-				"yAxisName": "title1",
-				"data": ["-123", "-234", "567", "987", "123", "2345","765","567"]
+				"yAxisName": "Title1",
+				"data": ["-120", "-2340", "-567", "-9870", "-1203", "-2345","-765","-567"]
 
 			}, {
 				"yAxisName": "title2",
