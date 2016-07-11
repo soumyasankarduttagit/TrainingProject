@@ -255,6 +255,7 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
  	yAxisTick.DivLineValues=divLineValues;
  	yAxisTick.numOfYTickValues=divLineValues.length;
 }
+
 //Function responsible for all SVG rendering fecility.
 function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,caption,subCaption,i)
 			{
@@ -435,12 +436,18 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				var prevY=0;
 				for(var c =0;c<plotCircles.length;c++)
 				{
+					 
+                    
 					var plotCircle = document.createElementNS(NS,"circle");
 					plotCircle.setAttributeNS(null, "cx", plotCircles[c].x);
 					plotCircle.setAttributeNS(null, "cy", plotCircles[c].y);
 					plotCircle.setAttributeNS(null, "r",  width/100);
 					plotCircle.setAttributeNS(null, "fill", "green");
-					plotCircle.classList.add("plotDots");
+					var toolTip = document.createElementNS(NS, "title"); 
+                    toolTip.setAttributeNS(null, "class", "plotToolTip"); 
+                    toolTip.innerHTML ="Time: "+plotCircles[c].xValue +"<br/>Value: "+plotCircles[c].yValue; 
+                    plotCircle.classList.add("plotDots");
+                    plotCircle.appendChild(toolTip); 
 					svg.appendChild(plotCircle);
 					if((prevX!=0)&&(prevY!=0))
 					{
@@ -521,6 +528,8 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 
 					}
 					var plotcord = new Object();
+					plotcord.xValue=plotXValue;
+					plotcord.yValue=plotYValue;
 					plotcord.x = plotXCordinate;
 					plotcord.y = plotYCordinate;
 					dataPlotCollection.push(plotcord);
