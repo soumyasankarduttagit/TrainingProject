@@ -79,7 +79,7 @@ function parseJsonData(json)
 		plotData.data = new Array();
 		for(var interIndex=0; interIndex<xAxisData.length&&interIndex<yAxisData.length;interIndex++)
 		{
-			if((xAxisData[interIndex]===""||xAxisData[interIndex]===null|| typeof xAxisData[interIndex]===undefined)||(yAxisData[interIndex]===""||yAxisData[interIndex]===null|| typeof yAxisData[interIndex]===undefined))
+			if((xAxisData[interIndex]===""||xAxisData[interIndex]===null|| typeof xAxisData[interIndex]===undefined)||(yAxisData[interIndex]===""||yAxisData[interIndex]===null|| typeof yAxisData[interIndex]===undefined)||typeof yAxisData[interIndex]===NaN)
 			{
 				continue;
 			}
@@ -167,7 +167,7 @@ function round(value, precision) {
 // Fuction for calculating Y-Axis Tick Values it will take maximum and minimum yAxis valueand defined tick object
 function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 {
-
+	
 	var maxValue = maxYAxisValue;
 	var minValue = minYAxisValue;
 	//flooring and cieling maximum and minimum values
@@ -186,19 +186,26 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	var niceMinValueDigit = parseInt(String(Math.abs(niceMinValue)).length);
 	//declaration of loop variable
 	var i,j;
+	if(niceMaxValueDigit===1 && niceMinValueDigit===1)
+	{
+		niceMaxRangeValue=roundedMaxValue;
+		niceMinRangeValue=roundedMinValue;
+	}
+	else
+	{
 	//calculating minimum interval and maximum interval value.
-	for(i=1;i<niceMinValueDigit;i++)
+	for(i=niceMinValueDigit-1;i<=niceMinValueDigit;i++)
 	{
 		mininterval+="0";
 	}
-	for(j=1;j<niceMaxValueDigit;j++)
+	for(j=niceMaxValueDigit-1;j<=niceMaxValueDigit;j++)
 	{
 		maxinterval+="0";
 	}
 	//rounding value up-to one decimal place.
-	niceMinRangeValue= round(niceMinValue/parseInt(mininterval),1);
-	niceMaxRangeValue= round(niceMaxValue/parseInt(maxinterval),1);
-
+	niceMinRangeValue= niceMinValue/parseInt(mininterval);
+	niceMaxRangeValue= niceMaxValue/parseInt(maxinterval);
+	}
 	var roundedNiceMinRangeValue= Math.floor(niceMinRangeValue);
 	var roundedNiceMaxRangeValue= Math.ceil(niceMaxRangeValue);
 	var exactNiceMaxValue,exactNiceMinValue;
@@ -209,9 +216,9 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	exactNiceMinValue*=parseInt(mininterval);
 	//Array defination to hold Y-Axis divline properties
 	var divLineValues = new Array();
-	var stepValue=(exactNiceMaxValue-exactNiceMinValue)/5;
+	var stepValue=(exactNiceMaxValue-exactNiceMinValue)/10;
 	divLineValues.push(exactNiceMinValue);
-	for(var k =1;k<5;k++)
+	for(var k =1;k<10;k++)
 	{
 		
 		divLineValues.push(round((exactNiceMinValue+(k*stepValue)),1));
@@ -300,9 +307,12 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				svg.appendChild(text);
 				}
 				var text1 = document.createElementNS(NS,"text");
-				text1.setAttribute("x",width/40);
-				text1.setAttribute("y",(height)/3);
+				var w =width/10;
+				var h = (height)/3;
+				text1.setAttribute("x",w);
+				text1.setAttribute("y",h);
 				text1.setAttribute("fill", "#000000");
+				text1.setAttribute("transform","rotate(180 125 180)");
 				text1.style.fontSize=hfontsize;
 				text1.textContent = yTitle;
 				text1.classList.add("yAxisTitle");
@@ -323,12 +333,8 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					divln.setAttribute("stroke","#202020");
 					divln.setAttribute("stroke-width",1);
 					divln.classList.add("yAxisDivLine");
-					if(j==0)
-					{
-						continue;
-					}
 					var yLabel = document.createElementNS(NS,"text");
-					yLabel.setAttribute("x",width/6);
+					yLabel.setAttribute("x",(width*11)/40);
 					yLabel.setAttribute("y",l2y1val-(k*step));
 					yLabel.setAttribute("fill", "#000000");
 					yLabel.style.fontSize=hfontsize;
@@ -388,6 +394,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				}
 				//Drawing Data-plot anchors
 				var plotCircles =drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData);
+				console.log(plotCircles.length);
 				var prevX=0;
 				var prevY=0;
 				for(var c =0;c<plotCircles.length;c++)
@@ -440,6 +447,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					xLabel.setAttribute("fill", "#000000");
 					xLabel.style.fontSize=hfontsize;
 					xLabel.textContent = xLabels[j-1];
+					//xLabel.setAttribute("transform","rotate(2 "+tickCordinate.X+" "+tickCordinate.Y+10+")");
 					xLabel.classList.add("xAxisLabels");
 					xMapping.Value=xLabels[j-1];
 					xMapping.xCordinate=tickCordinate.X;

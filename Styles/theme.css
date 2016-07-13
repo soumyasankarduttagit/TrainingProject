@@ -22,12 +22,14 @@ body {
   border: 3px solid #ffffff;
   align-items: center;
   display: block;
-  text-align: left;
+  text-align: center;
   text-decoration: none;
   text-transform: capitalize;
   font-family: "Times New Roman", Times, serif;
   font-style: normal;
   font-weight: bold;
+  font-size: 120%;
+  color: #424242;
 	
 }
 .subCaption
@@ -59,52 +61,62 @@ body {
     text-transform: capitalize;
     font-family: "Times New Roman", Times, serif;
     font-style: normal;
+    stroke: #424242;
 }
 .yAxisLabels
 {
-   fill:#298A08;
-   text-align: center;
-   text-decoration: none;
-   text-transform: capitalize;
-   font-family: "Times New Roman", Times, serif;
-   font-style: normal;
+  
+     fill:#298A08;
+   
+    text-align: center;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-family: "Times New Roman", Times, serif;
+    font-style: normal;
+    stroke: #424242;
 }
 .xAxisTitle
 {
-   fill:#084B8A;
-   text-align: center;
-   text-decoration: none;
-   text-transform: capitalize;
-   font-family: "Times New Roman", Times, serif;
-   font-style: normal;
-   font-weight: bold;
+   
+   
+     fill:#298A08;
+
+    text-align: center;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-family: "Times New Roman", Times, serif;
+    font-style: normal;
+    stroke: #424242;
 }
 .yAxisTitle
 {
-   fill:#084B8A;
-  writing-mode: tb-rl;
-  text-align: center;
-  text-decoration: none;
-  text-transform: capitalize;
-  font-family: "Times New Roman", Times, serif;
-  font-style: normal;
-  font-weight: bold;
+   
+     fill:#298A08;
+    writing-mode: tb-rl;
+    text-align: center;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-family: "Times New Roman", Times, serif;
+    font-style: normal;
+    stroke: #424242;
 }
 .xAxis 
 {
-  stroke: #084B8A;
+  stroke: #424242;
   stroke-linecap:square;
+  stroke-width:1;
+
 }
 .yAxis
 {
-  stroke: #084B8A;
+  stroke: #424242;
   stroke-linecap:square;
-  stroke-width :5;
+  stroke-width :1;
 
 }
 .xAxisDivLine
 {
-  stroke: #084B8A;
+  stroke: #424242;
 
   stroke-linecap:square;
 
@@ -113,7 +125,7 @@ body {
 {
   stroke-width :1;
   
-  stroke: #084B8A;
+  stroke: #424242;
   stroke-linecap:square;
 }
 .chart 
@@ -122,9 +134,9 @@ body {
   background: #ffffff;
   align-self: center;
   margin: auto;
-  padding-right: 1%;
+  padding-right: 30%;
   padding-top: 0%;
-  padding-left: 2%;
+ 
   padding-bottom: 0%;
   border: 1px solid #ffffff;
   align-items: center;
@@ -132,15 +144,16 @@ body {
 .plotLines{
 	
     
-    stroke: #298A08;
+    stroke: #0174DF;
 
-    stroke-width :2;
+    stroke-width :4;
     stroke-linecap:square;
 }
 .plotDots
 {
-	stroke:#0B3861;
+	stroke:#0174DF;
 	fill: #ffffff;
+  r:7;
 }
 .chartContainer
 {
@@ -151,8 +164,15 @@ body {
     padding-bottom: 0%;
     align-self: center;
     align-items: center;
+    text-align: center;
 
 }
 .plotDots:hover { 
- fill: #298A08; 
+ fill: #0174DF; 
  } 
+ .nullValueLine
+ {
+  stroke: #000000;
+  stroke-width: 7;
+  stroke-dasharray: 5, 5;
+ }
