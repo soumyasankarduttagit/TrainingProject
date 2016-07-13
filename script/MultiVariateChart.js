@@ -1,4 +1,4 @@
-﻿/*-----------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
 Defining function for rendering chart.
 This function is the starting point of Execution.
 Which is responsible for loading JSON file asynchronously and calling function
@@ -6,55 +6,15 @@ for parsing JSON file and calling function for rendering SVG componants.
 -------------------------------------------------------------------------------
 */
 
-function render()
-{	
-
-/*
-	JSON file is hosted in a server that's why to access JSON file need to call it asynchronously.
----------------------------------------------------------------------------------------------
-loadJsonFile function is declared to access JSON file asynchronously.
-
----------------------------------------------------------------------------------------------
-parseJsonData function is declared to read the multi-variate data set in the given JSON file
-and convert it in internal data structure.
-
-*/
-	function loadJsonFile(url) {
-	
-	//declaration of variable to hold XMLHttpRequest object.
-	//declaration of variable to hold parsed json file.
-	var xmlhttp = new XMLHttpRequest(),
-            json;
-            
-	//Anonymous function declared to parse every time the readState changes.           
-	xmlhttp.onreadystatechange = function () {
-		//Checking whether status is OK or not and request finished and response is ready.
-    	if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-			//Parsing the JSON file and holding it in a variable.     
-       		 json = JSON.parse(xmlhttp.responseText);
-			//calling parseJsonData function to convert multi-variate data set into customized intermidiate data structure.     
-       			parseJsonData(json);
-		}
-
-	}
-	//Specifies the type of request
-	xmlhttp.open('GET', url, true);
-	//Sends the request to the server
-	xmlhttp.send();
-}
-	//Calling function for loading JSON file.
-			loadJsonFile("triLineChart.json");
-
-}
 //Function for initiating all rendering fecility.
 function renderEngine(entireChartObject)
 {
 // Starting of loadJsonFile function.
 			var computedChartObject=entireChartObject;
 			//Calculating chart height.
-			var chartheight= Math.ceil(document.getElementById("height").value);
+			var chartheight= entireChartObject.chartobject.chartHeight;
 			//Calculating chart width.
-			var chartwidth= Math.ceil(document.getElementById("width").value);
+			var chartwidth= entireChartObject.chartobject.chartWidth;
 			//Calculating number of charts to be rendered according to internal data structure.
 			var numOfChart = computedChartObject.chartobject.plot.length;
 			// Getting Plot data from internal data structure.
@@ -64,17 +24,9 @@ function renderEngine(entireChartObject)
 			//Getting sub-caption value.
 			var subCaption = computedChartObject.chartobject.chartSubCption;
 			//Checking entered div height and width.
-			if(chartheight==0||chartwidth==0)
-				{
-					alert("Enter valid height and width for proper Data-Visualization");
-					refreshAll();
-				}
-				else if(chartheight<100||chartwidth<100)
-				{
-					alert("Enter valid height and width for proper Data-Visualization");
-					refreshAll();
-				}
 			//Rendering graphical elements according to the number of chart created from internal data structure.
+			document.getElementById("caption").innerHTML=caption+"<br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"+subCaption;
+
 			for(var i=0;i<numOfChart;i++)
 			{
 				//Local variable to hold X-Axis Tick values.
@@ -90,16 +42,12 @@ function renderEngine(entireChartObject)
 				//Putting Plot information inside an array.
 				var plotData= plot[i].data;
 				//calling function for rendering all Data-Visualization items
-				svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,caption,subCaption,i);
+				svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart);
 			}
 			
 
 }
 //Declaring function for refrashing the page for asynchronously load JSON file.
-function refreshAll()
-{
-	history.go(0);
-}
 
 
 
@@ -107,12 +55,6 @@ function refreshAll()
 
 function parseJsonData(json)
 {
-	// declaring variable to hold chart-caption , Sub-Caption, X-Axis label, time values.
-    var caption = json.chart.caption,
-    subCaption= json.chart.subcaption,
-    xAxisName= json.chart.xAxisName,
-    time = json.chart.time;
-
 	/*
 	Creation of intermidiate object to hold converted multi-variate data set
 	and this calculation will be done from this intermidiate object for rendering purpose.
@@ -120,28 +62,45 @@ function parseJsonData(json)
 	*/
 	var chartObject = new Object();
 	//attributes defined for intermidiate object.
-	chartObject.chartCaption= caption;
-	chartObject.chartSubCption= subCaption;
-	chartObject.xaxisName=xAxisName;
+	var dataValueProperties = Object.keys(json.dataValues);
+	var numberOfCharts = dataValueProperties.length-1;
+	chartObject.chartCaption=json.dataCosmetics.caption;
+	chartObject.chartSubCption=json.dataCosmetics.subCaption;
+	chartObject.xaxisName= dataValueProperties[0];
+	chartObject.plot = new Array();
+    chartObject.chartHeight= json.dataCosmetics.height;
+    chartObject.chartWidth= json.dataCosmetics.width;
+	for(var index=1;index<=numberOfCharts;index++)
+	{
+		var plotData = new Object();
+		var xAxisData = json.dataValues[chartObject.xaxisName].split(",");
+		var yAxisData = json.dataValues[dataValueProperties[index]].split(",");
+		plotData.plotyAxisTitle= dataValueProperties[index];
+		plotData.data = new Array();
+		for(var interIndex=0; interIndex<xAxisData.length&&interIndex<yAxisData.length;interIndex++)
+		{
+			if((xAxisData[interIndex]===""||xAxisData[interIndex]===null|| typeof xAxisData[interIndex]===undefined)||(yAxisData[interIndex]===""||yAxisData[interIndex]===null|| typeof yAxisData[interIndex]===undefined)||typeof yAxisData[interIndex]===NaN)
+			{
+				continue;
+			}
+			else
+			{
+			var dataValue = new Object();
+			dataValue.label=xAxisData[interIndex];
+			dataValue.value=yAxisData[interIndex];
+			plotData.data.push(dataValue);
+		}
+
+		}
+		chartObject.plot.push(plotData);
+
+	}
+	// declaring variable to hold chart-caption , Sub-Caption, X-Axis label, time values.
+  
 
 	//holding the different charts value for the newly created object and storing it in plot attribute as an array.
-	chartObject.plot = new Array();
-	for (var i = 0; i<json.chart.plot.length; i++) {
-		//each object storedd in plot array is object.
-		var plotData = new Object();
-		//Defining and storing title attribute for each intermediate chart objects.
-		plotData.plotyAxisTitle=json.chart.plot[i].yAxisName;
-		//data array will hold different data set values.
-		plotData.data = new Array();
-		for (var j = 0; j<time.length; j++) {
-			var dataValue = new Object();
-			dataValue.label=time[j];
-			dataValue.value=json.chart.plot[i].data[j];
-			plotData.data.push(dataValue);
-		}	
-		//Adding in array
-		chartObject.plot.push(plotData);
-	}
+	
+
 	/*
 	Declaration of object for holding  X-Axis tick values
 	such as number of tick values and value of tick labels.
@@ -208,7 +167,7 @@ function round(value, precision) {
 // Fuction for calculating Y-Axis Tick Values it will take maximum and minimum yAxis valueand defined tick object
 function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 {
-
+	
 	var maxValue = maxYAxisValue;
 	var minValue = minYAxisValue;
 	//flooring and cieling maximum and minimum values
@@ -227,19 +186,26 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	var niceMinValueDigit = parseInt(String(Math.abs(niceMinValue)).length);
 	//declaration of loop variable
 	var i,j;
+	if(niceMaxValueDigit===1 && niceMinValueDigit===1)
+	{
+		niceMaxRangeValue=roundedMaxValue;
+		niceMinRangeValue=roundedMinValue;
+	}
+	else
+	{
 	//calculating minimum interval and maximum interval value.
-	for(i=1;i<niceMinValueDigit;i++)
+	for(i=niceMinValueDigit-1;i<=niceMinValueDigit;i++)
 	{
 		mininterval+="0";
 	}
-	for(j=2;j<niceMaxValueDigit;j++)
+	for(j=niceMaxValueDigit-1;j<=niceMaxValueDigit;j++)
 	{
 		maxinterval+="0";
 	}
 	//rounding value up-to one decimal place.
-	niceMinRangeValue= round(niceMinValue/parseInt(mininterval),1);
-	niceMaxRangeValue= round(niceMaxValue/parseInt(maxinterval),1);
-
+	niceMinRangeValue= niceMinValue/parseInt(mininterval);
+	niceMaxRangeValue= niceMaxValue/parseInt(maxinterval);
+	}
 	var roundedNiceMinRangeValue= Math.floor(niceMinRangeValue);
 	var roundedNiceMaxRangeValue= Math.ceil(niceMaxRangeValue);
 	var exactNiceMaxValue,exactNiceMinValue;
@@ -250,9 +216,9 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	exactNiceMinValue*=parseInt(mininterval);
 	//Array defination to hold Y-Axis divline properties
 	var divLineValues = new Array();
-	var stepValue=(exactNiceMaxValue-exactNiceMinValue)/5;
+	var stepValue=(exactNiceMaxValue-exactNiceMinValue)/10;
 	divLineValues.push(exactNiceMinValue);
-	for(var k =1;k<5;k++)
+	for(var k =1;k<10;k++)
 	{
 		
 		divLineValues.push(round((exactNiceMinValue+(k*stepValue)),1));
@@ -271,7 +237,7 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 }
 
 //Function responsible for all SVG rendering fecility.
-function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,caption,subCaption,i)
+function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart)
 			{
 
 				var height =chartheight;
@@ -284,7 +250,6 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
  			 	var l2x2val= width;
  			 	var l2y1val= (height*2)/3;
  				var l2y2val = (height*2)/3;
- 				var hfontsize;
  				if(height<width)
  				{
  			 		hfontsize = height/20;
@@ -311,30 +276,6 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
  				 svg.setAttribute("height",height);
  				 svg.setAttribute("width",width);
  				 svg.classList.add("chart");
-
- 				 //rendering captions and Sub-caption
- 				 if(i==0)
- 				 	{
-
- 					    var captionOnWall = document.createElementNS(NS,"text");
-						captionOnWall.setAttribute("x",(width*3)/5);
-						captionOnWall.setAttribute("y",(height)/100);
-						captionOnWall.setAttribute("fill", "#000000");
-						captionOnWall.style.fontSize=hfontsize+6;
-						captionOnWall.textContent = caption;
-						var subcaptionOnWall = document.createElementNS(NS,"text");
-						subcaptionOnWall.setAttribute("x",(width*17)/30);
-						subcaptionOnWall.setAttribute("y",(height)/15);
-						subcaptionOnWall.setAttribute("fill", "#000000");
-						subcaptionOnWall.style.fontSize=hfontsize+2;
-						subcaptionOnWall.textContent = subCaption;
-						captionOnWall.classList.add("caption");
-						subcaptionOnWall.classList.add("subCaption");
-						svg.appendChild(captionOnWall);
-						svg.appendChild(subcaptionOnWall);
-					}
-				//Rendering axis lines
-				//defining cordinate variables
  				
 				var line = document.createElementNS(NS,"line");
 				line.setAttribute("x1",l1x1val);
@@ -353,6 +294,9 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				line1.setAttribute("stroke-width",5);
 				line1.classList.add("yAxis");
 				//Rendering X-Axis and Y-Axis titles
+				if(i==numOfChart-1)
+					{
+				
 				var text = document.createElementNS(NS,"text");
 				text.setAttribute("x",(width*5)/8);
 				text.setAttribute("y",(19*height)/20);
@@ -360,10 +304,15 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				text.style.fontSize=hfontsize;
 				text.textContent = xTitle;
 				text.classList.add("xAxisTitle");
+				svg.appendChild(text);
+				}
 				var text1 = document.createElementNS(NS,"text");
-				text1.setAttribute("x",width/40);
-				text1.setAttribute("y",(height)/3);
+				var w =width/10;
+				var h = (height)/3;
+				text1.setAttribute("x",w);
+				text1.setAttribute("y",h);
 				text1.setAttribute("fill", "#000000");
+				text1.setAttribute("transform","rotate(180 125 180)");
 				text1.style.fontSize=hfontsize;
 				text1.textContent = yTitle;
 				text1.classList.add("yAxisTitle");
@@ -384,12 +333,8 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					divln.setAttribute("stroke","#202020");
 					divln.setAttribute("stroke-width",1);
 					divln.classList.add("yAxisDivLine");
-					if(j==0)
-					{
-						continue;
-					}
 					var yLabel = document.createElementNS(NS,"text");
-					yLabel.setAttribute("x",width/6);
+					yLabel.setAttribute("x",(width*11)/40);
 					yLabel.setAttribute("y",l2y1val-(k*step));
 					yLabel.setAttribute("fill", "#000000");
 					yLabel.style.fontSize=hfontsize;
@@ -420,7 +365,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					
 					if(j==0)
 					{
-						continue;
+					continue;
 					}
 					var tickCordinate = new Object();
 					tickCordinate.X= l2x1val+(j*step);
@@ -431,7 +376,10 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					var xLabel = createXLabel(j,tickCordinate,xLabels,xMapping,hfontsize);
 					xCordArr.push(xMapping);
 					svg.appendChild(xTick);
+					if(i==numOfChart-1)
+					{
 					svg.appendChild(xLabel);
+				}
 				}
 			
 				for(var t =0,u=1;t<yCordarr.length-1;t++,u++)
@@ -446,6 +394,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				}
 				//Drawing Data-plot anchors
 				var plotCircles =drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData);
+				console.log(plotCircles.length);
 				var prevX=0;
 				var prevY=0;
 				for(var c =0;c<plotCircles.length;c++)
@@ -479,7 +428,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					
 				}
 				
-				svg.appendChild(text);
+				
 				svg.appendChild(text1);
 				svg.appendChild(line);
 				svg.appendChild(line1);
@@ -498,6 +447,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					xLabel.setAttribute("fill", "#000000");
 					xLabel.style.fontSize=hfontsize;
 					xLabel.textContent = xLabels[j-1];
+					//xLabel.setAttribute("transform","rotate(2 "+tickCordinate.X+" "+tickCordinate.Y+10+")");
 					xLabel.classList.add("xAxisLabels");
 					xMapping.Value=xLabels[j-1];
 					xMapping.xCordinate=tickCordinate.X;
@@ -553,4 +503,39 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				return dataPlotCollection;
 
 			}
+			/*
+	JSON file is hosted in a server that's why to access JSON file need to call it asynchronously.
+---------------------------------------------------------------------------------------------
+loadJsonFile function is declared to access JSON file asynchronously.
+
+---------------------------------------------------------------------------------------------
+parseJsonData function is declared to read the multi-variate data set in the given JSON file
+and convert it in internal data structure.
+
+*/
+	function loadJsonFile(url) {
+	
+	//declaration of variable to hold XMLHttpRequest object.
+	//declaration of variable to hold parsed json file.
+	var xmlhttp = new XMLHttpRequest(),
+            json;
+            
+	//Anonymous function declared to parse every time the readState changes.           
+	xmlhttp.onreadystatechange = function () {
+		//Checking whether status is OK or not and request finished and response is ready.
+    	if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+			//Parsing the JSON file and holding it in a variable.     
+       		 json = JSON.parse(xmlhttp.responseText);
+			//calling parseJsonData function to convert multi-variate data set into customized intermidiate data structure.     
+       			parseJsonData(json);
+		}
+
+	}
+	//Specifies the type of request
+	xmlhttp.open('GET', url, true);
+	//Sends the request to the server
+	xmlhttp.send();
+}
+	//Calling function for loading JSON file.
+			loadJsonFile("DataResource/DataSource.json");
 

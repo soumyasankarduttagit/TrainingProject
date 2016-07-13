@@ -1,0 +1,15 @@
+{
+	"dataCosmetics": {
+		"caption": "An Example Of Multi-Variate Control Chart",
+		"subCaption": "Time vs Regional Temperature",
+		"height": 400,
+		"width": 800	
+	},
+	"dataValues": {
+		"Time": "January,February,March,April,May,June",
+		"Northern Region": "-1132,-34,-12.45,-2.45,5,23.99",
+		"Eastern Region": "29,19,45,81,34.8,55.2",
+		"Western Region": "1.45,.65,.56,.7567567,.74,.113",
+		"Southern Region": "100,,2.3,1132573457,457,540"
+	}
+}

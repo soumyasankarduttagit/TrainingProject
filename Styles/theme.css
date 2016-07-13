@@ -1,0 +1,178 @@
+
+	body, html {
+  height: 100%;
+}
+
+body {
+  display: block;
+  justify-content: center;
+  align-items: center;
+  font-family: "fira-sans-2", Verdana, sans-serif;
+}
+.caption
+{
+  position: relative;
+  background: #ffffff;
+  align-self: center;
+  margin: auto;
+  padding-right: 1%;
+  padding-top: 1%;
+  padding-left: 16%;
+  padding-bottom:0%;
+  border: 3px solid #ffffff;
+  align-items: center;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  text-transform: capitalize;
+  font-family: "Times New Roman", Times, serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 120%;
+  color: #424242;
+	
+}
+.subCaption
+{
+  position: relative;
+  background: #ffffff;
+  align-self: center;
+  margin: auto;
+  padding-right: 1%;
+  padding-top: 1%;
+  padding-left: 16%;
+  padding-bottom:1%;
+  border: 3px solid #ffffff;
+  align-items: center;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  text-transform: capitalize;
+  font-family: "Times New Roman", Times, serif;
+  font-style: normal;
+  font-weight: bold;
+}
+.xAxisLabels
+{
+     fill:#298A08;
+    writing-mode: tb-rl;
+    text-align: center;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-family: "Times New Roman", Times, serif;
+    font-style: normal;
+    stroke: #424242;
+}
+.yAxisLabels
+{
+  
+     fill:#298A08;
+   
+    text-align: center;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-family: "Times New Roman", Times, serif;
+    font-style: normal;
+    stroke: #424242;
+}
+.xAxisTitle
+{
+   
+   
+     fill:#298A08;
+
+    text-align: center;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-family: "Times New Roman", Times, serif;
+    font-style: normal;
+    stroke: #424242;
+}
+.yAxisTitle
+{
+   
+     fill:#298A08;
+    writing-mode: tb-rl;
+    text-align: center;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-family: "Times New Roman", Times, serif;
+    font-style: normal;
+    stroke: #424242;
+}
+.xAxis 
+{
+  stroke: #424242;
+  stroke-linecap:square;
+  stroke-width:1;
+
+}
+.yAxis
+{
+  stroke: #424242;
+  stroke-linecap:square;
+  stroke-width :1;
+
+}
+.xAxisDivLine
+{
+  stroke: #424242;
+
+  stroke-linecap:square;
+
+}
+.yAxisDivLine
+{
+  stroke-width :1;
+  
+  stroke: #424242;
+  stroke-linecap:square;
+}
+.chart 
+{
+  position: relative;
+  background: #ffffff;
+  align-self: center;
+  margin: auto;
+  padding-right: 30%;
+  padding-top: 0%;
+ 
+  padding-bottom: 0%;
+  border: 1px solid #ffffff;
+  align-items: center;
+}
+.plotLines{
+	
+    
+    stroke: #0174DF;
+
+    stroke-width :4;
+    stroke-linecap:square;
+}
+.plotDots
+{
+	stroke:#0174DF;
+	fill: #ffffff;
+  r:7;
+}
+.chartContainer
+{
+    margin: auto;
+    width: 100%;
+    padding-left: 10%;
+    padding-top: 0%;
+    padding-bottom: 0%;
+    align-self: center;
+    align-items: center;
+    text-align: center;
+
+}
+.plotDots:hover { 
+ fill: #0174DF; 
+ } 
+ .nullValueLine
+ {
+  stroke: #000000;
+  stroke-width: 7;
+  stroke-dasharray: 5, 5;
+ }
