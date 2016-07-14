@@ -424,7 +424,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					var toolTip = document.createElementNS(NS, "title"); 
                     toolTip.setAttributeNS(null, "class", "plotToolTip"); 
                     toolTip.innerHTML ="Time: "+plotCircles[c].xValue +"<br/>Value: "+plotCircles[c].yValue; 
-                    plotCircle.classList.add("plotDots");
+                    plotCircle.setAttributeNS(null,"class","plotDots");
                     plotCircle.appendChild(toolTip); 
 					svg.appendChild(plotCircle);
 					if((prevX!=0)&&(prevY!=0))
@@ -445,10 +445,10 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				}
 				div.appendChild(svg);
 				document.body.appendChild(div);
-				crossLineCustomEventHandler(document.getElementsByClassName("chart"),height,width);
+				crossLineCustomEventHandler(document.getElementsByClassName("chart"),height,width,plotCircles);
 				
 			}
-			function crossLineCustomEventHandler(listOfCharts,height,width)
+			function crossLineCustomEventHandler(listOfCharts,height,width,plotCircles)
 			{
 				for(var charts of listOfCharts)
 				{
@@ -467,19 +467,59 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					cross.setAttributeNS(null,"id","ii");
 					charts.appendChild(cross);
 					console.log("created");
+					var toolTipRectangle = document.createElementNS(NS,"rect");
+					toolTipRectangle.setAttributeNS(null,"x",width/3);
+					toolTipRectangle.setAttributeNS(null,"y",(height*2)/3-100);
+					toolTipRectangle.setAttributeNS(null,"width",85);
+					toolTipRectangle.setAttributeNS(null,"height",35);
+					toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
+					toolTipRectangle.setAttributeNS(null,"id","rec");
+					toolTipRectangle.setAttributeNS(null,"class","rectHide");
+					charts.appendChild(toolTipRectangle);
 
 				},false);
 					charts.addEventListener("mousemove",function(event)
 				{
-					var ee = event.clientX;
-					if(((ee-(width*13)/50)>(width/3))&&((ee-(width*13)/50)<width))
+					var plotarr = new  Array();
+					for(var plot of plotCircles)
 					{
+						plotarr.push(Math.round(plot.x));
+					}
+					console.log(plotarr);
+					var xCord,yCord,xVal,yVal;
+					var ee = event.clientX;
+					var pointValue= ((width*13)/50)+2;
+					if(((ee-pointValue)>(width/3)-1)&&((ee-pointValue)<width+1))
+					{
+						
 					var cross = document.getElementById("ii");
-					cross.setAttributeNS(null,"x1",ee-(width*13)/50);
-					cross.setAttributeNS(null,"x2",ee-(width*13)/50);
+					
+					cross.setAttributeNS(null,"x1",ee-pointValue);
+					cross.setAttributeNS(null,"x2",ee-pointValue);
+					var rec = document.getElementById("rec");
+					if(plotarr.indexOf(ee-pointValue)!==-1)
+					{
+						
+					rec.setAttributeNS(null,"x",ee-pointValue);
+					rec.setAttributeNS(null,"y",event.clientY-40);
+					rec.setAttributeNS(null,"fill","red");
+					rec.setAttributeNS(null,"class","rectShow");
+					}
+					else
+					{
+						rec.setAttributeNS(null,"class","rectHide");
+					}
+					
+					//var toolText =  document.createElementNS(null,"text");
+					//toolText.setAttributeNS(null,)
+					//if(plotarr.indexOf((ee-pointValue)-208.334)!==-1)
+					//{
+						//console.log("hurray");
+					//}
+
 					//event.target.appendChild(cross);
-					console.log(event.clientX);
-					console.log(cross.parentNode);
+					console.log(ee-pointValue);
+					//console.log(cross.parentNode);
 				}
 					//svg.appendChild(cross);
 
@@ -489,6 +529,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					
 					//cross.setAttributeNS(null,"stroke","blue");
 					charts.removeChild(document.getElementById("ii"));
+					charts.removeChild(document.getElementById("rec"));
 				});
 
 				}

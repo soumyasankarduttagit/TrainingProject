@@ -182,3 +182,13 @@ body {
   stroke-width: 1;
   fill:#e0e0d1;
  }
+ .rectHide
+ {
+  display:none;
+  opacity: 0;
+ }
+ .rectShow
+ {
+  visibility: block;
+  opacity:30%;
+ }
