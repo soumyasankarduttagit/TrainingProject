@@ -334,7 +334,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				var numTickValue= yTickDetails.numOfYTickValues;
 				var stepValue = yTickDetails.stepValue;
 				//Rendering Tick values
-				for(var k =0;k<divLineValues.length;k++)
+				for(var k =1;k<divLineValues.length;k++)
 				{
 					var divLineValue= divLineValues[k];
 					var step =(l1y2val-l1y1val)/numTickValue;
@@ -346,6 +346,19 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					divln.setAttributeNS(null,"stroke","#202020");
 					divln.setAttributeNS(null,"stroke-width",1);
 					svg.appendChild(divln);
+					var divrect = document.createElementNS(NS,"rect");
+					divrect.setAttributeNS(null,"x",l2x1val);
+					divrect.setAttributeNS(null,"y",l2y1val-(k*step));
+					divrect.setAttributeNS(null,"width",l2x2val-l2x1val);
+					divrect.setAttributeNS(null,"height",(l1y2val-l1y1val)/numTickValue);
+					divrect.setAttributeNS(null,"stroke","#ffffff");
+					if(k%2==0)
+					divrect.setAttributeNS(null,"fill","#ffffff");
+				else
+					divrect.setAttributeNS(null,"fill","#e0e0d1");
+					divrect.setAttributeNS(null,"stroke-width",0);
+
+					svg.appendChild(divrect);
 					divln.classList.add("yAxisDivLine");
 					var yLabel = document.createElementNS(NS,"text");
 					yLabel.setAttributeNS(null,"x",width/4);
@@ -469,7 +482,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					console.log("created");
 					var toolTipRectangle = document.createElementNS(NS,"rect");
 					toolTipRectangle.setAttributeNS(null,"x",width/3);
-					toolTipRectangle.setAttributeNS(null,"y",(height*2)/3-100);
+					toolTipRectangle.setAttributeNS(null,"y",(height*2)/3-20);
 					toolTipRectangle.setAttributeNS(null,"width",85);
 					toolTipRectangle.setAttributeNS(null,"height",35);
 					toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
@@ -497,12 +510,12 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					cross.setAttributeNS(null,"x1",ee-pointValue);
 					cross.setAttributeNS(null,"x2",ee-pointValue);
 					var rec = document.getElementById("rec");
-					if(plotarr.indexOf(ee-pointValue)!==-1)
+					if(plotarr.indexOf(ee-pointValue)!=-1)
 					{
 						
 					rec.setAttributeNS(null,"x",ee-pointValue);
 					rec.setAttributeNS(null,"y",event.clientY-40);
-					rec.setAttributeNS(null,"fill","red");
+					rec.setAttributeNS(null,"fill","#ffb3b3");
 					rec.setAttributeNS(null,"class","rectShow");
 					}
 					else
