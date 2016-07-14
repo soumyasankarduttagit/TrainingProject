@@ -9,6 +9,7 @@ body {
   align-items: center;
   font-family: "fira-sans-2", Verdana, sans-serif;
 }
+
 .caption
 {
   position: relative;
@@ -67,7 +68,6 @@ body {
 {
   
      fill:#298A08;
-   
     text-align: center;
     text-decoration: none;
     text-transform: capitalize;
@@ -170,9 +170,15 @@ body {
 .plotDots:hover { 
  fill: #0174DF; 
  } 
- .nullValueLine
+ .cross
  {
-  stroke: #000000;
-  stroke-width: 7;
+  stroke: red;
+  stroke-width: 1;
   stroke-dasharray: 5, 5;
+ }
+ .rect
+ {
+  stroke:#202020;
+  stroke-width: 1;
+  fill:#e0e0d1;
  }
