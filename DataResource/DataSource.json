@@ -8,8 +8,8 @@
 	"dataValues": {
 		"Time": "January,February,March,April,May,June",
 		"Northern Region": "-1132,-34,-12.45,-2.45,5,23.99",
-		"Eastern Region": "29,19,45,81,34.8,55.2",
-		"Western Region": "1.45,.65,.56,.7567567,.74,.113",
+		"Eastern Region": "290000,19000000,45000000,81900907,3466473,5534324.43",
+		"Western Region": "0,-.8,,,,",
 		"Southern Region": "100,,2.3,1132573457,457,540"
 	}
 }

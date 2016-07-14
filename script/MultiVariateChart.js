@@ -273,48 +273,58 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				var NS="http://www.w3.org/2000/svg";
 				//Creation of SVG object
 				var svg=document.createElementNS(NS,"svg");
- 				 svg.setAttribute("height",height);
- 				 svg.setAttribute("width",width);
- 				 svg.classList.add("chart");
- 				
+ 				 svg.setAttributeNS(null,"height",height+"px");
+ 				 svg.setAttributeNS(null,"width",width+"px");
+ 				 svg.setAttributeNS(null,"class","chart");
 				var line = document.createElementNS(NS,"line");
-				line.setAttribute("x1",l1x1val);
-				line.setAttribute("x2",l1x2val);
-				line.setAttribute("y1",l1y1val);
-				line.setAttribute("y2",l1y2val);
-				line.setAttribute("stroke","#202020");
-				line.setAttribute("stroke-width",5);
-				line.classList.add("xAxis");
+				line.setAttributeNS(null,"x1",l1x1val);
+				line.setAttributeNS(null,"x2",l1x2val);
+				line.setAttributeNS(null,"y1",l1y1val);
+				line.setAttributeNS(null,"y2",l1y2val);
+				line.setAttributeNS(null,"stroke","#202020");
+				line.setAttributeNS(null,"stroke-width",5);
+				line.setAttributeNS(null,"class","xAxis");
+				svg.appendChild(line);
 				var line1 = document.createElementNS(NS,"line");
-				line1.setAttribute("x1",l2x1val);
-				line1.setAttribute("x2",l2x2val);
-				line1.setAttribute("y1",l2y1val);
-				line1.setAttribute("y2",l2y2val);
-				line1.setAttribute("stroke","#202020");
-				line1.setAttribute("stroke-width",5);
-				line1.classList.add("yAxis");
+				line1.setAttributeNS(null,"x1",l2x1val);
+				line1.setAttributeNS(null,"x2",l2x2val);
+				line1.setAttributeNS(null,"y1",l2y1val);
+				line1.setAttributeNS(null,"y2",l2y2val);
+				line1.setAttributeNS(null,"stroke","#202020");
+				line1.setAttributeNS(null,"stroke-width",5);
+				line1.setAttributeNS(null,"class","yAxis");
+				svg.appendChild(line1);
+				var chartRectangle = document.createElementNS(NS,"rect");
+				chartRectangle.setAttributeNS(null,"x",l2x1val+1);
+				chartRectangle.setAttributeNS(null,"y",l1y1val+2);
+				chartRectangle.setAttributeNS(null,"width",l2x2val-l2x1val);
+				chartRectangle.setAttributeNS(null,"height",(l1y2val-l1y1val));
+				//chartRectangle.setAttributeNS(null,"fill","#202020");
+				chartRectangle.setAttributeNS(null,"class","rect");
+				svg.appendChild(chartRectangle);
 				//Rendering X-Axis and Y-Axis titles
 				if(i==numOfChart-1)
 					{
 				
 				var text = document.createElementNS(NS,"text");
-				text.setAttribute("x",(width*5)/8);
-				text.setAttribute("y",(19*height)/20);
-				text.setAttribute("fill", "#000000");
+				text.setAttributeNS(null,"x",(width*5)/8);
+				text.setAttributeNS(null,"y",(19*height)/20);
+				text.setAttributeNS(null,"fill", "#000000");
 				text.style.fontSize=hfontsize;
 				text.textContent = xTitle;
-				text.classList.add("xAxisTitle");
+				text.setAttributeNS(null,"class","xAxisTitle");
 				svg.appendChild(text);
 				}
 				var text1 = document.createElementNS(NS,"text");
 				var w =width/10;
 				var h = (height)/3;
-				text1.setAttribute("x",w);
-				text1.setAttribute("y",h);
-				text1.setAttribute("fill", "#000000");
-				text1.setAttribute("transform","rotate(180 125 180)");
+				text1.setAttributeNS(null,"x",w);
+				text1.setAttributeNS(null,"y",h);
+				text1.setAttributeNS(null,"fill", "#000000");
+				text1.setAttributeNS(null,"transform","rotate(180 125 180)");
 				text1.style.fontSize=hfontsize;
 				text1.textContent = yTitle;
+				svg.appendChild(text1);
 				text1.classList.add("yAxisTitle");
 				var divLineValues= yTickDetails.DivLineValues;
 				var niceMaxDivLineValues = yTickDetails.niceMaxExactDivValue;
@@ -324,28 +334,31 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				//Rendering Tick values
 				for(var k =0;k<divLineValues.length;k++)
 				{
+					var divLineValue= divLineValues[k];
 					var step =(l1y2val-l1y1val)/numTickValue;
 					var divln = document.createElementNS(NS,"line");
-					divln.setAttribute("x1",l2x1val);
-					divln.setAttribute("x2",l2x2val);
-					divln.setAttribute("y1",l2y1val-(k*step));
-					divln.setAttribute("y2",l2y1val-(k*step));
-					divln.setAttribute("stroke","#202020");
-					divln.setAttribute("stroke-width",1);
+					divln.setAttributeNS(null,"x1",l2x1val-5);
+					divln.setAttributeNS(null,"x2",l2x2val);
+					divln.setAttributeNS(null,"y1",l2y1val-(k*step));
+					divln.setAttributeNS(null,"y2",l2y1val-(k*step));
+					divln.setAttributeNS(null,"stroke","#202020");
+					divln.setAttributeNS(null,"stroke-width",1);
+					svg.appendChild(divln);
 					divln.classList.add("yAxisDivLine");
 					var yLabel = document.createElementNS(NS,"text");
-					yLabel.setAttribute("x",(width*11)/40);
-					yLabel.setAttribute("y",l2y1val-(k*step));
-					yLabel.setAttribute("fill", "#000000");
+					yLabel.setAttributeNS(null,"x",width/4);
+					yLabel.setAttributeNS(null,"y",l2y1val-(k*step));
+					yLabel.setAttributeNS(null,"fill", "#000000");
 					yLabel.style.fontSize=hfontsize;
-					yLabel.textContent = divLineValues[k];
+					yLabel.textContent = valueNormalizer(divLineValue);
 					yLabel.classList.add("yAxisLabels");
+					svg.appendChild(yLabel);
 					var yMapping = new Object();
 					yMapping.yCordinate= l2y1val-(k*step);
 					yMapping.value= divLineValues[k];
 					yCordarr.push(yMapping);
-					svg.appendChild(divln);
-					svg.appendChild(yLabel);
+					
+					
 
 				}
 
@@ -355,12 +368,12 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 
 					var step = (l2x2val - l2x1val)/(numOfXTick+1);
 					var xTick =document.createElementNS(NS,"line");
-					xTick.setAttribute("x1",l2x1val+(j*step));
-					xTick.setAttribute("x2",l2x1val+(j*step));
-					xTick.setAttribute("y1",(height*2)/3);
-					xTick.setAttribute("y2",(height*7)/10);
-					xTick.setAttribute("stroke","#202020");
-					xTick.setAttribute("stroke-width",2);
+					xTick.setAttributeNS(null,"x1",l2x1val+(j*step));
+					xTick.setAttributeNS(null,"x2",l2x1val+(j*step));
+					xTick.setAttributeNS(null,"y1",(height*2)/3);
+					xTick.setAttributeNS(null,"y2",(height*7)/10);
+					xTick.setAttributeNS(null,"stroke","#202020");
+					xTick.setAttributeNS(null,"stroke-width",2);
 					xTick.classList.add("xAxisDivLine");
 					
 					if(j==0)
@@ -415,11 +428,12 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					if((prevX!=0)&&(prevY!=0))
 					{
 						var linkLine = document.createElementNS(NS,"line");
-						linkLine.setAttribute("x1",prevX);
-					 	linkLine.setAttribute("x2",plotCircles[c].x);
-						linkLine.setAttribute("y1",prevY);
-						linkLine.setAttribute("y2",plotCircles[c].y);
-						linkLine.setAttribute("stroke","green");
+						linkLine.setAttributeNS(null,"x1",prevX);
+					 	linkLine.setAttributeNS(null,"x2",plotCircles[c].x);
+						linkLine.setAttributeNS(null,"y1",prevY);
+						linkLine.setAttributeNS(null,"y2",plotCircles[c].y);
+						linkLine.setAttributeNS(null,"stroke","green");
+						linkLine.setAttributeNS(null,"id","linkline");
 						linkLine.classList.add("plotLines");
 						svg.appendChild(linkLine);
 					}
@@ -427,24 +441,64 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					prevY= plotCircles[c].y;
 					
 				}
-				
-				
-				svg.appendChild(text1);
-				svg.appendChild(line);
-				svg.appendChild(line1);
-				
 				div.appendChild(svg);
 				document.body.appendChild(div);
+				crossLineCustomEventHandler(document.getElementsByClassName("chart"),height,width);
 				
+			}
+			function crossLineCustomEventHandler(listOfCharts,height,width)
+			{
+				for(var charts of listOfCharts)
+				{
+					charts.addEventListener("mouseenter",function(event)
+				{
+
+					var NS="http://www.w3.org/2000/svg";
+					var cross = document.createElementNS(NS,"line");
+					cross.setAttributeNS(null,"x1",width/3);
+					cross.setAttributeNS(null,"x2",width/3);
+					cross.setAttributeNS(null,"y1",0);
+					cross.setAttributeNS(null,"y2",(height*2)/3);
+					cross.setAttributeNS(null,"stroke","red");
+					cross.setAttributeNS(null,"stroke-width",5);
+					cross.setAttributeNS(null,"class","cross");
+					cross.setAttributeNS(null,"id","ii");
+					charts.appendChild(cross);
+					console.log("created");
+
+				},false);
+					charts.addEventListener("mousemove",function(event)
+				{
+					var ee = event.clientX;
+					if(((ee-208)>(width/3))&&((ee-208)<width))
+					{
+					var cross = document.getElementById("ii");
+					cross.setAttributeNS(null,"x1",ee-208);
+					cross.setAttributeNS(null,"x2",ee-208);
+					//event.target.appendChild(cross);
+					console.log(event.clientX);
+					console.log(cross.parentNode);
+				}
+					//svg.appendChild(cross);
+
+				},false);
+					charts.addEventListener("mouseleave",function(event)
+				{
+					
+					//cross.setAttributeNS(null,"stroke","blue");
+					charts.removeChild(document.getElementById("ii"));
+				});
+
+				}
 			}
 			//Function which will render X-Axis labels
 			function createXLabel(j,tickCordinate,xLabels,xMapping,hfontsize)
 			{		var NS="http://www.w3.org/2000/svg";
 					
 					var xLabel = document.createElementNS(NS,"text");
-					xLabel.setAttribute("x",tickCordinate.X);
-					xLabel.setAttribute("y",tickCordinate.Y+10);
-					xLabel.setAttribute("fill", "#000000");
+					xLabel.setAttributeNS(null,"x",tickCordinate.X);
+					xLabel.setAttributeNS(null,"y",tickCordinate.Y+10);
+					xLabel.setAttributeNS(null,"fill", "#000000");
 					xLabel.style.fontSize=hfontsize;
 					xLabel.textContent = xLabels[j-1];
 					//xLabel.setAttribute("transform","rotate(2 "+tickCordinate.X+" "+tickCordinate.Y+10+")");
@@ -502,6 +556,27 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				
 				return dataPlotCollection;
 
+			}
+			function valueNormalizer(divLineValue)
+			{	var resValue;
+				var valueLength = parseInt(String(Math.abs(divLineValue)).length);
+				if(valueLength>=1 && valueLength<4)
+				{
+					resValue= divLineValue;
+				}
+				else if(valueLength>=4&&valueLength<6)
+				{
+					resValue= round((divLineValue/1000),1)+"k";
+				}
+				else if(valueLength>=6 && valueLength<8)
+				{
+					resValue= round((divLineValue/100000),1)+"Lkh";
+				}
+				else
+				{
+					resValue= round((divLineValue/10000000),1)+"Cr";
+				}
+				return resValue;
 			}
 			/*
 	JSON file is hosted in a server that's why to access JSON file need to call it asynchronously.
