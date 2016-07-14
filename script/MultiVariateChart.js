@@ -363,10 +363,10 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				}
 
 
-				for(var j=0;j<(numOfXTick+1);j++)
+				for(var j=0;j<(numOfXTick);j++)
 				{
 
-					var step = (l2x2val - l2x1val)/(numOfXTick+1);
+					var step = (l2x2val - l2x1val)/(numOfXTick-1);
 					var xTick =document.createElementNS(NS,"line");
 					xTick.setAttributeNS(null,"x1",l2x1val+(j*step));
 					xTick.setAttributeNS(null,"x2",l2x1val+(j*step));
@@ -376,10 +376,10 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					xTick.setAttributeNS(null,"stroke-width",2);
 					xTick.classList.add("xAxisDivLine");
 					
-					if(j==0)
-					{
-					continue;
-					}
+				//	if(j==0)
+				//	{
+				//	continue;
+				//	}
 					var tickCordinate = new Object();
 					tickCordinate.X= l2x1val+(j*step);
 					tickCordinate.Y= (height*7)/10;
@@ -500,10 +500,10 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					xLabel.setAttributeNS(null,"y",tickCordinate.Y+10);
 					xLabel.setAttributeNS(null,"fill", "#000000");
 					xLabel.style.fontSize=hfontsize;
-					xLabel.textContent = xLabels[j-1];
+					xLabel.textContent = xLabels[j];
 					//xLabel.setAttribute("transform","rotate(2 "+tickCordinate.X+" "+tickCordinate.Y+10+")");
 					xLabel.classList.add("xAxisLabels");
-					xMapping.Value=xLabels[j-1];
+					xMapping.Value=xLabels[j];
 					xMapping.xCordinate=tickCordinate.X;
 					return xLabel;
 			}
