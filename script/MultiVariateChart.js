@@ -456,6 +456,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 			{
 				for(var charts of listOfCharts)
 				{
+					console.log(plotCircles);
 					charts.addEventListener("mouseenter",function(event)
 				{
 
@@ -470,7 +471,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					cross.setAttributeNS(null,"class","cross");
 					cross.setAttributeNS(null,"id","ii");
 					charts.appendChild(cross);
-					console.log("created");
+					//console.log("created");
 					var toolTipRectangle = document.createElementNS(NS,"rect");
 					toolTipRectangle.setAttributeNS(null,"x",width/3);
 					toolTipRectangle.setAttributeNS(null,"y",(height*2)/3-1);
@@ -489,7 +490,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					{
 						plotarr.push(Math.round(plot.x));
 					}
-					console.log(plotarr);
+					//console.log(plotarr);
 					var xCord,yCord,xVal,yVal;
 					var ee = event.clientX;
 					var pointValue= ((width*13)/50)+2;
@@ -503,7 +504,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					var rec = document.getElementById("rec");
 					if(plotarr.indexOf(ee-pointValue)!=-1)
 					{
-						
+						//console.log("********"+ee-pointValue);
 					rec.setAttributeNS(null,"x",ee-pointValue);
 					rec.setAttributeNS(null,"y",event.clientY-40);
 					rec.setAttributeNS(null,"fill","#ffb3b3");
@@ -522,7 +523,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					//}
 
 					//event.target.appendChild(cross);
-					console.log(ee-pointValue);
+					//console.log(ee-pointValue);
 					//console.log(cross.parentNode);
 				}
 					//svg.appendChild(cross);
