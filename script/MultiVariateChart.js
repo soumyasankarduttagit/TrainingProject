@@ -12,9 +12,11 @@ function renderEngine(entireChartObject)
 // Starting of loadJsonFile function.
 			var computedChartObject=entireChartObject;
 			//Calculating chart height.
-			var chartheight= entireChartObject.chartobject.chartHeight;
+			var chartheight=400;
+			// entireChartObject.chartobject.chartHeight;
 			//Calculating chart width.
-			var chartwidth= entireChartObject.chartobject.chartWidth;
+			var chartwidth=800; 
+			//entireChartObject.chartobject.chartWidth;
 			//Calculating number of charts to be rendered according to internal data structure.
 			var numOfChart = computedChartObject.chartobject.plot.length;
 			// Getting Plot data from internal data structure.
@@ -68,8 +70,8 @@ function parseJsonData(json)
 	chartObject.chartSubCption=json.dataCosmetics.subCaption;
 	chartObject.xaxisName= dataValueProperties[0];
 	chartObject.plot = new Array();
-    chartObject.chartHeight= json.dataCosmetics.height;
-    chartObject.chartWidth= json.dataCosmetics.width;
+    //chartObject.chartHeight= json.dataCosmetics.height;
+   // chartObject.chartWidth= json.dataCosmetics.width;
 	for(var index=1;index<=numberOfCharts;index++)
 	{
 		var plotData = new Object();
@@ -470,11 +472,11 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					charts.addEventListener("mousemove",function(event)
 				{
 					var ee = event.clientX;
-					if(((ee-208)>(width/3))&&((ee-208)<width))
+					if(((ee-(width*13)/50)>(width/3))&&((ee-(width*13)/50)<width))
 					{
 					var cross = document.getElementById("ii");
-					cross.setAttributeNS(null,"x1",ee-208);
-					cross.setAttributeNS(null,"x2",ee-208);
+					cross.setAttributeNS(null,"x1",ee-(width*13)/50);
+					cross.setAttributeNS(null,"x2",ee-(width*13)/50);
 					//event.target.appendChild(cross);
 					console.log(event.clientX);
 					console.log(cross.parentNode);
