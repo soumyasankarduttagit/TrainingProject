@@ -172,58 +172,26 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	
 	var maxValue = maxYAxisValue;
 	var minValue = minYAxisValue;
-	//flooring and cieling maximum and minimum values
-	var roundedMinValue=Math.floor(minValue);
-	var roundedMaxValue=Math.ceil(maxValue);
-	var niceMinValue,niceMaxValue;
-		niceMinValue=roundedMinValue;
-		niceMaxValue= roundedMaxValue;
-	
-	//Calculation of number of digits.
-	var niceMaxRangeValue,niceMinRangeValue;
-	var mininterval="1";
-	var maxinterval="1";
-	//calculating numberof digits.
-	var niceMaxValueDigit = parseInt(String(Math.abs(niceMaxValue)).length);
-	var niceMinValueDigit = parseInt(String(Math.abs(niceMinValue)).length);
-	//declaration of loop variable
-	var i,j;
-	if(niceMaxValueDigit===1 && niceMinValueDigit===1)
-	{
-		niceMaxRangeValue=roundedMaxValue;
-		niceMinRangeValue=roundedMinValue;
-	}
-	else
-	{
-	//calculating minimum interval and maximum interval value.
-	for(i=niceMinValueDigit-1;i<=niceMinValueDigit;i++)
-	{
-		mininterval+="0";
-	}
-	for(j=niceMaxValueDigit-1;j<=niceMaxValueDigit;j++)
-	{
-		maxinterval+="0";
-	}
-	//rounding value up-to one decimal place.
-	niceMinRangeValue= niceMinValue/parseInt(mininterval);
-	niceMaxRangeValue= niceMaxValue/parseInt(maxinterval);
-	}
-	var roundedNiceMinRangeValue= Math.floor(niceMinRangeValue);
-	var roundedNiceMaxRangeValue= Math.ceil(niceMaxRangeValue);
-	var exactNiceMaxValue,exactNiceMinValue;
-	//exact Nice div values.
-	exactNiceMinValue=roundedNiceMinRangeValue;
-	exactNiceMaxValue=roundedNiceMaxRangeValue;
-	exactNiceMaxValue*=parseInt(maxinterval);
-	exactNiceMinValue*=parseInt(mininterval);
+	var rangeval = maxValue-minValue;
+	var noOfStep = 6;
+	var niceRange = calcStepSize(rangeval,noOfStep);
+	exactNiceMaxValue= niceRange*Math.ceil(maxValue/niceRange);
+	exactNiceMinValue=niceRange* Math.floor(minValue/niceRange);
 	//Array defination to hold Y-Axis divline properties
 	var divLineValues = new Array();
-	var stepValue=(exactNiceMaxValue-exactNiceMinValue)/10;
+	var stepValue=(exactNiceMaxValue-exactNiceMinValue)/6;
 	divLineValues.push(exactNiceMinValue);
-	for(var k =1;k<10;k++)
+	for(var k =1;k<6;k++)
 	{
-		
-		divLineValues.push(round((exactNiceMinValue+(k*stepValue)),1));
+		if(Math.floor(exactNiceMinValue)===0)
+		{
+		divLineValues.push(round((exactNiceMinValue+(k*stepValue)),3));
+		}
+		else{
+
+				divLineValues.push(round((exactNiceMinValue+(k*stepValue)),0));
+			}
+
 
 
 	}
@@ -238,6 +206,29 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
  	yAxisTick.numOfYTickValues=divLineValues.length;
 }
 
+var calcStepSize = function(range, targetSteps)
+{
+	var ln10 = Math.log(10);
+  // calculate an initial guess at step size
+  var tempStep = range / targetSteps;
+
+  // get the magnitude of the step size
+  var mag = Math.floor(Math.log(tempStep) / ln10);
+  var magPow = Math.pow(10, mag);
+
+  // calculate most significant digit of the new step size
+  var magMsd = Math.round(tempStep / magPow + 0.5);
+
+  // promote the MSD to either 1, 2, or 5
+  if (magMsd > 5.0)
+    magMsd = 10.0;
+  else if (magMsd > 2.0)
+    magMsd = 5.0;
+  else if (magMsd > 1.0)
+    magMsd = 2.0;
+
+  return magMsd * magPow;
+};
 //Function responsible for all SVG rendering fecility.
 function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart)
 			{
@@ -334,7 +325,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				var numTickValue= yTickDetails.numOfYTickValues;
 				var stepValue = yTickDetails.stepValue;
 				//Rendering Tick values
-				for(var k =1;k<divLineValues.length;k++)
+				for(var k =0;k<divLineValues.length;k++)
 				{
 					var divLineValue= divLineValues[k];
 					var step =(l1y2val-l1y1val)/numTickValue;
@@ -355,7 +346,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					if(k%2==0)
 					divrect.setAttributeNS(null,"fill","#ffffff");
 				else
-					divrect.setAttributeNS(null,"fill","#e0e0d1");
+					divrect.setAttributeNS(null,"fill","#f5f5ef");
 					divrect.setAttributeNS(null,"stroke-width",0);
 
 					svg.appendChild(divrect);
@@ -482,7 +473,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					console.log("created");
 					var toolTipRectangle = document.createElementNS(NS,"rect");
 					toolTipRectangle.setAttributeNS(null,"x",width/3);
-					toolTipRectangle.setAttributeNS(null,"y",(height*2)/3-20);
+					toolTipRectangle.setAttributeNS(null,"y",(height*2)/3-1);
 					toolTipRectangle.setAttributeNS(null,"width",85);
 					toolTipRectangle.setAttributeNS(null,"height",35);
 					toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
@@ -614,8 +605,17 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 
 			}
 			function valueNormalizer(divLineValue)
-			{	var resValue;
-				var valueLength = parseInt(String(Math.abs(divLineValue)).length);
+			{	
+				console.log(divLineValue);
+				var resValue;
+				if((Math.floor(divLineValue)===0))
+				{
+					resValue= divLineValue;
+
+				}
+				else
+				{
+				var valueLength = parseInt(String(Math.abs(Math.floor(divLineValue))).length);
 				if(valueLength>=1 && valueLength<4)
 				{
 					resValue= divLineValue;
@@ -632,6 +632,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				{
 					resValue= round((divLineValue/10000000),1)+"Cr";
 				}
+			}
 				return resValue;
 			}
 			/*
