@@ -12,9 +12,11 @@ function renderEngine(entireChartObject)
 // Starting of loadJsonFile function.
 			var computedChartObject=entireChartObject;
 			//Calculating chart height.
-			var chartheight= entireChartObject.chartobject.chartHeight;
+			var chartheight=400;
+			// entireChartObject.chartobject.chartHeight;
 			//Calculating chart width.
-			var chartwidth= entireChartObject.chartobject.chartWidth;
+			var chartwidth=800; 
+			//entireChartObject.chartobject.chartWidth;
 			//Calculating number of charts to be rendered according to internal data structure.
 			var numOfChart = computedChartObject.chartobject.plot.length;
 			// Getting Plot data from internal data structure.
@@ -68,8 +70,8 @@ function parseJsonData(json)
 	chartObject.chartSubCption=json.dataCosmetics.subCaption;
 	chartObject.xaxisName= dataValueProperties[0];
 	chartObject.plot = new Array();
-    chartObject.chartHeight= json.dataCosmetics.height;
-    chartObject.chartWidth= json.dataCosmetics.width;
+    //chartObject.chartHeight= json.dataCosmetics.height;
+   // chartObject.chartWidth= json.dataCosmetics.width;
 	for(var index=1;index<=numberOfCharts;index++)
 	{
 		var plotData = new Object();
@@ -170,58 +172,26 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	
 	var maxValue = maxYAxisValue;
 	var minValue = minYAxisValue;
-	//flooring and cieling maximum and minimum values
-	var roundedMinValue=Math.floor(minValue);
-	var roundedMaxValue=Math.ceil(maxValue);
-	var niceMinValue,niceMaxValue;
-		niceMinValue=roundedMinValue;
-		niceMaxValue= roundedMaxValue;
-	
-	//Calculation of number of digits.
-	var niceMaxRangeValue,niceMinRangeValue;
-	var mininterval="1";
-	var maxinterval="1";
-	//calculating numberof digits.
-	var niceMaxValueDigit = parseInt(String(Math.abs(niceMaxValue)).length);
-	var niceMinValueDigit = parseInt(String(Math.abs(niceMinValue)).length);
-	//declaration of loop variable
-	var i,j;
-	if(niceMaxValueDigit===1 && niceMinValueDigit===1)
-	{
-		niceMaxRangeValue=roundedMaxValue;
-		niceMinRangeValue=roundedMinValue;
-	}
-	else
-	{
-	//calculating minimum interval and maximum interval value.
-	for(i=niceMinValueDigit-1;i<=niceMinValueDigit;i++)
-	{
-		mininterval+="0";
-	}
-	for(j=niceMaxValueDigit-1;j<=niceMaxValueDigit;j++)
-	{
-		maxinterval+="0";
-	}
-	//rounding value up-to one decimal place.
-	niceMinRangeValue= niceMinValue/parseInt(mininterval);
-	niceMaxRangeValue= niceMaxValue/parseInt(maxinterval);
-	}
-	var roundedNiceMinRangeValue= Math.floor(niceMinRangeValue);
-	var roundedNiceMaxRangeValue= Math.ceil(niceMaxRangeValue);
-	var exactNiceMaxValue,exactNiceMinValue;
-	//exact Nice div values.
-	exactNiceMinValue=roundedNiceMinRangeValue;
-	exactNiceMaxValue=roundedNiceMaxRangeValue;
-	exactNiceMaxValue*=parseInt(maxinterval);
-	exactNiceMinValue*=parseInt(mininterval);
+	var rangeval = maxValue-minValue;
+	var noOfStep = 6;
+	var niceRange = calcStepSize(rangeval,noOfStep);
+	exactNiceMaxValue= niceRange*Math.ceil(maxValue/niceRange);
+	exactNiceMinValue=niceRange* Math.floor(minValue/niceRange);
 	//Array defination to hold Y-Axis divline properties
 	var divLineValues = new Array();
-	var stepValue=(exactNiceMaxValue-exactNiceMinValue)/10;
+	var stepValue=(exactNiceMaxValue-exactNiceMinValue)/6;
 	divLineValues.push(exactNiceMinValue);
-	for(var k =1;k<10;k++)
+	for(var k =1;k<6;k++)
 	{
-		
-		divLineValues.push(round((exactNiceMinValue+(k*stepValue)),1));
+		if(Math.floor(exactNiceMinValue)===0)
+		{
+		divLineValues.push(round((exactNiceMinValue+(k*stepValue)),3));
+		}
+		else{
+
+				divLineValues.push(round((exactNiceMinValue+(k*stepValue)),0));
+			}
+
 
 
 	}
@@ -236,6 +206,29 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
  	yAxisTick.numOfYTickValues=divLineValues.length;
 }
 
+var calcStepSize = function(range, targetSteps)
+{
+	var ln10 = Math.log(10);
+  // calculate an initial guess at step size
+  var tempStep = range / targetSteps;
+
+  // get the magnitude of the step size
+  var mag = Math.floor(Math.log(tempStep) / ln10);
+  var magPow = Math.pow(10, mag);
+
+  // calculate most significant digit of the new step size
+  var magMsd = Math.round(tempStep / magPow + 0.5);
+
+  // promote the MSD to either 1, 2, or 5
+  if (magMsd > 5.0)
+    magMsd = 10.0;
+  else if (magMsd > 2.0)
+    magMsd = 5.0;
+  else if (magMsd > 1.0)
+    magMsd = 2.0;
+
+  return magMsd * magPow;
+};
 //Function responsible for all SVG rendering fecility.
 function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart)
 			{
@@ -344,6 +337,19 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					divln.setAttributeNS(null,"stroke","#202020");
 					divln.setAttributeNS(null,"stroke-width",1);
 					svg.appendChild(divln);
+					var divrect = document.createElementNS(NS,"rect");
+					divrect.setAttributeNS(null,"x",l2x1val);
+					divrect.setAttributeNS(null,"y",l2y1val-(k*step));
+					divrect.setAttributeNS(null,"width",l2x2val-l2x1val);
+					divrect.setAttributeNS(null,"height",(l1y2val-l1y1val)/numTickValue);
+					divrect.setAttributeNS(null,"stroke","#ffffff");
+					if(k%2==0)
+					divrect.setAttributeNS(null,"fill","#ffffff");
+				else
+					divrect.setAttributeNS(null,"fill","#f5f5ef");
+					divrect.setAttributeNS(null,"stroke-width",0);
+
+					svg.appendChild(divrect);
 					divln.classList.add("yAxisDivLine");
 					var yLabel = document.createElementNS(NS,"text");
 					yLabel.setAttributeNS(null,"x",width/4);
@@ -422,7 +428,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					var toolTip = document.createElementNS(NS, "title"); 
                     toolTip.setAttributeNS(null, "class", "plotToolTip"); 
                     toolTip.innerHTML ="Time: "+plotCircles[c].xValue +"<br/>Value: "+plotCircles[c].yValue; 
-                    plotCircle.classList.add("plotDots");
+                    plotCircle.setAttributeNS(null,"class","plotDots");
                     plotCircle.appendChild(toolTip); 
 					svg.appendChild(plotCircle);
 					if((prevX!=0)&&(prevY!=0))
@@ -443,13 +449,14 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				}
 				div.appendChild(svg);
 				document.body.appendChild(div);
-				crossLineCustomEventHandler(document.getElementsByClassName("chart"),height,width);
+				crossLineCustomEventHandler(document.getElementsByClassName("chart"),height,width,plotCircles);
 				
 			}
-			function crossLineCustomEventHandler(listOfCharts,height,width)
+			function crossLineCustomEventHandler(listOfCharts,height,width,plotCircles)
 			{
 				for(var charts of listOfCharts)
 				{
+					console.log(plotCircles);
 					charts.addEventListener("mouseenter",function(event)
 				{
 
@@ -464,20 +471,60 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					cross.setAttributeNS(null,"class","cross");
 					cross.setAttributeNS(null,"id","ii");
 					charts.appendChild(cross);
-					console.log("created");
+					//console.log("created");
+					var toolTipRectangle = document.createElementNS(NS,"rect");
+					toolTipRectangle.setAttributeNS(null,"x",width/3);
+					toolTipRectangle.setAttributeNS(null,"y",(height*2)/3-1);
+					toolTipRectangle.setAttributeNS(null,"width",85);
+					toolTipRectangle.setAttributeNS(null,"height",35);
+					toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
+					toolTipRectangle.setAttributeNS(null,"id","rec");
+					toolTipRectangle.setAttributeNS(null,"class","rectHide");
+					charts.appendChild(toolTipRectangle);
 
 				},false);
 					charts.addEventListener("mousemove",function(event)
 				{
-					var ee = event.clientX;
-					if(((ee-208)>(width/3))&&((ee-208)<width))
+					var plotarr = new  Array();
+					for(var plot of plotCircles)
 					{
+						plotarr.push(Math.round(plot.x));
+					}
+					//console.log(plotarr);
+					var xCord,yCord,xVal,yVal;
+					var ee = event.clientX;
+					var pointValue= ((width*13)/50)+2;
+					if(((ee-pointValue)>(width/3)-1)&&((ee-pointValue)<width+1))
+					{
+						
 					var cross = document.getElementById("ii");
-					cross.setAttributeNS(null,"x1",ee-208);
-					cross.setAttributeNS(null,"x2",ee-208);
+					
+					cross.setAttributeNS(null,"x1",ee-pointValue);
+					cross.setAttributeNS(null,"x2",ee-pointValue);
+					var rec = document.getElementById("rec");
+					if(plotarr.indexOf(ee-pointValue)!=-1)
+					{
+						//console.log("********"+ee-pointValue);
+					rec.setAttributeNS(null,"x",ee-pointValue);
+					rec.setAttributeNS(null,"y",event.clientY-40);
+					rec.setAttributeNS(null,"fill","#ffb3b3");
+					rec.setAttributeNS(null,"class","rectShow");
+					}
+					else
+					{
+						rec.setAttributeNS(null,"class","rectHide");
+					}
+					
+					//var toolText =  document.createElementNS(null,"text");
+					//toolText.setAttributeNS(null,)
+					//if(plotarr.indexOf((ee-pointValue)-208.334)!==-1)
+					//{
+						//console.log("hurray");
+					//}
+
 					//event.target.appendChild(cross);
-					console.log(event.clientX);
-					console.log(cross.parentNode);
+					//console.log(ee-pointValue);
+					//console.log(cross.parentNode);
 				}
 					//svg.appendChild(cross);
 
@@ -487,6 +534,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					
 					//cross.setAttributeNS(null,"stroke","blue");
 					charts.removeChild(document.getElementById("ii"));
+					charts.removeChild(document.getElementById("rec"));
 				});
 
 				}
@@ -558,8 +606,17 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 
 			}
 			function valueNormalizer(divLineValue)
-			{	var resValue;
-				var valueLength = parseInt(String(Math.abs(divLineValue)).length);
+			{	
+				console.log(divLineValue);
+				var resValue;
+				if((Math.floor(divLineValue)===0))
+				{
+					resValue= divLineValue;
+
+				}
+				else
+				{
+				var valueLength = parseInt(String(Math.abs(Math.floor(divLineValue))).length);
 				if(valueLength>=1 && valueLength<4)
 				{
 					resValue= divLineValue;
@@ -576,6 +633,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				{
 					resValue= round((divLineValue/10000000),1)+"Cr";
 				}
+			}
 				return resValue;
 			}
 			/*

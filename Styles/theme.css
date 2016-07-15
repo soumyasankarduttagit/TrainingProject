@@ -111,7 +111,7 @@ body {
 {
   stroke: #424242;
   stroke-linecap:square;
-  stroke-width :1;
+  stroke-width :0;
 
 }
 .xAxisDivLine
@@ -162,7 +162,7 @@ body {
     padding-left: 10%;
     padding-top: 0%;
     padding-bottom: 0%;
-    align-self: center;
+   align-self: center;
     align-items: center;
     text-align: center;
 
@@ -178,7 +178,17 @@ body {
  }
  .rect
  {
-  stroke:#202020;
-  stroke-width: 1;
-  fill:#e0e0d1;
+  stroke:#ffffff;
+  stroke-width: 0;
+  fill:#f5f5ef;
+ }
+ .rectHide
+ {
+  display:none;
+  opacity: 0;
+ }
+ .rectShow
+ {
+  visibility: block;
+  opacity:30%;
  }
