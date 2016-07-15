@@ -489,6 +489,15 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					cross.setAttributeNS(null,"class","cross");
 					cross.setAttributeNS(null,"id","ii");
 					charts.appendChild(cross);
+					var toolTipRectangle = document.createElementNS(NS,"rect");
+					toolTipRectangle.setAttributeNS(null,"x",svgwidth/3);
+					toolTipRectangle.setAttributeNS(null,"y",svgheight);
+					toolTipRectangle.setAttributeNS(null,"width",85);
+					toolTipRectangle.setAttributeNS(null,"height",35);
+					toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
+					toolTipRectangle.setAttributeNS(null,"id","rec");
+					toolTipRectangle.setAttributeNS(null,"class","rectHide");
+					charts.appendChild(toolTipRectangle);
 					
 
 				},false);
@@ -507,10 +516,19 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					cross.setAttributeNS(null,"class","cross");
 					cross.setAttributeNS(null,"id","ii");
 					charts.appendChild(cross);
+					var toolTipRectangle = document.createElementNS(NS,"rect");
+					toolTipRectangle.setAttributeNS(null,"x",svgwidth/3);
+					toolTipRectangle.setAttributeNS(null,"y",svgheight);
+					toolTipRectangle.setAttributeNS(null,"width",85);
+					toolTipRectangle.setAttributeNS(null,"height",35);
+					toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
+					toolTipRectangle.setAttributeNS(null,"id","rec");
+					toolTipRectangle.setAttributeNS(null,"class","rectHide");
+					charts.appendChild(toolTipRectangle);
 					});
 					charts.addEventListener("mousemove",function(event)
 				{
-					var crossHeirMove = new CustomEvent("CrossHeirMove",{detail:event.clientX});
+					var crossHeirMove = new CustomEvent("CrossHeirMove",{detail:{mousex:event.clientX,mousey:event.clientY}});
 					for(var chart of listOfCharts)
 					{
 						if(chart!==event.target)
@@ -520,12 +538,28 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					}
 					var svgheight = parseInt(event.target.getAttributeNS(null,"height"));
 					var svgwidth = parseInt(event.target.getAttributeNS(null,"width"));
-					
+					var plotarr = new  Array();
+					for(var plot of plotCircles)
+					{
+						plotarr.push(Math.round(plot.x));
+					}
 					var ee = event.clientX;
 					//var pointValue= ((svgwidth*13)/50)-150;
 					//if(((ee-pointValue)>(svgwidth/3)-20)&&((ee-pointValue)<svgwidth))
 					//{
-					
+					var rec = document.getElementById("rec");
+					if(plotarr.indexOf(ee)!=-1)
+					{
+						//console.log("********"+ee-pointValue);
+					rec.setAttributeNS(null,"x",ee);
+					rec.setAttributeNS(null,"y",event.clientY);
+					rec.setAttributeNS(null,"fill","#ffb3b3");
+					rec.setAttributeNS(null,"class","rectShow");
+					}
+					else
+					{
+						rec.setAttributeNS(null,"class","rectHide");
+					}
 					var cross = document.getElementsByClassName("cross");
 					for(var c of cross)
 					{
@@ -545,12 +579,28 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					var svgheight = parseInt(event.target.getAttributeNS(null,"height"));
 					var svgwidth = parseInt(event.target.getAttributeNS(null,"width"));
 					
-					var ee = event.detail;
-					//var pointValue= ((svgwidth*13)/50)-150;
-					//if(((ee-pointValue)>(svgwidth/3)-20)&&((ee-pointValue)<svgwidth))
-					//{
+					var ee = event.detail.mousex;
+					var yy = event.detail.mousey;
+					var plotarr = new  Array();
+						for(var plot of plotCircles)
+					{
+						plotarr.push(Math.round(plot.x));
+					}
 					if(charts!=event.source)
 					{
+						var rec = document.getElementById("rec");
+					if(plotarr.indexOf(ee)!=-1)
+					{
+						//console.log("********"+ee-pointValue);
+					rec.setAttributeNS(null,"x",ee);
+					rec.setAttributeNS(null,"y",yy);
+					rec.setAttributeNS(null,"fill","#ffb3b3");
+					rec.setAttributeNS(null,"class","rectShow");
+					}
+					else
+					{
+						rec.setAttributeNS(null,"class","rectHide");
+					}
 					var cross = document.getElementsByClassName("cross");
 					for(var c of cross)
 					{
