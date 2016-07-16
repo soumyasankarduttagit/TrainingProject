@@ -572,11 +572,11 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 										if(ee-9=== Math.round(t.parentNode.getAttributeNS(null,"cx")))
 										{
 											
-											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
 											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy")-20);
 											rec.setAttributeNS(null,"fill","#ffb3b3");
 											rec.setAttributeNS(null,"class","rectShow");
-											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
 											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
 											ttext.setAttributeNS(null,"class","toolTipShow");
 											ttext.textContent= t.innerHTML;
@@ -622,11 +622,11 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 									{
 										if(ee-9=== Math.round(t.parentNode.getAttributeNS(null,"cx")))
 										{
-											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
 											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy")-20);
 											rec.setAttributeNS(null,"fill","#ffb3b3");
 											rec.setAttributeNS(null,"class","rectShow");
-											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
 											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
 											//ttext.setAttributeNS(null,"fill","#ffb3b3");
 											ttext.setAttributeNS(null,"class","toolTipShow");
