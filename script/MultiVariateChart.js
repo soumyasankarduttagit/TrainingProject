@@ -1,62 +1,57 @@
-/*-----------------------------------------------------------------------------
-Defining function for rendering chart.
-This function is the starting point of Execution.
-Which is responsible for loading JSON file asynchronously and calling function
-for parsing JSON file and calling function for rendering SVG componants.
--------------------------------------------------------------------------------
+/*--------------------------------------------------------------------------------------------
+	Defining function for rendering chart.
+	This function is the starting point of Renderining visual elements.
+----------------------------------------------------------------------------------------------
 */
 
-//Function for initiating all rendering fecility.
+//	@entireChartObject is an input parameter of internal chart Object.
 function renderEngine(entireChartObject)
-{
-// Starting of loadJsonFile function.
-			var computedChartObject=entireChartObject;
-			//Calculating chart height.
-			var chartheight=400;
-			// entireChartObject.chartobject.chartHeight;
-			//Calculating chart width.
-			var chartwidth=800; 
-			//entireChartObject.chartobject.chartWidth;
-			//Calculating number of charts to be rendered according to internal data structure.
-			var numOfChart = computedChartObject.chartobject.plot.length;
-			// Getting Plot data from internal data structure.
-			var plot = computedChartObject.chartobject.plot;
-			//Getting caption value.
-			var caption = computedChartObject.chartobject.chartCaption;
-			//Getting sub-caption value.
-			var subCaption = computedChartObject.chartobject.chartSubCption;
-			//Checking entered div height and width.
-			//Rendering graphical elements according to the number of chart created from internal data structure.
-			document.getElementById("caption").innerHTML=caption+"<br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"+subCaption;
+	{
 
-			for(var i=0;i<numOfChart;i++)
-			{
-				//Local variable to hold X-Axis Tick values.
-				var numOfXTick = computedChartObject.xaxistickvalues.numOfTickValues;
-				//Local variable to hold Y-Axis details.
-				var yTickDetails = computedChartObject.yaxistickvaluesdetails.yAxisTickValues[i];
-				//Local variable to hold Y-Axis Title.
-				var yTitle= computedChartObject.chartobject.plot[i].plotyAxisTitle;
-				//Locl variable to hold X-Axis labels.
-				var xLabels= computedChartObject.xaxistickvalues.xAxisLabels;
-				//Local variable to hold X-Axis name.
-				var xTitle = computedChartObject.chartobject.xaxisName;
-				//Putting Plot information inside an array.
-				var plotData= plot[i].data;
-				//calling function for rendering all Data-Visualization items
-				svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart);
-			}
-			
-
-}
-//Declaring function for refrashing the page for asynchronously load JSON file.
-
-
-
-// Declaration of parseJsonData function starts here
-
+	var computedChartObject=entireChartObject;
+	//Calculating chart height.
+	var chartheight=400;
+	// entireChartObject.chartobject.chartHeight;
+	//Calculating chart width.
+	var chartwidth=800; 
+	//entireChartObject.chartobject.chartWidth;
+	//Calculating number of charts to be rendered according to internal data structure.
+	var numOfChart = computedChartObject.chartobject.plot.length;
+	// Getting Plot data from internal data structure.
+	var plot = computedChartObject.chartobject.plot;
+	//Getting caption value.
+	var caption = computedChartObject.chartobject.chartCaption;
+	//Getting sub-caption value.
+	var subCaption = computedChartObject.chartobject.chartSubCption;
+	//Rendering Caption and sub caption.
+	document.getElementById("caption").innerHTML=caption+"<br/>&nbsp"+subCaption;
+	//Rendering graphical elements according to the number of chart created from internal data structure.
+	for(var i=0;i<numOfChart;i++)
+		{
+			//Local variable to hold X-Axis Tick values.
+			var numOfXTick = computedChartObject.xaxistickvalues.numOfTickValues;
+			//Local variable to hold Y-Axis details.
+			var yTickDetails = computedChartObject.yaxistickvaluesdetails.yAxisTickValues[i];
+			//Local variable to hold Y-Axis Title.
+			var yTitle= computedChartObject.chartobject.plot[i].plotyAxisTitle;
+			//Locl variable to hold X-Axis labels.
+			var xLabels= computedChartObject.xaxistickvalues.xAxisLabels;
+			//Local variable to hold X-Axis name.
+			var xTitle = computedChartObject.chartobject.xaxisName;
+			//Putting Plot information inside an array.
+			var plotData= plot[i].data;
+			//calling function for rendering all Data-Visualization items
+			svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart);
+		}			
+	}
+/*
+-----------------------------------------------------------------------------------------------
+	@parseJson() resposible for parsing external JSON structure to an internal JSON structure.
+	@json input after after asynchronously loading JSON data from external JSON file.
+-----------------------------------------------------------------------------------------------
+*/
 function parseJsonData(json)
-{
+	{
 	/*
 	Creation of intermidiate object to hold converted multi-variate data set
 	and this calculation will be done from this intermidiate object for rendering purpose.
@@ -71,7 +66,7 @@ function parseJsonData(json)
 	chartObject.xaxisName= dataValueProperties[0];
 	chartObject.plot = new Array();
     //chartObject.chartHeight= json.dataCosmetics.height;
-   // chartObject.chartWidth= json.dataCosmetics.width;
+    // chartObject.chartWidth= json.dataCosmetics.width;
 	for(var index=1;index<=numberOfCharts;index++)
 	{
 		var plotData = new Object();
@@ -87,12 +82,11 @@ function parseJsonData(json)
 			}
 			else
 			{
-			var dataValue = new Object();
-			dataValue.label=xAxisData[interIndex];
-			dataValue.value=yAxisData[interIndex];
-			plotData.data.push(dataValue);
-		}
-
+				var dataValue = new Object();
+				dataValue.label=xAxisData[interIndex];
+				dataValue.value=yAxisData[interIndex];
+				plotData.data.push(dataValue);
+			}
 		}
 		chartObject.plot.push(plotData);
 
@@ -151,30 +145,42 @@ function parseJsonData(json)
 		entireChartObject.yaxistickvaluesdetails= yAxisTickDetails;
 		//calling render-engine
 		renderEngine(entireChartObject);
-}
-//Function for getting number of tick values and labels for all x axis values.
+	}
+/*
+	--------------------------------------------------------------------------------------------
+	Function for getting number of tick values and labels for all x axis values.
+	@chartObject-> Internal data structure parsed from external Json structure.
+	--------------------------------------------------------------------------------------------
+*/
 function getXAxisTicks(chartObject,xAxisTick)
-{
+	{
 	for(var i=0;i<chartObject.plot[0].data.length;i++)
 	{
   		 xAxisTick.xAxisLabels.push(chartObject.plot[0].data[i].label);
    		xAxisTick.numOfTickValues++;
 	}
-}
-//function to to calculate round up-t0 different decimal place
-function round(value, precision) {
+	}
+/*
+	@round() to calculate round up-to nth different decimal place
+*/
+function round(value, precision) 
+	{
     var multiplier = Math.pow(10, precision || 0);
     return Math.round(value * multiplier) / multiplier;
-}
-// Fuction for calculating Y-Axis Tick Values it will take maximum and minimum yAxis valueand defined tick object
+	}
+/*---------------------------------------------------------------------------------------------
+ 	Fuction for calculating Y-Axis Tick Values it will take maximum and minimum yAxis value and defined tick object
+ ----------------------------------------------------------------------------------------------
+ */
 function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
-{
+	{
 	
 	var maxValue = maxYAxisValue;
 	var minValue = minYAxisValue;
 	var rangeval = maxValue-minValue;
 	var noOfStep = 6;
-	var niceRange = calcStepSize(rangeval,noOfStep);
+	//Calling function for calculating nice step values.
+	var niceRange = calculateNiceStepSize(rangeval,noOfStep);
 	exactNiceMaxValue= niceRange*Math.ceil(maxValue/niceRange);
 	exactNiceMinValue=niceRange* Math.floor(minValue/niceRange);
 	//Array defination to hold Y-Axis divline properties
@@ -183,18 +189,19 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	divLineValues.push(exactNiceMinValue);
 	for(var k =1;k<6;k++)
 	{
+		//checking whether the value only has fractional part
 		if(Math.floor(exactNiceMinValue)===0)
 		{
-		divLineValues.push(round((exactNiceMinValue+(k*stepValue)),3));
+			//inserting values in an array
+			divLineValues.push(round((exactNiceMinValue+(k*stepValue)),3));
 		}
-		else{
-
-				divLineValues.push(round((exactNiceMinValue+(k*stepValue)),0));
-			}
-
-
-
+		else
+		{
+			//inserting values inside an array
+			divLineValues.push(round((exactNiceMinValue+(k*stepValue)),0));
+		}
 	}
+	//inserting values inside an array.
 	divLineValues.push(exactNiceMaxValue);
 	//Assigning calculated Y-Axis div-line properties into yAxisTick object.
 	yAxisTick.niceMaxExactDivValue=exactNiceMaxValue;
@@ -204,17 +211,21 @@ function getYAxisTicks(maxYAxisValue,minYAxisValue,yAxisTick)
 	//Storing divline(tick) values in the yAxisTick object property.
  	yAxisTick.DivLineValues=divLineValues;
  	yAxisTick.numOfYTickValues=divLineValues.length;
-}
+	}
+/*---------------------------------------------------------------------------------------------
+	@calculateNiceStepSize -> calculating nice step values for Y-Axis values.
+	-------------------------------------------------------------------------------------------
+*/
 
-var calcStepSize = function(range, targetSteps)
-{
+var calculateNiceStepSize = function(range, noOfSteps)
+	{
 	var ln10 = Math.log(10);
   // calculate an initial guess at step size
-  var tempStep = range / targetSteps;
+  var tempStep = range / noOfSteps;
 
   // get the magnitude of the step size
-  var mag = Math.floor(Math.log(tempStep) / ln10);
-  var magPow = Math.pow(10, mag);
+  var magnitude = Math.floor(Math.log(tempStep) / ln10);
+  var magPow = Math.pow(10, magnitude);
 
   // calculate most significant digit of the new step size
   var magMsd = Math.round(tempStep / magPow + 0.5);
@@ -228,11 +239,22 @@ var calcStepSize = function(range, targetSteps)
     magMsd = 2.0;
 
   return magMsd * magPow;
-};
-//Function responsible for all SVG rendering fecility.
+	};
+/*---------------------------------------------------------------------------------------------
+	@svgCreate() Function responsible for creating and rendering  all SVG objects.
+	input parameters 
+	@chartheight -> Indivudual SVG height.
+	@chartwidth  -> Individual SVG width.
+	@numOfXTick  -> Number of X-Axis Ticks.
+	@xLabels     -> Array of X-Axis Labels.
+	@yTickDetails-> Array of Y-Axis Ticks.
+	@yTitle      -> Title of Y-Axis.
+	@xTitle 	 -> Title of X-Axis.
+-----------------------------------------------------------------------------------------------
+*/
 function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart)
 			{
-
+				//variable declarations for X-Axis and Y-Axis.
 				var height =chartheight;
 				var width = chartwidth;
 				var l1x1val = width/3;
@@ -240,7 +262,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
  			 	var l1y1val = 0;
  			 	var l1y2val = (height*2)/3;
  				var l2x1val= width/3;
- 			 	var l2x2val= width;
+ 			 	var l2x2val= width-10;
  			 	var l2y1val= (height*2)/3;
  				var l2y2val = (height*2)/3;
  				if(height<width)
@@ -269,6 +291,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
  				 svg.setAttributeNS(null,"height",height+"px");
  				 svg.setAttributeNS(null,"width",width+"px");
  				 svg.setAttributeNS(null,"class","chart");
+ 				 //creating Y-Axis
 				var line = document.createElementNS(NS,"line");
 				line.setAttributeNS(null,"x1",l1x1val);
 				line.setAttributeNS(null,"x2",l1x2val);
@@ -278,6 +301,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				line.setAttributeNS(null,"stroke-width",5);
 				line.setAttributeNS(null,"class","xAxis");
 				svg.appendChild(line);
+				//Creating X-Axis
 				var line1 = document.createElementNS(NS,"line");
 				line1.setAttributeNS(null,"x1",l2x1val);
 				line1.setAttributeNS(null,"x2",l2x2val);
@@ -287,20 +311,19 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				line1.setAttributeNS(null,"stroke-width",5);
 				line1.setAttributeNS(null,"class","yAxis");
 				svg.appendChild(line1);
-				
 				//Rendering X-Axis and Y-Axis titles
 				if(i==numOfChart-1)
 					{
 				
-				var text = document.createElementNS(NS,"text");
-				text.setAttributeNS(null,"x",(width*5)/8);
-				text.setAttributeNS(null,"y",(19*height)/20);
-				text.setAttributeNS(null,"fill", "#000000");
-				text.style.fontSize=hfontsize;
-				text.textContent = xTitle;
-				text.setAttributeNS(null,"class","xAxisTitle");
-				svg.appendChild(text);
-				}
+						var text = document.createElementNS(NS,"text");
+						text.setAttributeNS(null,"x",(width*5)/8);
+						text.setAttributeNS(null,"y",(19*height)/20);
+						text.setAttributeNS(null,"fill", "#000000");
+						text.style.fontSize=hfontsize;
+						text.textContent = xTitle;
+						text.setAttributeNS(null,"class","xAxisTitle");
+						svg.appendChild(text);
+					}
 				var text1 = document.createElementNS(NS,"text");
 				var w =width/10;
 				var h = (height)/3;
@@ -338,10 +361,9 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					divrect.setAttributeNS(null,"stroke","#ffffff");
 					if(k%2==0)
 					divrect.setAttributeNS(null,"fill","#ffffff");
-				else
+					else
 					divrect.setAttributeNS(null,"fill","#f5f5ef");
 					divrect.setAttributeNS(null,"stroke-width",0);
-
 					svg.appendChild(divrect);
 					divln.classList.add("yAxisDivLine");
 					var yLabel = document.createElementNS(NS,"text");
@@ -355,23 +377,19 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					var yMapping = new Object();
 					yMapping.yCordinate= l2y1val-(k*step);
 					yMapping.value= divLineValues[k];
-					yCordarr.push(yMapping);
-					
-					
+					yCordarr.push(yMapping);	
 
 				}
 				var chartRectangle = document.createElementNS(NS,"rect");
 				chartRectangle.setAttributeNS(null,"x",l2x1val);
 				chartRectangle.setAttributeNS(null,"y",l1y1val);
-				chartRectangle.setAttributeNS(null,"width",l2x2val-l2x1val);
+				chartRectangle.setAttributeNS(null,"width",(l2x2val-l2x1val)+10);
 				chartRectangle.setAttributeNS(null,"height",(l1y2val-l1y1val));
 				//chartRectangle.setAttributeNS(null,"fill","#202020");
 				chartRectangle.setAttributeNS(null,"class","rect");
 				svg.appendChild(chartRectangle);
-
 				for(var j=0;j<(numOfXTick);j++)
 				{
-
 					var step = (l2x2val - l2x1val)/(numOfXTick-1);
 					var xTick =document.createElementNS(NS,"line");
 					xTick.setAttributeNS(null,"x1",l2x1val+(j*step));
@@ -381,11 +399,6 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					xTick.setAttributeNS(null,"stroke","#202020");
 					xTick.setAttributeNS(null,"stroke-width",2);
 					xTick.classList.add("xAxisDivLine");
-					
-				//	if(j==0)
-				//	{
-				//	continue;
-				//	}
 					var tickCordinate = new Object();
 					tickCordinate.X= l2x1val+(j*step);
 					tickCordinate.Y= (height*7)/10;
@@ -397,10 +410,9 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					svg.appendChild(xTick);
 					if(i==numOfChart-1)
 					{
-					svg.appendChild(xLabel);
+						svg.appendChild(xLabel);
+					}
 				}
-				}
-			
 				for(var t =0,u=1;t<yCordarr.length-1;t++,u++)
 				{
 					var plotSlice = new Object();
@@ -413,13 +425,11 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				}
 				//Drawing Data-plot anchors
 				var plotCircles =drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData);
-				console.log(plotCircles.length);
+				//console.log(plotCircles.length);
 				var prevX=0;
 				var prevY=0;
 				for(var c =0;c<plotCircles.length;c++)
-				{
-					 
-                    
+				{ 
 					var plotCircle = document.createElementNS(NS,"circle");
 					plotCircle.setAttributeNS(null, "cx", plotCircles[c].x);
 					plotCircle.setAttributeNS(null, "cy", plotCircles[c].y);
@@ -427,7 +437,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					plotCircle.setAttributeNS(null, "fill", "green");
 					var toolTip = document.createElementNS(NS, "title"); 
                     toolTip.setAttributeNS(null, "class", "plotToolTip"); 
-                    toolTip.innerHTML ="Time: "+plotCircles[c].xValue +"<br/>Value: "+plotCircles[c].yValue; 
+                    toolTip.innerHTML =plotCircles[c].yValue; 
                     plotCircle.setAttributeNS(null,"class","plotDots");
                     plotCircle.appendChild(toolTip); 
 					svg.appendChild(plotCircle);
@@ -449,135 +459,155 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				}
 				div.appendChild(svg);
 				document.body.appendChild(div);
+
+				//@crossLineCustomEventHandler -> function for propagating custom events and other events on chart.
 				crossLineCustomEventHandler(document.getElementsByClassName("rect"),plotCircles);
 				
 			}
-			function crossLineCustomEventHandler(listOfCharts,plotCircles)
+/*
+	@crossLineCustomEventHandler() -> propagating and handling all events intiated within the chart.
+	@listOfCharts -> colection of SVG rectangle created.
+*/
+function crossLineCustomEventHandler(listOfCharts,plotCircles)
+	{
+		for(var charts of listOfCharts)
 			{
-				for(var charts of listOfCharts)
-				{
-					
-					charts.addEventListener("mouseenter",function(event)
-				{
-					var initializeCrossHeir = new CustomEvent("InitializeCrossHeir",{detail:event.clientX});
-					for(var chart of listOfCharts)
+				//event handler for mousemove event.
+				charts.addEventListener("mouseenter",function(event)
 					{
-						if(chart!==event.target)
-						{
-							chart.dispatchEvent(initializeCrossHeir);
-						}
-					}
-					var tool = document.getElementsByClassName("plotToolTip");
-					for(var t of tool)
-					{
-
-						if(event.target.parentNode === t.parentNode.parentNode)
-						{
-							console.log(t.innerHTML);
-						}
-					}
-					var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
-					var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
-					var NS="http://www.w3.org/2000/svg";
-					var cross = document.createElementNS(NS,"line");
-					cross.setAttributeNS(null,"x1",svgwidth);
-					cross.setAttributeNS(null,"x2",svgwidth);
-					cross.setAttributeNS(null,"y1",0);
-					cross.setAttributeNS(null,"y2",svgheight);
-					cross.setAttributeNS(null,"stroke","red");
-					//cross.setAttributeNS(null,"stroke-width",5);
-					cross.setAttributeNS(null,"class","cross");
-					cross.setAttributeNS(null,"id","ii");
-					//charts.appendChild(cross);
-					event.target.parentNode.appendChild(cross);
-					var toolTipRectangle = document.createElementNS(NS,"rect");
-					toolTipRectangle.setAttributeNS(null,"x",svgwidth/3);
-					toolTipRectangle.setAttributeNS(null,"y",svgheight);
-					toolTipRectangle.setAttributeNS(null,"width",85);
-					toolTipRectangle.setAttributeNS(null,"height",35);
-					toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
-					toolTipRectangle.setAttributeNS(null,"id","rec");
-					toolTipRectangle.setAttributeNS(null,"class","rectHide");
-					//charts.appendChild(toolTipRectangle);
-					event.target.parentNode.appendChild(toolTipRectangle);
+						//@intializeCrossHeir -> custom event for creating crossheir in all other charts.
+						var initializeCrossHeir = new CustomEvent("InitializeCrossHeir",{detail:event.clientX});
+							for(var chart of listOfCharts)
+								{
+									if(chart!==event.target)
+									{
+										chart.dispatchEvent(initializeCrossHeir);
+									}
+								}
+						var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
+						var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
+						var NS="http://www.w3.org/2000/svg";
+						var cross = document.createElementNS(NS,"line");
+						cross.setAttributeNS(null,"x1",svgwidth);
+						cross.setAttributeNS(null,"x2",svgwidth);
+						cross.setAttributeNS(null,"y1",0);
+						cross.setAttributeNS(null,"y2",svgheight);
+						cross.setAttributeNS(null,"stroke","red");
+						cross.setAttributeNS(null,"class","cross");
+						cross.setAttributeNS(null,"id","ii");
+						event.target.parentNode.appendChild(cross);
+						var toolTipRectangle = document.createElementNS(NS,"rect");
+						toolTipRectangle.setAttributeNS(null,"x",svgwidth/3);
+						toolTipRectangle.setAttributeNS(null,"y",svgheight);
+						toolTipRectangle.setAttributeNS(null,"width",80);
+						toolTipRectangle.setAttributeNS(null,"height",35);
+						toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
+						toolTipRectangle.setAttributeNS(null,"id","rec");
+						toolTipRectangle.setAttributeNS(null,"class","rectHide");
+						var toolTipText = document.createElementNS(NS,"text");
+						toolTipText.setAttributeNS(null,"x",svgwidth/3);
+						toolTipText.setAttributeNS(null,"y",svgheight);
+						toolTipText.setAttributeNS(null,"id","text");
+						//toolTipText.textContent="helo";
+						toolTipText.setAttributeNS(null,"class","tooTipHide");
+						event.target.parentNode.appendChild(toolTipRectangle);
+						event.target.parentNode.appendChild(toolTipText);
 					
+					},false);
 
-				},false);
-
-					charts.addEventListener("InitializeCrossHeir",function(event){
-					var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
-					var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
-					var NS="http://www.w3.org/2000/svg";
-					var cross = document.createElementNS(NS,"line");
-					cross.setAttributeNS(null,"x1",svgwidth);
-					cross.setAttributeNS(null,"x2",svgwidth);
-					cross.setAttributeNS(null,"y1",0);
-					cross.setAttributeNS(null,"y2",svgheight);
-					cross.setAttributeNS(null,"stroke","red");
-					//cross.setAttributeNS(null,"stroke-width",5);
-					cross.setAttributeNS(null,"class","cross");
-					cross.setAttributeNS(null,"id","ii");
-					//charts.appendChild(cross);
-					event.target.parentNode.appendChild(cross);
-					var toolTipRectangle = document.createElementNS(NS,"rect");
-					toolTipRectangle.setAttributeNS(null,"x",svgwidth);
-					toolTipRectangle.setAttributeNS(null,"y",svgheight);
-					toolTipRectangle.setAttributeNS(null,"width",85);
-					toolTipRectangle.setAttributeNS(null,"height",35);
-					toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
-					toolTipRectangle.setAttributeNS(null,"id","rec");
-					toolTipRectangle.setAttributeNS(null,"class","rectHide");
-					//charts.appendChild(toolTipRectangle);
-					event.target.parentNode.appendChild(toolTipRectangle);
+					charts.addEventListener("InitializeCrossHeir",function(event)
+					{
+						var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
+						var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
+						var NS="http://www.w3.org/2000/svg";
+						var cross = document.createElementNS(NS,"line");
+						cross.setAttributeNS(null,"x1",svgwidth);
+						cross.setAttributeNS(null,"x2",svgwidth);
+						cross.setAttributeNS(null,"y1",0);
+						cross.setAttributeNS(null,"y2",svgheight);
+						cross.setAttributeNS(null,"stroke","red");
+						//cross.setAttributeNS(null,"stroke-width",5);
+						cross.setAttributeNS(null,"class","cross");
+						cross.setAttributeNS(null,"id","ii");
+						//charts.appendChild(cross);
+						event.target.parentNode.appendChild(cross);
+						var toolTipRectangle = document.createElementNS(NS,"rect");
+						toolTipRectangle.setAttributeNS(null,"x",svgwidth);
+						toolTipRectangle.setAttributeNS(null,"y",svgheight);
+						toolTipRectangle.setAttributeNS(null,"width",80);
+						toolTipRectangle.setAttributeNS(null,"height",35);
+						toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
+						toolTipRectangle.setAttributeNS(null,"id","rec");
+						toolTipRectangle.setAttributeNS(null,"class","rectHide");
+						var toolTipText = document.createElementNS(NS,"text");
+						toolTipText.setAttributeNS(null,"x",svgwidth/3);
+						toolTipText.setAttributeNS(null,"y",svgheight);
+						toolTipText.setAttributeNS(null,"id","text");
+						//toolTipText.textContent="hello";
+						toolTipText.setAttributeNS(null,"class","toolTipHide");
+						
+						//charts.appendChild(toolTipRectangle);
+						event.target.parentNode.appendChild(toolTipRectangle);
+						event.target.parentNode.appendChild(toolTipText);
 					});
-					charts.addEventListener("mousemove",function(event)
-				{
-					var crossHeirMove = new CustomEvent("CrossHeirMove",{detail:{mousex:event.clientX,mousey:event.clientY}});
-					for(var chart of listOfCharts)
+				charts.addEventListener("mousemove",function(event)
 					{
-						if(chart!==event.target)
-						{
-							chart.dispatchEvent(crossHeirMove);
-						}
-					}
-					var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
-					var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
-					var plotarr = new  Array();
-					for(var plot of plotCircles)
-					{
-						plotarr.push(Math.round(plot.x));
-					}
-					var ee = event.clientX;
-					//var pointValue= ((svgwidth*13)/50)-150;
-					//if(((ee-pointValue)>(svgwidth/3)-20)&&((ee-pointValue)<svgwidth))
-					//{
-					var rec = document.getElementById("rec");
-					if(plotarr.indexOf(ee)!=-1)
-					{
-						//console.log("********"+ee-pointValue);
-					rec.setAttributeNS(null,"x",ee);
-					rec.setAttributeNS(null,"y",event.clientY);
-					rec.setAttributeNS(null,"fill","#ffb3b3");
-					rec.setAttributeNS(null,"class","rectShow");
-					}
-					else
-					{
-						rec.setAttributeNS(null,"class","rectHide");
-					}
-					var cross = document.getElementsByClassName("cross");
-					for(var c of cross)
-					{
+						var crossHeirMove = new CustomEvent("CrossHeirMove",{detail:{mousex:event.clientX,mousey:event.clientY}});
+						for(var chart of listOfCharts)
+							{
+								if(chart!==event.target)
+									{
+										chart.dispatchEvent(crossHeirMove);
+									}
+							}
 
-					c.setAttributeNS(null,"x1",ee);
-					c.setAttributeNS(null,"x2",ee);
-					//c.setAttributeNS(null,"y1",0);
-					//c.setAttributeNS(null,"y2",svgwidth/3);
-					}
+						var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
+						var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
+						var ee = event.clientX;
+						
+						var tool = event.currentTarget.parentNode.getElementsByClassName("plotToolTip");
+						for(var t of tool)
+							{
+
+								if(event.currentTarget.parentNode === t.parentNode.parentNode)
+									{
+										var rec = event.currentTarget.parentNode.getElementById("rec");
+										var ttext = event.currentTarget.parentNode.getElementById("text");
+										if(ee-9=== Math.round(t.parentNode.getAttributeNS(null,"cx")))
+										{
+											
+											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy")-20);
+											rec.setAttributeNS(null,"fill","#ffb3b3");
+											rec.setAttributeNS(null,"class","rectShow");
+											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
+											ttext.setAttributeNS(null,"class","toolTipShow");
+											//ttext.setAttributeNS(null,"fill","#ffb3b3");
+											//ttext.setAttributeNS(null,"class","rectShow");
+											ttext.textContent= t.innerHTML;
+											console.log(ee+"   "+t.innerHTML);
+											
+										}
+										else
+										{
+											//rec.setAttributeNS(null,"class","rectHide");
+											//ttext.setAttributeNS(null,"class","toolTipHide");
+										}
+
+										
+									}
+							}
+							var cross = document.getElementsByClassName("cross");
+						for(var c of cross)
+							{
+
+								c.setAttributeNS(null,"x1",ee-10);
+								c.setAttributeNS(null,"x2",ee-10);
+								//c.setAttributeNS(null,"y1",0);
+								//c.setAttributeNS(null,"y2",svgwidth/3);
+							}
 					
-				
-				//}
-					//svg.appendChild(cross);
-
 				},false);
 					charts.addEventListener("CrossHeirMove",function(event){
 					var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
@@ -585,49 +615,79 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					
 					var ee = event.detail.mousex;
 					var yy = event.detail.mousey;
-					var plotarr = new  Array();
-						for(var plot of plotCircles)
-					{
-						plotarr.push(Math.round(plot.x));
-					}
+					
 					if(charts!=event.source)
-					{
-						var rec = document.getElementById("rec");
-					if(plotarr.indexOf(ee)!=-1)
-					{
-						//console.log("********"+ee-pointValue);
-					rec.setAttributeNS(null,"x",ee);
-					rec.setAttributeNS(null,"y",yy);
-					rec.setAttributeNS(null,"fill","#ffb3b3");
-					rec.setAttributeNS(null,"class","rectShow");
-					}
-					else
-					{
-						rec.setAttributeNS(null,"class","rectHide");
-					}
-					var cross = document.getElementsByClassName("cross");
-					for(var c of cross)
-					{
+						{
+							var rec = event.currentTarget.parentNode.getElementById("rec");
+							var ttext = event.currentTarget.parentNode.getElementById("text");
+							
+								var tool = event.currentTarget.parentNode.getElementsByClassName("plotToolTip");
+						for(var t of tool)
+							{
 
-					c.setAttributeNS(null,"x1",ee-1);
-					c.setAttributeNS(null,"x2",ee-1);
-					//c.setAttributeNS(null,"y1",0);
-					//c.setAttributeNS(null,"y2",svgwidth/3);
-					}
+								if(event.currentTarget.parentNode === t.parentNode.parentNode)
+									{
+										if(ee-9=== Math.round(t.parentNode.getAttributeNS(null,"cx")))
+										{
+											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy")-20);
+											rec.setAttributeNS(null,"fill","#ffb3b3");
+											rec.setAttributeNS(null,"class","rectShow");
+											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
+											//ttext.setAttributeNS(null,"fill","#ffb3b3");
+											ttext.setAttributeNS(null,"class","toolTipShow");
+											ttext.textContent= t.innerHTML;
+											console.log(ee+"   "+t.innerHTML);
+										}
+										else
+										{
+											//rec.setAttributeNS(null,"class","rectHide");
+											//ttext.setAttributeNS(null,"class","toolTipHide");
+										}
+										
+									}
+
+							}
+							var cross = document.getElementsByClassName("cross");
+							for(var c of cross)
+								{
+
+									c.setAttributeNS(null,"x1",ee-1);
+									c.setAttributeNS(null,"x2",ee-1);
+									//c.setAttributeNS(null,"y1",0);
+									//c.setAttributeNS(null,"y2",svgwidth/3);
+								}
 					}});
 					charts.addEventListener("mouseleave",function(event)
 				{
+
+
+
+
+					var cross = event.target.parentNode.getElementById("ii");
+						//	for(var c of cross)
+						//{
+						//	if(c.parentNode===event.target.parentNode)
+						//	{
+							if(cross)
+								event.target.parentNode.removeChild(cross);
+							//}
+						//}
 					
 					//cross.setAttributeNS(null,"stroke","blue");
-					var cross = document.getElementById("ii");
-							//for(var c of cross)
+					//var cross = document.getElementById("ii");
+						//	for(var c of cross)
 						//{
-						if(cross.parentNode===event.source)
-							{
-								cross.setAttributeNS(null,"class","crossHide");
-								event.target.parentNode.removeChild(cross);
-							}
-						////}
+						//if(c.parentNode===event.target.parentNode)
+						//	{
+							//	cross.setAttributeNS(null,"class","crossHide");
+						//	if(cross)
+						//	{
+						//		event.target.parentNode.removeChild(cross);
+						//	}
+						//	}
+						//}
 					var crossHeirDisappear = new CustomEvent("DisapearCrossHeir",{detail:event.clientX});
 					for(var chart of listOfCharts)
 					{
@@ -644,7 +704,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 							var cross = document.getElementsByClassName("cross");
 							for(var c of cross)
 						{
-							if(c.parentNode===event.target)
+							if(c.parentNode===event.target.parentNode)
 							{
 								event.target.parentNode.removeChild(c);
 							}
@@ -655,43 +715,51 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 
 				}
 			}
-			//Function which will render X-Axis labels
-			function createXLabel(j,tickCordinate,xLabels,xMapping,hfontsize)
-			{		var NS="http://www.w3.org/2000/svg";
-					
-					var xLabel = document.createElementNS(NS,"text");
-					xLabel.setAttributeNS(null,"x",tickCordinate.X);
-					xLabel.setAttributeNS(null,"y",tickCordinate.Y+10);
-					xLabel.setAttributeNS(null,"fill", "#000000");
-					xLabel.style.fontSize=hfontsize;
-					xLabel.textContent = xLabels[j];
-					//xLabel.setAttribute("transform","rotate(2 "+tickCordinate.X+" "+tickCordinate.Y+10+")");
-					xLabel.classList.add("xAxisLabels");
-					xMapping.Value=xLabels[j];
-					xMapping.xCordinate=tickCordinate.X;
-					return xLabel;
-			}
+/*----------------------------------------------------------------------------------------------------------
+	Function which will rendering  X-Axis labels
+	@index--> parameter for denoting a particular Tick.
+	@tickCordinate for holdig cordinate value of a particular tick.
+	@xLabel Returing a SVG object.
+	--------------------------------------------------------------------------------------------------------
+*/
+
+function createXLabel(index,tickCordinate,xLabels,xMapping,hfontsize)
+	{		
+		var NS="http://www.w3.org/2000/svg";	
+		var xLabel = document.createElementNS(NS,"text");
+		xLabel.setAttributeNS(null,"x",tickCordinate.X);
+		xLabel.setAttributeNS(null,"y",tickCordinate.Y+10);
+		xLabel.setAttributeNS(null,"fill", "#000000");
+		xLabel.style.fontSize=hfontsize;
+		xLabel.textContent = xLabels[index];
+		//xLabel.setAttribute("transform","rotate(2 "+tickCordinate.X+" "+tickCordinate.Y+10+")");
+		xLabel.classList.add("xAxisLabels");
+		xMapping.Value=xLabels[index];
+		xMapping.xCordinate=tickCordinate.X;
+		return xLabel;
+	}
 		
-			//Function for calculating  Data-Plot Cordinates 
-			function drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData)
+/*----------------------------------------------------------------------------------------------------------
+	Function for calculating  Data-Plot Cordinates and producing internal data-structure
+	with data plot coordinates and values.
+------------------------------------------------------------------------------------------------------------
+*/ 
+function drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData)
+	{
+		var dataPlotCollection = new Array();
+		for(var d=0;d<plotData.length;d++)
 			{
-				var dataPlotCollection = new Array();
-				for(var d=0;d<plotData.length;d++)
-				{
-					var plotXValue = plotData[d].label;
-					var plotYValue = plotData[d].value;
-					var plotXCordinate=0;
-					var plotYCordinate=0;
-					for(var t=0;t<xCordArr.length;t++)
+				var plotXValue = plotData[d].label;
+				var plotYValue = plotData[d].value;
+				var plotXCordinate=0;
+				var plotYCordinate=0;
+				for(var t=0;t<xCordArr.length;t++)
 					{
 						if(xCordArr[t].Value==plotXValue)
 						{
-							plotXCordinate= xCordArr[t].xCordinate;
-							
+							plotXCordinate= xCordArr[t].xCordinate;	
 							break;
-						}
-						
-						
+						}		
 					}
 					for(var p=0;p<plotSliceCollection.length;p++)
 					{
@@ -706,32 +774,35 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 							break;
 
 						}
-
-
 					}
+
 					var plotcord = new Object();
 					plotcord.xValue=plotXValue;
 					plotcord.yValue=plotYValue;
 					plotcord.x = plotXCordinate;
 					plotcord.y = plotYCordinate;
 					dataPlotCollection.push(plotcord);
-
 				}
 				
-				return dataPlotCollection;
+			return dataPlotCollection;
+	}
+
+/*-----------------------------------------------------------------------------------------------------------
+	@valuNormalizer function is responsible for showing Y-Axis values with a particular unit accorrding to the defined range.
+	 @divLineValue local variable acts as parameter for possible number system
+--------------------------------------------------------------------------------------------------------------
+*/
+function valueNormalizer(divLineValue)
+	{	
+		//console.log(divLineValue);
+		var resValue;
+		if((Math.floor(divLineValue)===0))
+			{
+				resValue= divLineValue;
 
 			}
-			function valueNormalizer(divLineValue)
-			{	
-				console.log(divLineValue);
-				var resValue;
-				if((Math.floor(divLineValue)===0))
-				{
-					resValue= divLineValue;
-
-				}
-				else
-				{
+			else
+			{
 				var valueLength = parseInt(String(Math.abs(Math.floor(divLineValue))).length);
 				if(valueLength>=1 && valueLength<4)
 				{
@@ -751,40 +822,45 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				}
 			}
 				return resValue;
-			}
-			/*
+	}
+/*
 	JSON file is hosted in a server that's why to access JSON file need to call it asynchronously.
----------------------------------------------------------------------------------------------
-loadJsonFile function is declared to access JSON file asynchronously.
+	---------------------------------------------------------------------------------------------
+	loadJsonFile function is declared to access JSON file asynchronously.
 
----------------------------------------------------------------------------------------------
-parseJsonData function is declared to read the multi-variate data set in the given JSON file
-and convert it in internal data structure.
+	---------------------------------------------------------------------------------------------
+	parseJsonData function is declared to read the multi-variate data set in the given JSON file
+	and convert it in internal data structure.
 
 */
-	function loadJsonFile(url) {
+//@url parameter for passing JSON File address
+function loadJsonFile(url) 
+	{
 	
-	//declaration of variable to hold XMLHttpRequest object.
-	//declaration of variable to hold parsed json file.
-	var xmlhttp = new XMLHttpRequest(),
+		//declaration of variable to hold XMLHttpRequest object.
+		//declaration of variable to hold parsed json file.
+		var xmlhttp = new XMLHttpRequest(),
             json;
             
-	//Anonymous function declared to parse every time the readState changes.           
-	xmlhttp.onreadystatechange = function () {
-		//Checking whether status is OK or not and request finished and response is ready.
-    	if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-			//Parsing the JSON file and holding it in a variable.     
-       		 json = JSON.parse(xmlhttp.responseText);
-			//calling parseJsonData function to convert multi-variate data set into customized intermidiate data structure.     
-       			parseJsonData(json);
-		}
+		//Anonymous function declared to parse every time the readState changes.           
+		xmlhttp.onreadystatechange = function () 
+		{
+			//Checking whether status is OK or not and request finished and response is ready.
+    		if (xmlhttp.readyState === 4 && xmlhttp.status === 200) 
+    			{
+					//Parsing the JSON file and holding it in a variable.     
+       				 json = JSON.parse(xmlhttp.responseText);
+					//calling parseJsonData function to convert multi-variate data set into customized intermidiate data structure.     
+       				parseJsonData(json);
+				}
 
+		}
+		//Specifies the type of request
+		xmlhttp.open('GET', url, true);
+		//Sends the request to the server
+		xmlhttp.send();
 	}
-	//Specifies the type of request
-	xmlhttp.open('GET', url, true);
-	//Sends the request to the server
-	xmlhttp.send();
-}
-	//Calling function for loading JSON file.
-			loadJsonFile("DataResource/DataSource.json");
+//Calling function for loading JSON file asynchronously.
+//Everytime page loads loadJsonFile function wil be called.
+loadJsonFile("DataResource/DataSource.json");
 
