@@ -24,7 +24,8 @@ function renderEngine(entireChartObject)
 	//Getting sub-caption value.
 	var subCaption = computedChartObject.chartobject.chartSubCption;
 	//Rendering Caption and sub caption.
-	document.getElementById("caption").innerHTML=caption+"<br/>&nbsp"+subCaption;
+	document.getElementById("caption").innerHTML=caption;
+	document.getElementById("subcaption").innerHTML=subCaption;
 	//Rendering graphical elements according to the number of chart created from internal data structure.
 	for(var i=0;i<numOfChart;i++)
 		{
@@ -267,15 +268,15 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
  				var l2y2val = (height*2)/3;
  				if(height<width)
  				{
- 			 		hfontsize = height/20;
+ 			 		hfontsize = height/24;
  			 	}
  			 	else if(height==width)
  			 	{
- 			 		hfontsize = height/20;
+ 			 		hfontsize = height/24;
  			 	}
  			 	else
  			 	{
- 			 		hfontsize=width/20;
+ 			 		hfontsize=width/24;
  			 	}
  			 	
 				var div = document.createElement("div");
@@ -499,7 +500,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						var toolTipRectangle = document.createElementNS(NS,"rect");
 						toolTipRectangle.setAttributeNS(null,"x",svgwidth/3);
 						toolTipRectangle.setAttributeNS(null,"y",svgheight);
-						toolTipRectangle.setAttributeNS(null,"width",80);
+						toolTipRectangle.setAttributeNS(null,"width",95);
 						toolTipRectangle.setAttributeNS(null,"height",35);
 						toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
 						toolTipRectangle.setAttributeNS(null,"id","rec");
@@ -526,15 +527,13 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						cross.setAttributeNS(null,"y1",0);
 						cross.setAttributeNS(null,"y2",svgheight);
 						cross.setAttributeNS(null,"stroke","red");
-						//cross.setAttributeNS(null,"stroke-width",5);
 						cross.setAttributeNS(null,"class","cross");
 						cross.setAttributeNS(null,"id","ii");
-						//charts.appendChild(cross);
 						event.target.parentNode.appendChild(cross);
 						var toolTipRectangle = document.createElementNS(NS,"rect");
 						toolTipRectangle.setAttributeNS(null,"x",svgwidth);
 						toolTipRectangle.setAttributeNS(null,"y",svgheight);
-						toolTipRectangle.setAttributeNS(null,"width",80);
+						toolTipRectangle.setAttributeNS(null,"width",95);
 						toolTipRectangle.setAttributeNS(null,"height",35);
 						toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
 						toolTipRectangle.setAttributeNS(null,"id","rec");
@@ -543,10 +542,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						toolTipText.setAttributeNS(null,"x",svgwidth/3);
 						toolTipText.setAttributeNS(null,"y",svgheight);
 						toolTipText.setAttributeNS(null,"id","text");
-						//toolTipText.textContent="hello";
 						toolTipText.setAttributeNS(null,"class","toolTipHide");
-						
-						//charts.appendChild(toolTipRectangle);
 						event.target.parentNode.appendChild(toolTipRectangle);
 						event.target.parentNode.appendChild(toolTipText);
 					});
@@ -564,27 +560,25 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
 						var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
 						var ee = event.clientX;
-						
+						var rec = event.currentTarget.parentNode.getElementById("rec");
+						var ttext = event.currentTarget.parentNode.getElementById("text");
 						var tool = event.currentTarget.parentNode.getElementsByClassName("plotToolTip");
 						for(var t of tool)
 							{
 
 								if(event.currentTarget.parentNode === t.parentNode.parentNode)
 									{
-										var rec = event.currentTarget.parentNode.getElementById("rec");
-										var ttext = event.currentTarget.parentNode.getElementById("text");
+										
 										if(ee-9=== Math.round(t.parentNode.getAttributeNS(null,"cx")))
 										{
 											
-											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
 											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy")-20);
 											rec.setAttributeNS(null,"fill","#ffb3b3");
 											rec.setAttributeNS(null,"class","rectShow");
-											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
 											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
 											ttext.setAttributeNS(null,"class","toolTipShow");
-											//ttext.setAttributeNS(null,"fill","#ffb3b3");
-											//ttext.setAttributeNS(null,"class","rectShow");
 											ttext.textContent= t.innerHTML;
 											console.log(ee+"   "+t.innerHTML);
 											
@@ -604,8 +598,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 
 								c.setAttributeNS(null,"x1",ee-10);
 								c.setAttributeNS(null,"x2",ee-10);
-								//c.setAttributeNS(null,"y1",0);
-								//c.setAttributeNS(null,"y2",svgwidth/3);
+								
 							}
 					
 				},false);
@@ -629,11 +622,11 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 									{
 										if(ee-9=== Math.round(t.parentNode.getAttributeNS(null,"cx")))
 										{
-											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
 											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy")-20);
 											rec.setAttributeNS(null,"fill","#ffb3b3");
 											rec.setAttributeNS(null,"class","rectShow");
-											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
 											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
 											//ttext.setAttributeNS(null,"fill","#ffb3b3");
 											ttext.setAttributeNS(null,"class","toolTipShow");
@@ -665,13 +658,19 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 
 
 
-					var cross = event.target.parentNode.getElementById("ii");
+					var cross = event.currentTarget.parentNode.getElementById("ii");
+					var rec = event.currentTarget.parentNode.getElementById("rec");
+					var ttext = event.currentTarget.parentNode.getElementById("text");
 						//	for(var c of cross)
 						//{
 						//	if(c.parentNode===event.target.parentNode)
 						//	{
 							if(cross)
-								event.target.parentNode.removeChild(cross);
+								event.currentTarget.parentNode.removeChild(cross);
+							if(rec)
+							event.currentTarget.parentNode.removeChild(rec);
+							if(ttext)
+								event.currentTarget.parentNode.removeChild(ttext);
 							//}
 						//}
 					
@@ -699,16 +698,36 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 					
 				});
 					charts.addEventListener("DisapearCrossHeir", function(event){
-						//if(event.target!=event.source)
+						
+						var cross = event.currentTarget.parentNode.getElementById("ii");
+						var rec = event.currentTarget.parentNode.getElementById("rec");
+						var ttext = event.currentTarget.parentNode.getElementById("text");
+						//	for(var c of cross)
 						//{
-							var cross = document.getElementsByClassName("cross");
+						//	if(c.parentNode===event.target.parentNode)
+						//	{
+							if(cross)
+								event.currentTarget.parentNode.removeChild(cross);
+							if(rec)
+							event.currentTarget.parentNode.removeChild(rec);
+							if(ttext)
+								event.currentTarget.parentNode.removeChild(ttext);//if(event.target!=event.source)
+						//{
+							/*var cross = document.getElementsByClassName("cross");
 							for(var c of cross)
 						{
 							if(c.parentNode===event.target.parentNode)
 							{
 								event.target.parentNode.removeChild(c);
 							}
-						}
+						}*/
+						//var cross = event.currentTarget.parentNode.getElementById("ii");
+						//	for(var c of cross)
+						//{
+						//	if(c.parentNode===event.target.parentNode)
+						//	{
+							//if(cross)
+							//	event.currentTarget.parentNode.removeChild(cross);
 
 						//}
 					});
