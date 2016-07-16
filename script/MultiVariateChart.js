@@ -500,7 +500,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						var toolTipRectangle = document.createElementNS(NS,"rect");
 						toolTipRectangle.setAttributeNS(null,"x",svgwidth/3);
 						toolTipRectangle.setAttributeNS(null,"y",svgheight);
-						toolTipRectangle.setAttributeNS(null,"width",90);
+						toolTipRectangle.setAttributeNS(null,"width",95);
 						toolTipRectangle.setAttributeNS(null,"height",35);
 						toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
 						toolTipRectangle.setAttributeNS(null,"id","rec");
@@ -527,15 +527,13 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						cross.setAttributeNS(null,"y1",0);
 						cross.setAttributeNS(null,"y2",svgheight);
 						cross.setAttributeNS(null,"stroke","red");
-						//cross.setAttributeNS(null,"stroke-width",5);
 						cross.setAttributeNS(null,"class","cross");
 						cross.setAttributeNS(null,"id","ii");
-						//charts.appendChild(cross);
 						event.target.parentNode.appendChild(cross);
 						var toolTipRectangle = document.createElementNS(NS,"rect");
 						toolTipRectangle.setAttributeNS(null,"x",svgwidth);
 						toolTipRectangle.setAttributeNS(null,"y",svgheight);
-						toolTipRectangle.setAttributeNS(null,"width",90);
+						toolTipRectangle.setAttributeNS(null,"width",95);
 						toolTipRectangle.setAttributeNS(null,"height",35);
 						toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
 						toolTipRectangle.setAttributeNS(null,"id","rec");
@@ -544,10 +542,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						toolTipText.setAttributeNS(null,"x",svgwidth/3);
 						toolTipText.setAttributeNS(null,"y",svgheight);
 						toolTipText.setAttributeNS(null,"id","text");
-						//toolTipText.textContent="hello";
 						toolTipText.setAttributeNS(null,"class","toolTipHide");
-						
-						//charts.appendChild(toolTipRectangle);
 						event.target.parentNode.appendChild(toolTipRectangle);
 						event.target.parentNode.appendChild(toolTipText);
 					});
@@ -584,8 +579,6 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
 											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
 											ttext.setAttributeNS(null,"class","toolTipShow");
-											//ttext.setAttributeNS(null,"fill","#ffb3b3");
-											//ttext.setAttributeNS(null,"class","rectShow");
 											ttext.textContent= t.innerHTML;
 											console.log(ee+"   "+t.innerHTML);
 											
@@ -605,8 +598,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 
 								c.setAttributeNS(null,"x1",ee-10);
 								c.setAttributeNS(null,"x2",ee-10);
-								//c.setAttributeNS(null,"y1",0);
-								//c.setAttributeNS(null,"y2",svgwidth/3);
+								
 							}
 					
 				},false);
