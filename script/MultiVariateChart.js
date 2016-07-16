@@ -24,7 +24,8 @@ function renderEngine(entireChartObject)
 	//Getting sub-caption value.
 	var subCaption = computedChartObject.chartobject.chartSubCption;
 	//Rendering Caption and sub caption.
-	document.getElementById("caption").innerHTML=caption+"<br/>&nbsp"+subCaption;
+	document.getElementById("caption").innerHTML=caption;
+	document.getElementById("subcaption").innerHTML=subCaption;
 	//Rendering graphical elements according to the number of chart created from internal data structure.
 	for(var i=0;i<numOfChart;i++)
 		{
@@ -267,15 +268,15 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
  				var l2y2val = (height*2)/3;
  				if(height<width)
  				{
- 			 		hfontsize = height/20;
+ 			 		hfontsize = height/24;
  			 	}
  			 	else if(height==width)
  			 	{
- 			 		hfontsize = height/20;
+ 			 		hfontsize = height/24;
  			 	}
  			 	else
  			 	{
- 			 		hfontsize=width/20;
+ 			 		hfontsize=width/24;
  			 	}
  			 	
 				var div = document.createElement("div");
@@ -564,15 +565,15 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
 						var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
 						var ee = event.clientX;
-						
+						var rec = event.currentTarget.parentNode.getElementById("rec");
+						var ttext = event.currentTarget.parentNode.getElementById("text");
 						var tool = event.currentTarget.parentNode.getElementsByClassName("plotToolTip");
 						for(var t of tool)
 							{
 
 								if(event.currentTarget.parentNode === t.parentNode.parentNode)
 									{
-										var rec = event.currentTarget.parentNode.getElementById("rec");
-										var ttext = event.currentTarget.parentNode.getElementById("text");
+										
 										if(ee-9=== Math.round(t.parentNode.getAttributeNS(null,"cx")))
 										{
 											
