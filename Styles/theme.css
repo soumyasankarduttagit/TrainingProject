@@ -134,11 +134,11 @@ body {
   background: #ffffff;
   align-self: left;
   margin: auto;
-  padding-right: 1%;
+  padding-right: 0%;
   padding-top: 0%;
  
   padding-bottom: 0%;
-  border: 1px solid #ffffff;
+ 
   align-items: left;
 }
 .plotLines{
@@ -182,7 +182,16 @@ body {
   stroke-width: 1;
   stroke-dasharray: 5, 5;
  }
-
+.toolTipHide
+{
+  display: none;
+  opacity: 0;
+}
+.toolTipShow
+{
+  display: block;
+  opacity:30%;
+}
  .crossHide
  {
   display:none;
@@ -198,7 +207,7 @@ body {
  }
  .rectHide
  {
-  
+  display: none;
   opacity: 0;
  }
  .rectShow

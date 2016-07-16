@@ -499,7 +499,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						var toolTipRectangle = document.createElementNS(NS,"rect");
 						toolTipRectangle.setAttributeNS(null,"x",svgwidth/3);
 						toolTipRectangle.setAttributeNS(null,"y",svgheight);
-						toolTipRectangle.setAttributeNS(null,"width",85);
+						toolTipRectangle.setAttributeNS(null,"width",80);
 						toolTipRectangle.setAttributeNS(null,"height",35);
 						toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
 						toolTipRectangle.setAttributeNS(null,"id","rec");
@@ -508,8 +508,8 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						toolTipText.setAttributeNS(null,"x",svgwidth/3);
 						toolTipText.setAttributeNS(null,"y",svgheight);
 						toolTipText.setAttributeNS(null,"id","text");
-						toolTipText.textContent="helo";
-						//toolTipText.setAttributeNS(null,"class","rectHide");
+						//toolTipText.textContent="helo";
+						toolTipText.setAttributeNS(null,"class","tooTipHide");
 						event.target.parentNode.appendChild(toolTipRectangle);
 						event.target.parentNode.appendChild(toolTipText);
 					
@@ -534,7 +534,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						var toolTipRectangle = document.createElementNS(NS,"rect");
 						toolTipRectangle.setAttributeNS(null,"x",svgwidth);
 						toolTipRectangle.setAttributeNS(null,"y",svgheight);
-						toolTipRectangle.setAttributeNS(null,"width",85);
+						toolTipRectangle.setAttributeNS(null,"width",80);
 						toolTipRectangle.setAttributeNS(null,"height",35);
 						toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
 						toolTipRectangle.setAttributeNS(null,"id","rec");
@@ -543,8 +543,8 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						toolTipText.setAttributeNS(null,"x",svgwidth/3);
 						toolTipText.setAttributeNS(null,"y",svgheight);
 						toolTipText.setAttributeNS(null,"id","text");
-						toolTipText.textContent="hello";
-						//toolTipText.setAttributeNS(null,"class","rectHide");
+						//toolTipText.textContent="hello";
+						toolTipText.setAttributeNS(null,"class","toolTipHide");
 						
 						//charts.appendChild(toolTipRectangle);
 						event.target.parentNode.appendChild(toolTipRectangle);
@@ -563,36 +563,26 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 
 						var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
 						var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
-						/*var plotarr = new  Array();
-						for(var plot of plotCircles)
-							{
-								plotarr.push(Math.round(plot.x));
-							}*/
 						var ee = event.clientX;
 						
-						/*if(plotarr.indexOf(ee)!=-1)
-							{
-								//console.log("********"+ee-pointValue);
-								
-							}*/
-						
-							var tool = event.currentTarget.parentNode.getElementsByClassName("plotToolTip");
+						var tool = event.currentTarget.parentNode.getElementsByClassName("plotToolTip");
 						for(var t of tool)
 							{
 
 								if(event.currentTarget.parentNode === t.parentNode.parentNode)
 									{
-										var rec = document.getElementById("rec");
+										var rec = event.currentTarget.parentNode.getElementById("rec");
 										var ttext = event.currentTarget.parentNode.getElementById("text");
 										if(ee-9=== Math.round(t.parentNode.getAttributeNS(null,"cx")))
 										{
 											
-											/*rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
-											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
+											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy")-20);
 											rec.setAttributeNS(null,"fill","#ffb3b3");
-											rec.setAttributeNS(null,"class","rectShow");*/
+											rec.setAttributeNS(null,"class","rectShow");
 											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
 											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
+											ttext.setAttributeNS(null,"class","toolTipShow");
 											//ttext.setAttributeNS(null,"fill","#ffb3b3");
 											//ttext.setAttributeNS(null,"class","rectShow");
 											ttext.textContent= t.innerHTML;
@@ -602,7 +592,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 										else
 										{
 											//rec.setAttributeNS(null,"class","rectHide");
-											//ttext.setAttributeNS(null,"class","rectHide");
+											//ttext.setAttributeNS(null,"class","toolTipHide");
 										}
 
 										
@@ -628,7 +618,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 					
 					if(charts!=event.source)
 						{
-							var rec = document.getElementById("rec");
+							var rec = event.currentTarget.parentNode.getElementById("rec");
 							var ttext = event.currentTarget.parentNode.getElementById("text");
 							
 								var tool = event.currentTarget.parentNode.getElementsByClassName("plotToolTip");
@@ -639,21 +629,21 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 									{
 										if(ee-9=== Math.round(t.parentNode.getAttributeNS(null,"cx")))
 										{
-											/*rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
-											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
+											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy")-20);
 											rec.setAttributeNS(null,"fill","#ffb3b3");
-											rec.setAttributeNS(null,"class","rectShow");*/
+											rec.setAttributeNS(null,"class","rectShow");
 											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
 											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
 											//ttext.setAttributeNS(null,"fill","#ffb3b3");
-											//ttext.setAttributeNS(null,"class","rectShow");
+											ttext.setAttributeNS(null,"class","toolTipShow");
 											ttext.textContent= t.innerHTML;
 											console.log(ee+"   "+t.innerHTML);
 										}
 										else
 										{
 											//rec.setAttributeNS(null,"class","rectHide");
-											//ttext.setAttributeNS(null,"class","rectHide");
+											//ttext.setAttributeNS(null,"class","toolTipHide");
 										}
 										
 									}
