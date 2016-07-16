@@ -449,7 +449,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				}
 				div.appendChild(svg);
 				document.body.appendChild(div);
-				crossLineCustomEventHandler(document.getElementsByClassName("chart"),plotCircles);
+				crossLineCustomEventHandler(document.getElementsByClassName("rect"),plotCircles);
 				
 			}
 			function crossLineCustomEventHandler(listOfCharts,plotCircles)
@@ -471,24 +471,25 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					for(var t of tool)
 					{
 
-						if(event.target === t.parentNode.parentNode)
+						if(event.target.parentNode === t.parentNode.parentNode)
 						{
 							console.log(t.innerHTML);
 						}
 					}
-					var svgheight = parseInt(event.target.getAttributeNS(null,"height"));
-					var svgwidth = parseInt(event.target.getAttributeNS(null,"width"));
+					var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
+					var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
 					var NS="http://www.w3.org/2000/svg";
 					var cross = document.createElementNS(NS,"line");
-					cross.setAttributeNS(null,"x1",svgwidth/3);
-					cross.setAttributeNS(null,"x2",svgwidth/3);
+					cross.setAttributeNS(null,"x1",svgwidth);
+					cross.setAttributeNS(null,"x2",svgwidth);
 					cross.setAttributeNS(null,"y1",0);
-					cross.setAttributeNS(null,"y2",(svgheight*2)/3);
+					cross.setAttributeNS(null,"y2",svgheight);
 					cross.setAttributeNS(null,"stroke","red");
 					//cross.setAttributeNS(null,"stroke-width",5);
 					cross.setAttributeNS(null,"class","cross");
 					cross.setAttributeNS(null,"id","ii");
-					charts.appendChild(cross);
+					//charts.appendChild(cross);
+					event.target.parentNode.appendChild(cross);
 					var toolTipRectangle = document.createElementNS(NS,"rect");
 					toolTipRectangle.setAttributeNS(null,"x",svgwidth/3);
 					toolTipRectangle.setAttributeNS(null,"y",svgheight);
@@ -497,34 +498,37 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
 					toolTipRectangle.setAttributeNS(null,"id","rec");
 					toolTipRectangle.setAttributeNS(null,"class","rectHide");
-					charts.appendChild(toolTipRectangle);
+					//charts.appendChild(toolTipRectangle);
+					event.target.parentNode.appendChild(toolTipRectangle);
 					
 
 				},false);
 
 					charts.addEventListener("InitializeCrossHeir",function(event){
-					var svgheight = parseInt(event.target.getAttributeNS(null,"height"));
-					var svgwidth = parseInt(event.target.getAttributeNS(null,"width"));
+					var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
+					var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
 					var NS="http://www.w3.org/2000/svg";
 					var cross = document.createElementNS(NS,"line");
-					cross.setAttributeNS(null,"x1",svgwidth/3);
-					cross.setAttributeNS(null,"x2",svgwidth/3);
+					cross.setAttributeNS(null,"x1",svgwidth);
+					cross.setAttributeNS(null,"x2",svgwidth);
 					cross.setAttributeNS(null,"y1",0);
-					cross.setAttributeNS(null,"y2",(svgheight*2)/3);
+					cross.setAttributeNS(null,"y2",svgheight);
 					cross.setAttributeNS(null,"stroke","red");
 					//cross.setAttributeNS(null,"stroke-width",5);
 					cross.setAttributeNS(null,"class","cross");
 					cross.setAttributeNS(null,"id","ii");
-					charts.appendChild(cross);
+					//charts.appendChild(cross);
+					event.target.parentNode.appendChild(cross);
 					var toolTipRectangle = document.createElementNS(NS,"rect");
-					toolTipRectangle.setAttributeNS(null,"x",svgwidth/3);
+					toolTipRectangle.setAttributeNS(null,"x",svgwidth);
 					toolTipRectangle.setAttributeNS(null,"y",svgheight);
 					toolTipRectangle.setAttributeNS(null,"width",85);
 					toolTipRectangle.setAttributeNS(null,"height",35);
 					toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
 					toolTipRectangle.setAttributeNS(null,"id","rec");
 					toolTipRectangle.setAttributeNS(null,"class","rectHide");
-					charts.appendChild(toolTipRectangle);
+					//charts.appendChild(toolTipRectangle);
+					event.target.parentNode.appendChild(toolTipRectangle);
 					});
 					charts.addEventListener("mousemove",function(event)
 				{
@@ -536,8 +540,8 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 							chart.dispatchEvent(crossHeirMove);
 						}
 					}
-					var svgheight = parseInt(event.target.getAttributeNS(null,"height"));
-					var svgwidth = parseInt(event.target.getAttributeNS(null,"width"));
+					var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
+					var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
 					var plotarr = new  Array();
 					for(var plot of plotCircles)
 					{
@@ -576,8 +580,8 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 
 				},false);
 					charts.addEventListener("CrossHeirMove",function(event){
-					var svgheight = parseInt(event.target.getAttributeNS(null,"height"));
-					var svgwidth = parseInt(event.target.getAttributeNS(null,"width"));
+					var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
+					var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
 					
 					var ee = event.detail.mousex;
 					var yy = event.detail.mousey;
@@ -615,14 +619,15 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				{
 					
 					//cross.setAttributeNS(null,"stroke","blue");
-					var cross = document.getElementsByClassName("cross");
-							for(var c of cross)
-						{
-							if(c.parentNode===event.source)
+					var cross = document.getElementById("ii");
+							//for(var c of cross)
+						//{
+						if(cross.parentNode===event.source)
 							{
-								event.target.removeChild(c);
+								cross.setAttributeNS(null,"class","crossHide");
+								event.target.parentNode.removeChild(cross);
 							}
-						}
+						////}
 					var crossHeirDisappear = new CustomEvent("DisapearCrossHeir",{detail:event.clientX});
 					for(var chart of listOfCharts)
 					{
@@ -634,18 +639,18 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					
 				});
 					charts.addEventListener("DisapearCrossHeir", function(event){
-						if(event.target!=event.source)
-						{
+						//if(event.target!=event.source)
+						//{
 							var cross = document.getElementsByClassName("cross");
 							for(var c of cross)
 						{
 							if(c.parentNode===event.target)
 							{
-								event.target.removeChild(c);
+								event.target.parentNode.removeChild(c);
 							}
 						}
 
-						}
+						//}
 					});
 
 				}
