@@ -25,8 +25,8 @@ body {
   display: block;
   text-align: center;
   text-decoration: none;
-  text-transform: capitalize;
-  font-family: arial, sans-serif;
+  text-transform: uppercase;
+  font-family: sans-serif;
   font-style: normal;
   font-weight: bold;
   font-size: 120%;
@@ -48,8 +48,8 @@ body {
   display: block;
   text-align: center;
   text-decoration: none;
-  text-transform: capitalize;
-  font-family: arial, sans-serif;
+  text-transform: uppercase;
+  font-family: sans-serif;
   font-style: normal;
   font-weight: normal;
 }
@@ -72,7 +72,7 @@ body {
     text-align: center;
     text-decoration: none;
     text-transform: capitalize;
-   font-family: arial, sans-serif;
+   font-family:sans-serif;
   font-style: normal;
   font-weight: lighter;
     stroke: #424242;
@@ -86,7 +86,7 @@ body {
     text-align: center;
     text-decoration: none;
     text-transform: capitalize;
-    font-family: arial, sans-serif;
+    font-family:sans-serif;
   font-style: normal;
   font-weight: lighter;
     stroke: #424242;
@@ -99,7 +99,7 @@ body {
     text-align: center;
     text-decoration: none;
     text-transform: capitalize;
-    font-family: arial, sans-serif;
+    font-family: sans-serif;
   font-style: normal;
   font-weight: lighter;
     stroke: #424242;
@@ -176,13 +176,13 @@ body {
  } 
  .cross
  {
-  stroke: red;
+  stroke: #f15c5c;
   stroke-width: 1;
   stroke-dasharray: 5, 5;
  }
  .crossdiff
  {
-  stroke: red;
+  stroke: #f15c5c;
   stroke-width: 1;
   stroke-dasharray: 5, 5;
  }

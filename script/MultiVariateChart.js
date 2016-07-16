@@ -527,7 +527,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						cross.setAttributeNS(null,"y1",0);
 						cross.setAttributeNS(null,"y2",svgheight);
 						cross.setAttributeNS(null,"stroke","red");
-						cross.setAttributeNS(null,"class","cross");
+						cross.setAttributeNS(null,"class","crossdiff");
 						cross.setAttributeNS(null,"id","ii");
 						event.target.parentNode.appendChild(cross);
 						var toolTipRectangle = document.createElementNS(NS,"rect");
@@ -625,11 +625,11 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
 											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy")-20);
 											rec.setAttributeNS(null,"fill","#ffb3b3");
-											rec.setAttributeNS(null,"class","rectShow");
+											rec.setAttributeNS(null,"class","rectShowDiff");
 											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
 											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
 											//ttext.setAttributeNS(null,"fill","#ffb3b3");
-											ttext.setAttributeNS(null,"class","toolTipShow");
+											ttext.setAttributeNS(null,"class","toolTipShowDiff");
 											ttext.textContent= t.innerHTML;
 											console.log(ee+"   "+t.innerHTML);
 										}
@@ -642,7 +642,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 									}
 
 							}
-							var cross = document.getElementsByClassName("cross");
+							var cross = document.getElementsByClassName("crossdiff");
 							for(var c of cross)
 								{
 
