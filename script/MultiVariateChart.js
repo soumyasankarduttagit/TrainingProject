@@ -499,7 +499,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						var toolTipRectangle = document.createElementNS(NS,"rect");
 						toolTipRectangle.setAttributeNS(null,"x",svgwidth/3);
 						toolTipRectangle.setAttributeNS(null,"y",svgheight);
-						toolTipRectangle.setAttributeNS(null,"width",80);
+						toolTipRectangle.setAttributeNS(null,"width",90);
 						toolTipRectangle.setAttributeNS(null,"height",35);
 						toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
 						toolTipRectangle.setAttributeNS(null,"id","rec");
@@ -534,7 +534,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						var toolTipRectangle = document.createElementNS(NS,"rect");
 						toolTipRectangle.setAttributeNS(null,"x",svgwidth);
 						toolTipRectangle.setAttributeNS(null,"y",svgheight);
-						toolTipRectangle.setAttributeNS(null,"width",80);
+						toolTipRectangle.setAttributeNS(null,"width",90);
 						toolTipRectangle.setAttributeNS(null,"height",35);
 						toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
 						toolTipRectangle.setAttributeNS(null,"id","rec");
@@ -665,13 +665,19 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 
 
 
-					var cross = event.target.parentNode.getElementById("ii");
+					var cross = event.currentTarget.parentNode.getElementById("ii");
+					var rec = event.currentTarget.parentNode.getElementById("rec");
+					var ttext = event.currentTarget.parentNode.getElementById("text");
 						//	for(var c of cross)
 						//{
 						//	if(c.parentNode===event.target.parentNode)
 						//	{
 							if(cross)
-								event.target.parentNode.removeChild(cross);
+								event.currentTarget.parentNode.removeChild(cross);
+							if(rec)
+							event.currentTarget.parentNode.removeChild(rec);
+							if(ttext)
+								event.currentTarget.parentNode.removeChild(ttext);
 							//}
 						//}
 					
@@ -701,14 +707,21 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 					charts.addEventListener("DisapearCrossHeir", function(event){
 						//if(event.target!=event.source)
 						//{
-							var cross = document.getElementsByClassName("cross");
+							/*var cross = document.getElementsByClassName("cross");
 							for(var c of cross)
 						{
 							if(c.parentNode===event.target.parentNode)
 							{
 								event.target.parentNode.removeChild(c);
 							}
-						}
+						}*/
+						var cross = event.currentTarget.parentNode.getElementById("ii");
+						//	for(var c of cross)
+						//{
+						//	if(c.parentNode===event.target.parentNode)
+						//	{
+							if(cross)
+								event.currentTarget.parentNode.removeChild(cross);
 
 						//}
 					});
