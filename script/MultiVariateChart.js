@@ -262,7 +262,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
  			 	var l1y1val = 0;
  			 	var l1y2val = (height*2)/3;
  				var l2x1val= width/3;
- 			 	var l2x2val= width;
+ 			 	var l2x2val= width-10;
  			 	var l2y1val= (height*2)/3;
  				var l2y2val = (height*2)/3;
  				if(height<width)
@@ -383,7 +383,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				var chartRectangle = document.createElementNS(NS,"rect");
 				chartRectangle.setAttributeNS(null,"x",l2x1val);
 				chartRectangle.setAttributeNS(null,"y",l1y1val);
-				chartRectangle.setAttributeNS(null,"width",l2x2val-l2x1val);
+				chartRectangle.setAttributeNS(null,"width",(l2x2val-l2x1val)+10);
 				chartRectangle.setAttributeNS(null,"height",(l1y2val-l1y1val));
 				//chartRectangle.setAttributeNS(null,"fill","#202020");
 				chartRectangle.setAttributeNS(null,"class","rect");
@@ -425,7 +425,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				}
 				//Drawing Data-plot anchors
 				var plotCircles =drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData);
-				console.log(plotCircles.length);
+				//console.log(plotCircles.length);
 				var prevX=0;
 				var prevY=0;
 				for(var c =0;c<plotCircles.length;c++)
@@ -437,7 +437,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					plotCircle.setAttributeNS(null, "fill", "green");
 					var toolTip = document.createElementNS(NS, "title"); 
                     toolTip.setAttributeNS(null, "class", "plotToolTip"); 
-                    toolTip.innerHTML ="Time: "+plotCircles[c].xValue +"<br/>Value: "+plotCircles[c].yValue; 
+                    toolTip.innerHTML =plotCircles[c].yValue; 
                     plotCircle.setAttributeNS(null,"class","plotDots");
                     plotCircle.appendChild(toolTip); 
 					svg.appendChild(plotCircle);
@@ -475,7 +475,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 				//event handler for mousemove event.
 				charts.addEventListener("mouseenter",function(event)
 					{
-						//@intializeCrossHeir -> custom event handler for creating crossheir in all other charts.
+						//@intializeCrossHeir -> custom event for creating crossheir in all other charts.
 						var initializeCrossHeir = new CustomEvent("InitializeCrossHeir",{detail:event.clientX});
 							for(var chart of listOfCharts)
 								{
@@ -484,15 +484,6 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 										chart.dispatchEvent(initializeCrossHeir);
 									}
 								}
-						var tool = document.getElementsByClassName("plotToolTip");
-						for(var t of tool)
-							{
-
-								if(event.target.parentNode === t.parentNode.parentNode)
-									{
-										console.log(t.innerHTML);
-									}
-							}
 						var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
 						var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
 						var NS="http://www.w3.org/2000/svg";
@@ -513,7 +504,14 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
 						toolTipRectangle.setAttributeNS(null,"id","rec");
 						toolTipRectangle.setAttributeNS(null,"class","rectHide");
+						var toolTipText = document.createElementNS(NS,"text");
+						toolTipText.setAttributeNS(null,"x",svgwidth/3);
+						toolTipText.setAttributeNS(null,"y",svgheight);
+						toolTipText.setAttributeNS(null,"id","text");
+						toolTipText.textContent="helo";
+						//toolTipText.setAttributeNS(null,"class","rectHide");
 						event.target.parentNode.appendChild(toolTipRectangle);
+						event.target.parentNode.appendChild(toolTipText);
 					
 					},false);
 
@@ -541,8 +539,16 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 						toolTipRectangle.setAttributeNS(null,"fill","#ffb3b3");
 						toolTipRectangle.setAttributeNS(null,"id","rec");
 						toolTipRectangle.setAttributeNS(null,"class","rectHide");
+						var toolTipText = document.createElementNS(NS,"text");
+						toolTipText.setAttributeNS(null,"x",svgwidth/3);
+						toolTipText.setAttributeNS(null,"y",svgheight);
+						toolTipText.setAttributeNS(null,"id","text");
+						toolTipText.textContent="hello";
+						//toolTipText.setAttributeNS(null,"class","rectHide");
+						
 						//charts.appendChild(toolTipRectangle);
 						event.target.parentNode.appendChild(toolTipRectangle);
+						event.target.parentNode.appendChild(toolTipText);
 					});
 				charts.addEventListener("mousemove",function(event)
 					{
@@ -554,26 +560,53 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 										chart.dispatchEvent(crossHeirMove);
 									}
 							}
+
 						var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
 						var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
-						var plotarr = new  Array();
+						/*var plotarr = new  Array();
 						for(var plot of plotCircles)
 							{
 								plotarr.push(Math.round(plot.x));
-							}
+							}*/
 						var ee = event.clientX;
-						var rec = document.getElementById("rec");
-						if(plotarr.indexOf(ee)!=-1)
+						
+						/*if(plotarr.indexOf(ee)!=-1)
 							{
 								//console.log("********"+ee-pointValue);
-								rec.setAttributeNS(null,"x",ee);
-								rec.setAttributeNS(null,"y",event.clientY);
-								rec.setAttributeNS(null,"fill","#ffb3b3");
-								rec.setAttributeNS(null,"class","rectShow");
-							}
-						else
+								
+							}*/
+						
+							var tool = event.currentTarget.parentNode.getElementsByClassName("plotToolTip");
+						for(var t of tool)
 							{
-								rec.setAttributeNS(null,"class","rectHide");
+
+								if(event.currentTarget.parentNode === t.parentNode.parentNode)
+									{
+										var rec = document.getElementById("rec");
+										var ttext = event.currentTarget.parentNode.getElementById("text");
+										if(ee-9=== Math.round(t.parentNode.getAttributeNS(null,"cx")))
+										{
+											
+											/*rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
+											rec.setAttributeNS(null,"fill","#ffb3b3");
+											rec.setAttributeNS(null,"class","rectShow");*/
+											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
+											//ttext.setAttributeNS(null,"fill","#ffb3b3");
+											//ttext.setAttributeNS(null,"class","rectShow");
+											ttext.textContent= t.innerHTML;
+											console.log(ee+"   "+t.innerHTML);
+											
+										}
+										else
+										{
+											//rec.setAttributeNS(null,"class","rectHide");
+											//ttext.setAttributeNS(null,"class","rectHide");
+										}
+
+										
+									}
 							}
 							var cross = document.getElementsByClassName("cross");
 						for(var c of cross)
@@ -592,26 +625,40 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 					
 					var ee = event.detail.mousex;
 					var yy = event.detail.mousey;
-					var plotarr = new  Array();
-					for(var plot of plotCircles)
-						{
-							plotarr.push(Math.round(plot.x));
-						}
+					
 					if(charts!=event.source)
 						{
 							var rec = document.getElementById("rec");
-							if(plotarr.indexOf(ee)!=-1)
-								{
-									//console.log("********"+ee-pointValue);
-									rec.setAttributeNS(null,"x",ee);
-									rec.setAttributeNS(null,"y",yy);
-									rec.setAttributeNS(null,"fill","#ffb3b3");
-									rec.setAttributeNS(null,"class","rectShow");
-								}
-							else
-								{
-									rec.setAttributeNS(null,"class","rectHide");
-								}
+							var ttext = event.currentTarget.parentNode.getElementById("text");
+							
+								var tool = event.currentTarget.parentNode.getElementsByClassName("plotToolTip");
+						for(var t of tool)
+							{
+
+								if(event.currentTarget.parentNode === t.parentNode.parentNode)
+									{
+										if(ee-9=== Math.round(t.parentNode.getAttributeNS(null,"cx")))
+										{
+											/*rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
+											rec.setAttributeNS(null,"fill","#ffb3b3");
+											rec.setAttributeNS(null,"class","rectShow");*/
+											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx"));
+											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
+											//ttext.setAttributeNS(null,"fill","#ffb3b3");
+											//ttext.setAttributeNS(null,"class","rectShow");
+											ttext.textContent= t.innerHTML;
+											console.log(ee+"   "+t.innerHTML);
+										}
+										else
+										{
+											//rec.setAttributeNS(null,"class","rectHide");
+											//ttext.setAttributeNS(null,"class","rectHide");
+										}
+										
+									}
+
+							}
 							var cross = document.getElementsByClassName("cross");
 							for(var c of cross)
 								{
@@ -628,14 +675,15 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 
 
 
-					var cross = document.getElementsByClassName("cross");
-							for(var c of cross)
-						{
-							if(c.parentNode===event.target.parentNode)
-							{
-								event.target.parentNode.removeChild(c);
-							}
-						}
+					var cross = event.target.parentNode.getElementById("ii");
+						//	for(var c of cross)
+						//{
+						//	if(c.parentNode===event.target.parentNode)
+						//	{
+							if(cross)
+								event.target.parentNode.removeChild(cross);
+							//}
+						//}
 					
 					//cross.setAttributeNS(null,"stroke","blue");
 					//var cross = document.getElementById("ii");
@@ -666,9 +714,9 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 							var cross = document.getElementsByClassName("cross");
 							for(var c of cross)
 						{
-							if(cross.parentNode===event.target.parentNode)
+							if(c.parentNode===event.target.parentNode)
 							{
-								event.target.parentNode.removeChild(cross);
+								event.target.parentNode.removeChild(c);
 							}
 						}
 
@@ -684,6 +732,7 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 	@xLabel Returing a SVG object.
 	--------------------------------------------------------------------------------------------------------
 */
+
 function createXLabel(index,tickCordinate,xLabels,xMapping,hfontsize)
 	{		
 		var NS="http://www.w3.org/2000/svg";	
@@ -701,8 +750,8 @@ function createXLabel(index,tickCordinate,xLabels,xMapping,hfontsize)
 	}
 		
 /*----------------------------------------------------------------------------------------------------------
-Function for calculating  Data-Plot Cordinates and producing internal data-structure
-with data plot coordinates and values.
+	Function for calculating  Data-Plot Cordinates and producing internal data-structure
+	with data plot coordinates and values.
 ------------------------------------------------------------------------------------------------------------
 */ 
 function drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData)
@@ -749,13 +798,13 @@ function drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData)
 	}
 
 /*-----------------------------------------------------------------------------------------------------------
-@valuNormalizer function is responsible for showing Y-Axis values with a particular unit accorrding to the defined range.
- @divLineValue local variable acts as parameter for possible number system
+	@valuNormalizer function is responsible for showing Y-Axis values with a particular unit accorrding to the defined range.
+	 @divLineValue local variable acts as parameter for possible number system
 --------------------------------------------------------------------------------------------------------------
 */
 function valueNormalizer(divLineValue)
 	{	
-		console.log(divLineValue);
+		//console.log(divLineValue);
 		var resValue;
 		if((Math.floor(divLineValue)===0))
 			{
@@ -785,17 +834,16 @@ function valueNormalizer(divLineValue)
 				return resValue;
 	}
 /*
-JSON file is hosted in a server that's why to access JSON file need to call it asynchronously.
----------------------------------------------------------------------------------------------
-loadJsonFile function is declared to access JSON file asynchronously.
+	JSON file is hosted in a server that's why to access JSON file need to call it asynchronously.
+	---------------------------------------------------------------------------------------------
+	loadJsonFile function is declared to access JSON file asynchronously.
 
----------------------------------------------------------------------------------------------
-parseJsonData function is declared to read the multi-variate data set in the given JSON file
-and convert it in internal data structure.
+	---------------------------------------------------------------------------------------------
+	parseJsonData function is declared to read the multi-variate data set in the given JSON file
+	and convert it in internal data structure.
 
 */
-	//@url parameter for passing JSON File address
-
+//@url parameter for passing JSON File address
 function loadJsonFile(url) 
 	{
 	
