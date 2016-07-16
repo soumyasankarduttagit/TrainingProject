@@ -698,7 +698,20 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 					
 				});
 					charts.addEventListener("DisapearCrossHeir", function(event){
-						//if(event.target!=event.source)
+						
+						var cross = event.currentTarget.parentNode.getElementById("ii");
+						var rec = event.currentTarget.parentNode.getElementById("rec");
+						var ttext = event.currentTarget.parentNode.getElementById("text");
+						//	for(var c of cross)
+						//{
+						//	if(c.parentNode===event.target.parentNode)
+						//	{
+							if(cross)
+								event.currentTarget.parentNode.removeChild(cross);
+							if(rec)
+							event.currentTarget.parentNode.removeChild(rec);
+							if(ttext)
+								event.currentTarget.parentNode.removeChild(ttext);//if(event.target!=event.source)
 						//{
 							/*var cross = document.getElementsByClassName("cross");
 							for(var c of cross)
@@ -708,13 +721,13 @@ function crossLineCustomEventHandler(listOfCharts,plotCircles)
 								event.target.parentNode.removeChild(c);
 							}
 						}*/
-						var cross = event.currentTarget.parentNode.getElementById("ii");
+						//var cross = event.currentTarget.parentNode.getElementById("ii");
 						//	for(var c of cross)
 						//{
 						//	if(c.parentNode===event.target.parentNode)
 						//	{
-							if(cross)
-								event.currentTarget.parentNode.removeChild(cross);
+							//if(cross)
+							//	event.currentTarget.parentNode.removeChild(cross);
 
 						//}
 					});
