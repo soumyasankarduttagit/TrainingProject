@@ -16,9 +16,9 @@ body {
   background: #ffffff;
   align-self: center;
   margin: auto;
-  padding-right: 1%;
+  padding-right: 0%;
   padding-top: 1%;
-  padding-left: 16%;
+  padding-left: 0%;
   padding-bottom:0%;
   border: 3px solid #ffffff;
   align-items: center;
@@ -41,7 +41,7 @@ body {
   margin: auto;
   padding-right: 1%;
   padding-top: 1%;
-  padding-left: 16%;
+  padding-left: 0%;
   padding-bottom:1%;
   border: 3px solid #ffffff;
   align-items: center;
@@ -132,14 +132,14 @@ body {
 {
   position: relative;
   background: #ffffff;
-  align-self: center;
+  align-self: left;
   margin: auto;
-  padding-right: 30%;
+  padding-right: 1%;
   padding-top: 0%;
  
   padding-bottom: 0%;
   border: 1px solid #ffffff;
-  align-items: center;
+  align-items: left;
 }
 .plotLines{
 	
@@ -159,12 +159,12 @@ body {
 {
     margin: auto;
     width: 100%;
-    padding-left: 10%;
+    padding-left: 0%;
     padding-top: 0%;
     padding-bottom: 0%;
-   align-self: center;
-    align-items: center;
-    text-align: center;
+   align-self: left;
+    align-items: left;
+    text-align: left;
 
 }
 .plotDots:hover { 
@@ -176,15 +176,23 @@ body {
   stroke-width: 1;
   stroke-dasharray: 5, 5;
  }
+
+ .crossHide
+ {
+  display:none;
+  opacity: 0;
+ }
  .rect
  {
   stroke:#ffffff;
   stroke-width: 0;
-  fill:#f5f5ef;
+  fill:#ffffff;
+  
+  opacity: 0;
  }
  .rectHide
  {
-  display:none;
+  
   opacity: 0;
  }
  .rectShow
