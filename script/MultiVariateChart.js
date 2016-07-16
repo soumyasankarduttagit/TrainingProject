@@ -27,7 +27,7 @@ function renderEngine(entireChartObject)
 			var subCaption = computedChartObject.chartobject.chartSubCption;
 			//Checking entered div height and width.
 			//Rendering graphical elements according to the number of chart created from internal data structure.
-			document.getElementById("caption").innerHTML=caption+"<br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"+subCaption;
+			document.getElementById("caption").innerHTML=caption+"<br/>&nbsp"+subCaption;
 
 			for(var i=0;i<numOfChart;i++)
 			{
@@ -568,8 +568,8 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					for(var c of cross)
 					{
 
-					c.setAttributeNS(null,"x1",ee);
-					c.setAttributeNS(null,"x2",ee);
+					c.setAttributeNS(null,"x1",ee-10);
+					c.setAttributeNS(null,"x2",ee-10);
 					//c.setAttributeNS(null,"y1",0);
 					//c.setAttributeNS(null,"y2",svgwidth/3);
 					}
@@ -617,17 +617,28 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					}});
 					charts.addEventListener("mouseleave",function(event)
 				{
+					var cross = document.getElementsByClassName("cross");
+							for(var c of cross)
+						{
+							if(c.parentNode===event.target.parentNode)
+							{
+								event.target.parentNode.removeChild(c);
+							}
+						}
 					
 					//cross.setAttributeNS(null,"stroke","blue");
-					var cross = document.getElementById("ii");
-							//for(var c of cross)
+					//var cross = document.getElementById("ii");
+						//	for(var c of cross)
 						//{
-						if(cross.parentNode===event.source)
-							{
-								cross.setAttributeNS(null,"class","crossHide");
-								event.target.parentNode.removeChild(cross);
-							}
-						////}
+						//if(c.parentNode===event.target.parentNode)
+						//	{
+							//	cross.setAttributeNS(null,"class","crossHide");
+						//	if(cross)
+						//	{
+						//		event.target.parentNode.removeChild(cross);
+						//	}
+						//	}
+						//}
 					var crossHeirDisappear = new CustomEvent("DisapearCrossHeir",{detail:event.clientX});
 					for(var chart of listOfCharts)
 					{
@@ -644,9 +655,9 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 							var cross = document.getElementsByClassName("cross");
 							for(var c of cross)
 						{
-							if(c.parentNode===event.target)
+							if(c.parentNode===event.target.parentNode)
 							{
-								event.target.parentNode.removeChild(c);
+								event.parentNode.removeChild(c);
 							}
 						}
 

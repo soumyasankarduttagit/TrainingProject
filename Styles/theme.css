@@ -16,7 +16,7 @@ body {
   background: #ffffff;
   align-self: center;
   margin: auto;
-  padding-right: 0%;
+  padding-right: 20%;
   padding-top: 1%;
   padding-left: 0%;
   padding-bottom:0%;
@@ -171,6 +171,12 @@ body {
  fill: #0174DF; 
  } 
  .cross
+ {
+  stroke: red;
+  stroke-width: 1;
+  stroke-dasharray: 5, 5;
+ }
+ .crossdiff
  {
   stroke: red;
   stroke-width: 1;
