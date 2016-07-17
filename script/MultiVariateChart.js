@@ -578,11 +578,12 @@ function crossLineCustomEventHandler(listOfCharts)
 										if(ee-9=== Math.round(t.parentNode.getAttributeNS(null,"cx")))
 										{
 											
-											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
+											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-40);
 											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy")-20);
+											rec.setAttributeNS(null,"width",((t.innerHTML.length)*10)+10);
 											rec.setAttributeNS(null,"fill","#ffb3b3");
 											rec.setAttributeNS(null,"class","rectShow");
-											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
+											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-40);
 											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
 											ttext.setAttributeNS(null,"class","toolTipShow");
 											ttext.textContent= t.innerHTML;
@@ -624,16 +625,17 @@ function crossLineCustomEventHandler(listOfCharts)
 									{
 										if(ee-9=== Math.round(t.parentNode.getAttributeNS(null,"cx")))
 										{
-											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
+											rec.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-40);
 											rec.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy")-20);
+											rec.setAttributeNS(null,"width",((t.innerHTML.length)*10)+10);
 											rec.setAttributeNS(null,"fill","#ffb3b3");
 											rec.setAttributeNS(null,"class","rectShowDiff");
-											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-95);
+											ttext.setAttributeNS(null,"x",t.parentNode.getAttributeNS(null,"cx")-40);
 											ttext.setAttributeNS(null,"y",t.parentNode.getAttributeNS(null,"cy"));
 											//ttext.setAttributeNS(null,"fill","#ffb3b3");
 											ttext.setAttributeNS(null,"class","toolTipShowDiff");
 											ttext.textContent= t.innerHTML;
-											console.log(ee+"   "+t.innerHTML);
+											//console.log(ee+"   "+t.innerHTML);
 										}
 										
 										
@@ -690,8 +692,10 @@ function crossLineCustomEventHandler(listOfCharts)
 							}
 						}
 							if(rec)
+								//rec.style.visibility="hidden";
 							event.currentTarget.parentNode.removeChild(rec);
 							if(ttext)
+								//ttext.style.visibility="hidden";
 								event.currentTarget.parentNode.removeChild(ttext);
 					});
 
