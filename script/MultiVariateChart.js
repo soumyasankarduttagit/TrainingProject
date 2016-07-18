@@ -499,7 +499,7 @@ function crossLineCustomEventHandler(listOfCharts)
 						cross.setAttributeNS(null,"y1",0);
 						cross.setAttributeNS(null,"y2",svgheight);
 						cross.setAttributeNS(null,"stroke","red");
-						cross.setAttributeNS(null,"class","crossdiff");
+						cross.setAttributeNS(null,"class","crossHide");
 						cross.setAttributeNS(null,"id","ii");
 						event.target.parentNode.appendChild(cross);
 						var toolTipRectangle = document.createElementNS(NS,"rect");
@@ -600,6 +600,7 @@ function crossLineCustomEventHandler(listOfCharts)
 
 								cross.setAttributeNS(null,"x1",ee-10);
 								cross.setAttributeNS(null,"x2",ee-10);
+								cross.setAttributeNS(null,"class","crossdiff");
 								
 						
 					
