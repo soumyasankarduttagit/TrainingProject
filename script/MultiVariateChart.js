@@ -65,6 +65,7 @@ function parseJsonData(json)
 	chartObject.chartCaption=json.dataCosmetics.caption;
 	chartObject.chartSubCption=json.dataCosmetics.subCaption;
 	chartObject.xaxisName= dataValueProperties[0];
+	chartObject.xAxisData= json.dataValues[chartObject.xaxisName].split(",");
 	chartObject.plot = new Array();
     //chartObject.chartHeight= json.dataCosmetics.height;
     // chartObject.chartWidth= json.dataCosmetics.width;
@@ -155,9 +156,9 @@ function parseJsonData(json)
 */
 function getXAxisTicks(chartObject,xAxisTick)
 	{
-	for(var i=0;i<chartObject.plot[0].data.length;i++)
+	for(var i=0;i<chartObject.xAxisData.length;i++)
 	{
-  		 xAxisTick.xAxisLabels.push(chartObject.plot[0].data[i].label);
+  		 xAxisTick.xAxisLabels.push(chartObject.xAxisData[i]);
    		xAxisTick.numOfTickValues++;
 	}
 	}
@@ -426,24 +427,12 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				}
 				//Drawing Data-plot anchors
 				var plotCircles =drawPlot(xCordArr,yCordarr,plotSliceCollection,plotData);
-				console.log(plotCircles.length);
+				//console.log(plotCircles.length);
 				var prevX=0;
 				var prevY=0;
 				for(var c =0;c<plotCircles.length;c++)
-				{
-					 
-                    
-					var plotCircle = document.createElementNS(NS,"circle");
-					plotCircle.setAttributeNS(null, "cx", plotCircles[c].x);
-					plotCircle.setAttributeNS(null, "cy", plotCircles[c].y);
-					plotCircle.setAttributeNS(null, "r",  width/100);
-					plotCircle.setAttributeNS(null, "fill", "green");
-					var toolTip = document.createElementNS(NS, "title"); 
-                    toolTip.setAttributeNS(null, "class", "plotToolTip"); 
-                    toolTip.innerHTML =plotCircles[c].yValue; 
-                    plotCircle.classList.add("plotDots");
-                    plotCircle.appendChild(toolTip); 
-					svg.appendChild(plotCircle);
+				{ 
+					
 					if((prevX!=0)&&(prevY!=0))
 					{
 						var linkLine = document.createElementNS(NS,"line");
@@ -456,9 +445,24 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 						linkLine.classList.add("plotLines");
 						svg.appendChild(linkLine);
 					}
+					
 					prevX=plotCircles[c].x;
 					prevY= plotCircles[c].y;
 					
+				}
+				for(var c =0;c<plotCircles.length;c++)
+				{ 
+					var plotCircle = document.createElementNS(NS,"circle");
+					plotCircle.setAttributeNS(null, "cx", plotCircles[c].x);
+					plotCircle.setAttributeNS(null, "cy", plotCircles[c].y);
+					plotCircle.setAttributeNS(null, "r",  width/100);
+					plotCircle.setAttributeNS(null, "fill", "green");
+					var toolTip = document.createElementNS(NS, "title"); 
+                    toolTip.setAttributeNS(null, "class", "plotToolTip"); 
+                    toolTip.innerHTML =plotCircles[c].yValue; 
+                    plotCircle.setAttributeNS(null,"class","plotDots");
+                    plotCircle.appendChild(toolTip);
+                    svg.appendChild(plotCircle);
 				}
 				div.appendChild(svg);
 				document.body.appendChild(div);
