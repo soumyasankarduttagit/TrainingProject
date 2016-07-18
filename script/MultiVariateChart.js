@@ -65,6 +65,7 @@ function parseJsonData(json)
 	chartObject.chartCaption=json.dataCosmetics.caption;
 	chartObject.chartSubCption=json.dataCosmetics.subCaption;
 	chartObject.xaxisName= dataValueProperties[0];
+	chartObject.xAxisData= json.dataValues[chartObject.xaxisName].split(",");
 	chartObject.plot = new Array();
     //chartObject.chartHeight= json.dataCosmetics.height;
     // chartObject.chartWidth= json.dataCosmetics.width;
@@ -155,9 +156,9 @@ function parseJsonData(json)
 */
 function getXAxisTicks(chartObject,xAxisTick)
 	{
-	for(var i=0;i<chartObject.plot[0].data.length;i++)
+	for(var i=0;i<chartObject.xAxisData.length;i++)
 	{
-  		 xAxisTick.xAxisLabels.push(chartObject.plot[0].data[i].label);
+  		 xAxisTick.xAxisLabels.push(chartObject.xAxisData[i]);
    		xAxisTick.numOfTickValues++;
 	}
 	}
