@@ -10,11 +10,10 @@ function renderEngine(entireChartObject)
 
 	var computedChartObject=entireChartObject;
 	//Calculating chart height.
-	var chartheight=400;
-	// entireChartObject.chartobject.chartHeight;
+	
+	var chartheight=entireChartObject.chartobject.chartHeight;
 	//Calculating chart width.
-	var chartwidth=800; 
-	//entireChartObject.chartobject.chartWidth;
+	var chartwidth=entireChartObject.chartobject.chartWidth;
 	//Calculating number of charts to be rendered according to internal data structure.
 	var numOfChart = computedChartObject.chartobject.plot.length;
 	// Getting Plot data from internal data structure.
@@ -67,8 +66,8 @@ function parseJsonData(json)
 	chartObject.xaxisName= dataValueProperties[0];
 	chartObject.xAxisData= json.dataValues[chartObject.xaxisName].split(",");
 	chartObject.plot = new Array();
-    //chartObject.chartHeight= json.dataCosmetics.height;
-    // chartObject.chartWidth= json.dataCosmetics.width;
+    chartObject.chartHeight= json.dataCosmetics.height;
+    chartObject.chartWidth= json.dataCosmetics.width;
 	for(var index=1;index<=numberOfCharts;index++)
 	{
 		var plotData = new Object();
@@ -259,25 +258,25 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				//variable declarations for X-Axis and Y-Axis.
 				var height =chartheight;
 				var width = chartwidth;
-				var l1x1val = width/3;
- 			 	var l1x2val = width/3;
+				var l1x1val = width/8;
+ 			 	var l1x2val = width/8;
  			 	var l1y1val = 0;
- 			 	var l1y2val = (height*2)/3;
- 				var l2x1val= width/3;
+ 			 	var l1y2val = (height*3)/4;
+ 				var l2x1val= width/8;
  			 	var l2x2val= width-10;
- 			 	var l2y1val= (height*2)/3;
- 				var l2y2val = (height*2)/3;
+ 			 	var l2y1val= (height*3)/4;
+ 				var l2y2val = (height*3)/4;
  				if(height<width)
  				{
- 			 		hfontsize = height/24;
+ 			 		hfontsize = height/32;
  			 	}
  			 	else if(height==width)
  			 	{
- 			 		hfontsize = height/24;
+ 			 		hfontsize = height/32;
  			 	}
  			 	else
  			 	{
- 			 		hfontsize=width/24;
+ 			 		hfontsize=width/32;
  			 	}
  			 	
 				var div = document.createElement("div");
@@ -327,12 +326,12 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 						svg.appendChild(text);
 					}
 				var text1 = document.createElementNS(NS,"text");
-				var w =width/10;
-				var h = (height)/3;
+				var w =width/50;
+				var h = (height)/4;
 				text1.setAttributeNS(null,"x",w);
 				text1.setAttributeNS(null,"y",h);
 				text1.setAttributeNS(null,"fill", "#000000");
-				text1.setAttributeNS(null,"transform","rotate(180 125 180)");
+				//text1.setAttributeNS(null,"transform","rotate(270 270,100)");
 				text1.style.fontSize=hfontsize;
 				text1.textContent = yTitle;
 				svg.appendChild(text1);
@@ -369,9 +368,9 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					svg.appendChild(divrect);
 					divln.classList.add("yAxisDivLine");
 					var yLabel = document.createElementNS(NS,"text");
-					yLabel.setAttributeNS(null,"x",width/4);
+					yLabel.setAttributeNS(null,"x",(width-(width*7)/8)/2.6);
 					yLabel.setAttributeNS(null,"y",l2y1val-(k*step));
-					yLabel.setAttributeNS(null,"fill", "#000000");
+					//yLabel.setAttributeNS(null,"fill", "#000000");
 					yLabel.style.fontSize=hfontsize;
 					yLabel.textContent = valueNormalizer(divLineValue);
 					yLabel.classList.add("yAxisLabels");
@@ -383,9 +382,9 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 
 				}
 				var chartRectangle = document.createElementNS(NS,"rect");
-				chartRectangle.setAttributeNS(null,"x",l2x1val);
+				chartRectangle.setAttributeNS(null,"x",l1x1val);
 				chartRectangle.setAttributeNS(null,"y",l1y1val);
-				chartRectangle.setAttributeNS(null,"width",(l2x2val-l2x1val)+10);
+				chartRectangle.setAttributeNS(null,"width",(l2x2val-l1x1val)+10);
 				chartRectangle.setAttributeNS(null,"height",(l1y2val-l1y1val));
 				//chartRectangle.setAttributeNS(null,"fill","#202020");
 				chartRectangle.setAttributeNS(null,"class","rect");
@@ -396,14 +395,14 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					var xTick =document.createElementNS(NS,"line");
 					xTick.setAttributeNS(null,"x1",l2x1val+(j*step));
 					xTick.setAttributeNS(null,"x2",l2x1val+(j*step));
-					xTick.setAttributeNS(null,"y1",(height*2)/3);
-					xTick.setAttributeNS(null,"y2",(height*7)/10);
+					xTick.setAttributeNS(null,"y1",(height*3)/4);
+					xTick.setAttributeNS(null,"y2",(height*307)/400);
 					xTick.setAttributeNS(null,"stroke","#202020");
-					xTick.setAttributeNS(null,"stroke-width",2);
+					xTick.setAttributeNS(null,"stroke-width",1);
 					xTick.classList.add("xAxisDivLine");
 					var tickCordinate = new Object();
 					tickCordinate.X= l2x1val+(j*step);
-					tickCordinate.Y= (height*7)/10;
+					tickCordinate.Y= (height*3)/4;
 					var xMapping = new Object();
 					xMapping.xCordinate;
 					xMapping.Value;
@@ -440,7 +439,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					 	linkLine.setAttributeNS(null,"x2",plotCircles[c].x);
 						linkLine.setAttributeNS(null,"y1",prevY);
 						linkLine.setAttributeNS(null,"y2",plotCircles[c].y);
-						linkLine.setAttributeNS(null,"stroke","green");
+						//linkLine.setAttributeNS(null,"stroke","green");
 						linkLine.setAttributeNS(null,"id","linkline");
 						linkLine.classList.add("plotLines");
 						svg.appendChild(linkLine);
@@ -456,7 +455,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					plotCircle.setAttributeNS(null, "cx", plotCircles[c].x);
 					plotCircle.setAttributeNS(null, "cy", plotCircles[c].y);
 					plotCircle.setAttributeNS(null, "r",  width/100);
-					plotCircle.setAttributeNS(null, "fill", "green");
+					//plotCircle.setAttributeNS(null, "fill", "green");
 					var toolTip = document.createElementNS(NS, "title"); 
                     toolTip.setAttributeNS(null, "class", "plotToolTip"); 
                     toolTip.innerHTML =plotCircles[c].yValue; 
@@ -491,7 +490,7 @@ function crossLineCustomEventHandler(listOfCharts)
 										chart.dispatchEvent(initializeCrossHeir);
 									}
 								}
-						var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
+						var svgheight = parseInt(event.target.getAttributeNS(null,"height"));
 						var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
 						var NS="http://www.w3.org/2000/svg";
 						var cross = document.createElementNS(NS,"line");
@@ -524,7 +523,7 @@ function crossLineCustomEventHandler(listOfCharts)
 				//custome event listner for mouseenter for different charts
 					charts.addEventListener("InitializeCrossHeir",function(event)
 					{
-						var svgheight = parseInt(event.target.getAttributeNS(null,"x"));
+						var svgheight = parseInt(event.target.getAttributeNS(null,"height"));
 						var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
 						var NS="http://www.w3.org/2000/svg";
 						var cross = document.createElementNS(NS,"line");
@@ -648,8 +647,8 @@ function crossLineCustomEventHandler(listOfCharts)
 							for(var c of cross)
 								{
 
-									c.setAttributeNS(null,"x1",ee-1);
-									c.setAttributeNS(null,"x2",ee-1);
+									c.setAttributeNS(null,"x1",ee-4);
+									c.setAttributeNS(null,"x2",ee-4);
 									
 								}
 					}});
@@ -683,8 +682,8 @@ function crossLineCustomEventHandler(listOfCharts)
 					charts.addEventListener("DisapearCrossHeir", function(event){
 						
 						var cross = document.getElementsByClassName("cross");
-						var rec = event.currentTarget.parentNode.getElementById("rec");
-						var ttext = event.currentTarget.parentNode.getElementById("text");
+						var rec = document.getElementsByClassName("rectShowDiff");
+						var ttext = document.getElementsByClassName("toolTipShowDiff");
 						for(var c of cross)
 					{
 						if(c.parentNode===event.target.parentNode)
@@ -693,12 +692,23 @@ function crossLineCustomEventHandler(listOfCharts)
 								event.target.parentNode.removeChild(c);
 							}
 						}
-							if(rec)
+						for(var r of rec)
+						{
+							if(r.parentNode===event.target.parentNode)
+							{
 								//rec.style.visibility="hidden";
-							event.currentTarget.parentNode.removeChild(rec);
-							if(ttext)
+							
+							event.currentTarget.parentNode.removeChild(r);
+						}
+						}
+						for(var t of ttext)
+						{
+							if(t.parentNode===event.target.parentNode)
+							{
 								//ttext.style.visibility="hidden";
 								event.currentTarget.parentNode.removeChild(ttext);
+							}
+						}
 					});
 
 				}
@@ -716,8 +726,8 @@ function createXLabel(index,tickCordinate,xLabels,xMapping,hfontsize)
 		var NS="http://www.w3.org/2000/svg";	
 		var xLabel = document.createElementNS(NS,"text");
 		xLabel.setAttributeNS(null,"x",tickCordinate.X);
-		xLabel.setAttributeNS(null,"y",tickCordinate.Y+10);
-		xLabel.setAttributeNS(null,"fill", "#000000");
+		xLabel.setAttributeNS(null,"y",tickCordinate.Y+15);
+		//xLabel.setAttributeNS(null,"fill", "#000000");
 		xLabel.style.fontSize=hfontsize;
 		xLabel.textContent = xLabels[index];
 		//xLabel.setAttribute("transform","rotate(2 "+tickCordinate.X+" "+tickCordinate.Y+10+")");
