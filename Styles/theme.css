@@ -16,7 +16,7 @@ body {
   background: #ffffff;
   align-self: center;
   margin: auto;
-  padding-right: 20%;
+  padding-right: 0%;
   padding-top: .5%;
   padding-left: 0%;
   padding-bottom:0%;
@@ -39,7 +39,7 @@ body {
   background: #ffffff;
   align-self: center;
   margin: auto;
-  padding-right: 20%;
+  padding-right: 0%;
   padding-top: .5%;
   padding-left: 0%;
   padding-bottom:.5%;
@@ -90,6 +90,17 @@ body {
   font-style: normal;
   font-weight: lighter;
     
+}
+.rectToolTip
+{
+  stroke:#0040FF;
+  fill:#0040FF;
+}
+.rectToolTip:hover
+{
+  fill:#8A0808;
+  stroke:#8A0808;
+
 }
 .yAxisTitle
 {

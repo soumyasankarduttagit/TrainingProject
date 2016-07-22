@@ -2,14 +2,20 @@
 	"dataCosmetics": {
 		"caption": "An Example Of Multi-Variate Control Chart",
 		"subCaption": "Time vs Regional power Consumption",
-		"height":"100",
-		"width":"300"	
+		"height":"300",
+		"width":"400",
+		"chartType":"line"	
 	},
 	"dataValues": {
-		"Time": ",Feb,Mar,Apr,May,Jun,Jul,Aug,Sept,Oct,Nov,Dec",
-		"Northern Region":",-34,-12.45,-2.45,5,23.99,456.89,786.98,12345,67,78,89",
-		"Eastern Region": ",19000000,45000000,81900907,3466473,5534324.43,3343,3434,3434,5667,7865,6754",
-		"Western Region": ",0.04,,,,,,,,,,.009",
-		"Southern Region":",,2.3,1132573457,457,540,34,4476876898,55,66,77,99"
+		"Time": "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sept,Oct,Nov,Dec",
+		"Northern Region":"30,-34,-12.45,-2.45,5,23.99,456.89,786.98,12345,67,78,89",
+		"Eastern Region": "2345,1900,4500,8190,3466,5538.43,3343,3434,3434,5667,7865,6754",
+		"Western Region": ".07,0.04,.09,.045,.032,.023,.087,.01,.05,.023,.08,.009",
+		"Southern Region":",120,23,113,457,540,34,447,55,66,77,99",
+		"NorhEast Region":"30,-34,-12.45,-2.45,5,23.99,456.89,786.98,12345,67,78,89",
+		"SouthEast Region": "2345,1900,4500,8190,3466,5538.43,3343,3434,3434,5667,7865,6754",
+		"SouthWest Region": ".07,0.04,.09,.045,.032,.023,.087,.01,.05,.023,.08,.009",
+		"NorthWest Region":",120,23,113,457,540,34,447,55,66,77,99",
+		"Central Region": "2345,1900,4500,8190,3466,5538.43,3343,3434,3434,5667,7865,6754"
 	}
 }
