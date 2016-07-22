@@ -734,8 +734,74 @@ function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,
 
 				//@crossLineCustomEventHandler -> function for propagating custom events and other events on chart.
 				//crossLineCustomEventHandler(document.getElementsByClassName("rect"));
+				columnHover(document.getElementsByClassName("rectToolTip"));
+			}
+function columnHover(listOfColumns)
+{
+
+for(var column of listOfColumns )
+{
+	column.addEventListener("mouseover",function(event){
+		var columnHoverlistener = new CustomEvent("initializeColumn",{detail:event.clientX});
+		var currentColumnx = event.currentTarget.getAttributeNS(null,"x");
+		var columnList = new Array();
+		for(var cc of listOfColumns)
+		{
+			if(cc.getAttributeNS(null,"x")===currentColumnx)
+			{
+
+				columnList.push(cc);
 				
 			}
+		}
+		for(var columnn of columnList)
+		{
+		columnn.dispatchEvent(columnHoverlistener);
+	}
+		//for(var ccc of columnList)
+		//{
+		//	console.log(ccc.getAttributeNS(null,"x"));
+
+		//}
+		//for(var col of cc)
+		//{
+		//	if(col!==event.source)
+		//	{
+				
+		//		col.dispatchEvent(columnHoverlistener);
+			
+		//	}
+		//}
+	//	console.log(event.clientX);
+		event.currentTarget.style.fill="#8A0808";
+		//console.log(event.currentTarget.getAttributeNS(null,"x"));
+
+	});
+	column.addEventListener("initializeColumn",function(event){
+		
+		this.style.fill="#8A0808";
+
+	});
+	column.addEventListener("mouseleave",function(event){
+		var columnleavelistener = new CustomEvent("leaveColumn",{detail:event.clientX});
+		for(var col of listOfColumns)
+		{
+			if(col!==event.target)
+			{
+				col.dispatchEvent(columnleavelistener);
+			}
+		}
+		event.currentTarget.style.fill="#0040FF";
+	});
+	column.addEventListener("leaveColumn",function(event){
+		
+		this.style.fill="#0040FF";
+
+	});
+}
+
+
+}
 /*
 	@crossLineCustomEventHandler() -> propagating and handling all events intiated within the chart.
 	@listOfCharts -> colection of SVG rectangle created.
