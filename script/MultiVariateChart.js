@@ -762,8 +762,17 @@ for(var column of listOfColumns )
 		event.currentTarget.style.fill="#8A0808";
 		var text = event.currentTarget.getElementsByClassName("plotToolTip");
 		//console.log(text[0].innerHTML);
+		var content=text[0].innerHTML;
 		coly =  event.currentTarget.getAttributeNS(null,"y")-10;
 		var rectWidth = event.currentTarget.getAttributeNS(null,"width");
+		var rectTool = document.createElementNS("http://www.w3.org/2000/svg","rect");
+		rectTool.setAttributeNS(null,"x",currentColumnx-5);
+		rectTool.setAttributeNS(null,"y",coly-15);
+		rectTool.setAttributeNS(null,"width",(content.length*10)+10);
+		rectTool.setAttributeNS(null,"height",22);
+		rectTool.setAttributeNS(null,"id","rectTool");
+		rectTool.setAttributeNS(null,"fill","#ffb3b3");
+		event.currentTarget.parentNode.appendChild(rectTool);
 		var coltext = document.createElementNS("http://www.w3.org/2000/svg","text");
 		coltext.setAttributeNS(null,"x",currentColumnx);
 		coltext.setAttributeNS(null,"y",coly);
@@ -777,10 +786,18 @@ for(var column of listOfColumns )
 		
 		this.style.fill="#8A0808";
 		var text = event.currentTarget.getElementsByClassName("plotToolTip");
-		console.log(text[0].innerHTML);
+		var content=text[0].innerHTML;
 		var currentColumnx = event.currentTarget.getAttributeNS(null,"x");
 		coly =  event.currentTarget.getAttributeNS(null,"y")-10;
 		var rectWidth = event.currentTarget.getAttributeNS(null,"width");
+		var rectTool = document.createElementNS("http://www.w3.org/2000/svg","rect");
+		rectTool.setAttributeNS(null,"x",currentColumnx-5);
+		rectTool.setAttributeNS(null,"y",coly-15);
+		rectTool.setAttributeNS(null,"width",(content.length*10)+10);
+		rectTool.setAttributeNS(null,"height",22);
+		rectTool.setAttributeNS(null,"class","rectTool");
+		rectTool.setAttributeNS(null,"fill","#ffb3b3");
+		event.currentTarget.parentNode.appendChild(rectTool);
 		var coltext = document.createElementNS("http://www.w3.org/2000/svg","text");
 		coltext.setAttributeNS(null,"x",currentColumnx);
 		coltext.setAttributeNS(null,"y",coly);
@@ -804,6 +821,8 @@ for(var column of listOfColumns )
 		var tt=document.getElementById("ctext");
 
 				event.target.parentNode.removeChild(tt);
+			var rt = document.getElementById("rectTool");
+			event.target.parentNode.removeChild(rt);
 	});
 	column.addEventListener("leaveColumn",function(event){
 		
@@ -814,6 +833,14 @@ for(var column of listOfColumns )
 		if(event.target.parentNode===v.parentNode)
 		{
 				event.target.parentNode.removeChild(v);
+		}
+		}
+		rectt = document.getElementsByClassName("rectTool");
+		for(var r of rectt)
+		{
+			if(event.target.parentNode===r.parentNode)
+		{
+				event.target.parentNode.removeChild(r);
 		}
 		}
 
