@@ -756,30 +756,38 @@ for(var column of listOfColumns )
 		}
 		for(var columnn of columnList)
 		{
-		columnn.dispatchEvent(columnHoverlistener);
-	}
-		//for(var ccc of columnList)
-		//{
-		//	console.log(ccc.getAttributeNS(null,"x"));
-
-		//}
-		//for(var col of cc)
-		//{
-		//	if(col!==event.source)
-		//	{
-				
-		//		col.dispatchEvent(columnHoverlistener);
-			
-		//	}
-		//}
-	//	console.log(event.clientX);
+			columnn.dispatchEvent(columnHoverlistener);
+		}
+		
 		event.currentTarget.style.fill="#8A0808";
-		//console.log(event.currentTarget.getAttributeNS(null,"x"));
+		var text = event.currentTarget.getElementsByClassName("plotToolTip");
+		//console.log(text[0].innerHTML);
+		coly =  event.currentTarget.getAttributeNS(null,"y")-10;
+		var rectWidth = event.currentTarget.getAttributeNS(null,"width");
+		var coltext = document.createElementNS("http://www.w3.org/2000/svg","text");
+		coltext.setAttributeNS(null,"x",currentColumnx);
+		coltext.setAttributeNS(null,"y",coly);
+		coltext.textContent= text[0].innerHTML;
+		coltext.style.fontSize="12";
+		coltext.setAttributeNS(null,"id","ctext");
+		event.currentTarget.parentNode.appendChild(coltext);
 
 	});
 	column.addEventListener("initializeColumn",function(event){
 		
 		this.style.fill="#8A0808";
+		var text = event.currentTarget.getElementsByClassName("plotToolTip");
+		console.log(text[0].innerHTML);
+		var currentColumnx = event.currentTarget.getAttributeNS(null,"x");
+		coly =  event.currentTarget.getAttributeNS(null,"y")-10;
+		var rectWidth = event.currentTarget.getAttributeNS(null,"width");
+		var coltext = document.createElementNS("http://www.w3.org/2000/svg","text");
+		coltext.setAttributeNS(null,"x",currentColumnx);
+		coltext.setAttributeNS(null,"y",coly);
+		coltext.style.fontSize="12";
+		coltext.textContent= text[0].innerHTML;
+		coltext.setAttributeNS(null,"class","colToolText");
+		event.currentTarget.parentNode.appendChild(coltext);
 
 	});
 	column.addEventListener("mouseleave",function(event){
@@ -789,13 +797,25 @@ for(var column of listOfColumns )
 			if(col!==event.target)
 			{
 				col.dispatchEvent(columnleavelistener);
+				
 			}
 		}
 		event.currentTarget.style.fill="#0040FF";
+		var tt=document.getElementById("ctext");
+
+				event.target.parentNode.removeChild(tt);
 	});
 	column.addEventListener("leaveColumn",function(event){
 		
 		this.style.fill="#0040FF";
+		colt = document.getElementsByClassName("colToolText");
+		for(var v of colt)
+		{
+		if(event.target.parentNode===v.parentNode)
+		{
+				event.target.parentNode.removeChild(v);
+		}
+		}
 
 	});
 }
