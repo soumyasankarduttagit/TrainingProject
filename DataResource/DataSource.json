@@ -4,19 +4,19 @@
 		"subCaption": "Time vs Regional power Consumption",
 		"height":"300",
 		"width":"300",
-		"chartType":"line",
-		"sortType":"min"
+		"chartType":"column",
+		"sortType":"avg"
 	},
 	"dataValues": {
 		"Time": "January,Feb,Mar,Apr,May,Jun,Jul,Aug,Sept,Oct,Nov,Dec",
 		"Northern Region":"30,-34,-12.45,-2.45,5,23.99,456.89,78.98,123,67,78,89",
 		"Eastern Region": "2345,1900,4500,8190,3466,5538.43,3343,3434,3434,5667,7865,6754",
 		"Western Region": ".07,0.04,.09,.045,.032,.023,.087,.01,.05,.023,.08,.009",
-		"Southern Region":",12,23,11,45,54,34,44,55,66,77,-23",
-		"Nort Region":"30,-34,-12.45,-2.45,5,23.99,45.89,78.98,123,67,78,89",
-		"Eas Region": "23,19,45,81,34,55.43,33,34,34,56,78,67",
-		"North Region":"30,-34,-12.45,-2.45,5,23.99,45.89,78.98,123,67,78,89",
-		"East Region": "23,19,45,81,34,55,33,34,34,56,78,67"
+		"Southern Region":",12,23,11,45,54,34,44,55,66,177,-23",
+		"Central Region":"30,-34,-12.45,-2.45,5,23.99,45.89,78.98,223,67,78,89",
+		"North Eastern Region": "23,19,45,81,34,255.43,33,34,34,56,78,67",
+		"South Western Region":"30,-34,-12.45,-2.45,5,23.99,45.89,78.98,123,67,78,89",
+		"Soth Eastern Region": "23,19,45,281,34,55,33,34,34,56,78,67"
 		
 		
 		

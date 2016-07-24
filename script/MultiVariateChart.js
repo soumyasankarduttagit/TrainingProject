@@ -1,11 +1,3 @@
-var chartPositionChecker = function(entireChartObject)
-{
-
-	
-
-	
-}
-
 
 /*--------------------------------------------------------------------------------------------
 	Defining function for rendering chart.
@@ -148,27 +140,25 @@ function parseJsonData(json)
     for(var index=1;index<=numberOfCharts;index++)
     {
     	var sum=0;
-     var yValues = new Object();
-    yValues.yTitle=dataValueProperties[index];
-    yValues.yData= json.dataValues[dataValueProperties[index]].split(",");
-    var ynumval = new Array();
-    for(var k of yValues.yData)
-    {
-    	if(k===""||k===null||typeof k=== undefined||typeof k===NaN)
+     	var yValues = new Object();
+    	yValues.yTitle=dataValueProperties[index];
+   		yValues.yData= json.dataValues[dataValueProperties[index]].split(",");
+    	var ynumval = new Array();
+   		for(var k of yValues.yData)
     	{
-    			continue;
-    	}
-    	var val = parseFloat(k);
-    	sum+=val;
-    	ynumval.push(val);
-
-
-    }
+    		if(k===""||k===null||typeof k=== undefined||typeof k===NaN)
+    		{
+    				continue;
+    		}
+    		var val = parseFloat(k);
+    		sum+=val;
+    		ynumval.push(val);
+   		}
    
-  	 yValues.maxVal =Math.max.apply(null,ynumval);
-  	 yValues.minVal= Math.min.apply(null,ynumval);
-  	 yValues.avgVal= sum/yValues.yData.length;
-     yAxisDataValues.push(yValues);
+  		yValues.maxVal =Math.max.apply(null,ynumval);
+  	 	yValues.minVal= Math.min.apply(null,ynumval);
+  	 	yValues.avgVal= sum/yValues.yData.length;
+     	yAxisDataValues.push(yValues);
     }
     function compareMax(a,b)
     {
@@ -177,7 +167,6 @@ function parseJsonData(json)
     	if(a.maxVal<b.maxVal)
     		return 1;
     	return 0;
-
     }
     function compareMin(c,d)
     {
@@ -186,7 +175,6 @@ function parseJsonData(json)
     	if(c.minVal<d.minVal)
     		return -1;
     	return 0;
-
     }
     function compareAvg(e,f)
     {
@@ -195,7 +183,6 @@ function parseJsonData(json)
     	if(e.avgVal<f.avgVal)
     		return 1;
     	return 0;
-
     }
     if(chartObject.sortType!=="none"||chartObject.sortType!==null||typeof chartObject.sortType!==undefined)
     {
@@ -211,8 +198,6 @@ function parseJsonData(json)
     	{
     		yAxisDataValues.sort(compareAvg);
     	}
-    
-    
 	}
 
  
@@ -495,7 +480,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				seriesRect.setAttributeNS(null,"y",0);
 				seriesRect.setAttributeNS(null,"width",width);
 				seriesRect.setAttributeNS(null,"height",height/6);
-				seriesRect.setAttributeNS(null,"fill","#A9E2F3");
+				seriesRect.setAttributeNS(null,"fill","#CEECF5");
 				childSvg.appendChild(seriesRect);
 				var text1 = document.createElementNS(NS,"text");
 				var w =width/3;
@@ -580,7 +565,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					xMapping.Value;
 					var xLabel = createXLabel(j,tickCordinate,xLabels,xMapping,hfontsize,width);
 					xCordArr.push(xMapping);
-					//svg.appendChild(xTick);
+					parentSvg.appendChild(xTick);
 					if(i>=lastRowFirstChartIndex-1)
 					{
 						parentSvg.appendChild(xLabel);
@@ -742,7 +727,7 @@ function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,
 				seriesRect.setAttributeNS(null,"y",0);
 				seriesRect.setAttributeNS(null,"width",width);
 				seriesRect.setAttributeNS(null,"height",height/6);
-				seriesRect.setAttributeNS(null,"fill","#A9E2F3");
+				seriesRect.setAttributeNS(null,"fill","#CEECF5");
 				childSvg.appendChild(seriesRect);
 				var text1 = document.createElementNS(NS,"text");
 				var w =width/3;
@@ -893,51 +878,51 @@ function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,
 				columnHover(document.getElementsByClassName("rectToolTip"));
 			}
 function columnHover(listOfColumns)
-{
+	{
 
-for(var column of listOfColumns )
-{
-	column.addEventListener("mouseover",function(event){
-		var columnHoverlistener = new CustomEvent("initializeColumn",{detail:event.clientX});
-		var currentColumnx = event.currentTarget.getAttributeNS(null,"x");
-		var columnList = new Array();
-		for(var cc of listOfColumns)
+		for(var column of listOfColumns )
 		{
-			if(cc.getAttributeNS(null,"x")===currentColumnx)
+			column.addEventListener("mouseover",function(event){
+			var columnHoverlistener = new CustomEvent("initializeColumn",{detail:event.clientX});
+			var currentColumnx = event.currentTarget.getAttributeNS(null,"x");
+			var columnList = new Array();
+			for(var cc of listOfColumns)
 			{
+				if(cc.getAttributeNS(null,"x")===currentColumnx)
+				{
 
-				columnList.push(cc);
+					columnList.push(cc);
 				
+				}
 			}
-		}
-		for(var columnn of columnList)
-		{
-			columnn.dispatchEvent(columnHoverlistener);
-		}
+			for(var columnn of columnList)
+			{
+				columnn.dispatchEvent(columnHoverlistener);
+			}
 		
-		event.currentTarget.style.fill="#8A0808";
-		var text = event.currentTarget.getElementsByClassName("plotToolTip");
-		//console.log(text[0].innerHTML);
-		var content=text[0].innerHTML;
-		coly =  event.currentTarget.getAttributeNS(null,"y")-10;
-		var rectWidth = event.currentTarget.getAttributeNS(null,"width");
-		var rectTool = document.createElementNS("http://www.w3.org/2000/svg","rect");
-		rectTool.setAttributeNS(null,"x",currentColumnx-5);
-		rectTool.setAttributeNS(null,"y",coly-15);
-		rectTool.setAttributeNS(null,"width",(content.length*10)+10);
-		rectTool.setAttributeNS(null,"height",22);
-		rectTool.setAttributeNS(null,"id","rectTool");
-		rectTool.setAttributeNS(null,"fill","#ffb3b3");
-		event.currentTarget.parentNode.appendChild(rectTool);
-		var coltext = document.createElementNS("http://www.w3.org/2000/svg","text");
-		coltext.setAttributeNS(null,"x",currentColumnx);
-		coltext.setAttributeNS(null,"y",coly);
-		coltext.textContent= text[0].innerHTML;
-		coltext.style.fontSize="12";
-		coltext.setAttributeNS(null,"id","ctext");
-		event.currentTarget.parentNode.appendChild(coltext);
+			event.currentTarget.style.fill="#8A0808";
+			var text = event.currentTarget.getElementsByClassName("plotToolTip");
+			//console.log(text[0].innerHTML);
+			var content=text[0].innerHTML;
+			coly =  event.currentTarget.getAttributeNS(null,"y")-10;
+			var rectWidth = event.currentTarget.getAttributeNS(null,"width");
+			var rectTool = document.createElementNS("http://www.w3.org/2000/svg","rect");
+			rectTool.setAttributeNS(null,"x",currentColumnx-5);
+			rectTool.setAttributeNS(null,"y",coly-15);
+			rectTool.setAttributeNS(null,"width",(content.length*10)+10);
+			rectTool.setAttributeNS(null,"height",22);
+			rectTool.setAttributeNS(null,"id","rectTool");
+			rectTool.setAttributeNS(null,"fill","#ffb3b3");
+			event.currentTarget.parentNode.appendChild(rectTool);
+			var coltext = document.createElementNS("http://www.w3.org/2000/svg","text");
+			coltext.setAttributeNS(null,"x",currentColumnx);
+			coltext.setAttributeNS(null,"y",coly);
+			coltext.textContent= text[0].innerHTML;
+			coltext.style.fontSize="12";
+			coltext.setAttributeNS(null,"id","ctext");
+			event.currentTarget.parentNode.appendChild(coltext);
 
-	});
+		});
 	column.addEventListener("initializeColumn",function(event){
 		
 		this.style.fill="#8A0808";
@@ -962,7 +947,7 @@ for(var column of listOfColumns )
 		coltext.setAttributeNS(null,"class","colToolText");
 		event.currentTarget.parentNode.appendChild(coltext);
 
-	});
+		});
 	column.addEventListener("mouseleave",function(event){
 		var columnleavelistener = new CustomEvent("leaveColumn",{detail:event.clientX});
 		for(var col of listOfColumns)
@@ -1001,9 +986,7 @@ for(var column of listOfColumns )
 		}
 
 	});
-}
-
-
+	}
 }
 /*
 	@crossLineCustomEventHandler() -> propagating and handling all events intiated within the chart.
@@ -1025,13 +1008,15 @@ function crossLineCustomEventHandler(listOfCharts)
 										chart.dispatchEvent(initializeCrossHeir);
 									}
 								}
-						var svgheight = parseInt(event.target.getAttributeNS(null,"height"));
-						var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
+								if(charts===event.target)
+								{
+									var svgheight =charts.getAttributeNS(null,"height");
+									var svgwidth = charts.getAttributeNS(null,"width");
 						var NS="http://www.w3.org/2000/svg";
 						var cross = document.createElementNS(NS,"line");
 						cross.setAttributeNS(null,"x1",svgwidth);
 						cross.setAttributeNS(null,"x2",svgwidth);
-						cross.setAttributeNS(null,"y1",0);
+						cross.setAttributeNS(null,"y1",svgwidth/8);
 						cross.setAttributeNS(null,"y2",svgheight);
 						cross.setAttributeNS(null,"stroke","red");
 						cross.setAttributeNS(null,"class","crossHide");
@@ -1053,6 +1038,7 @@ function crossLineCustomEventHandler(listOfCharts)
 						toolTipText.setAttributeNS(null,"class","tooTipHide");
 						event.target.parentNode.appendChild(toolTipRectangle);
 						event.target.parentNode.appendChild(toolTipText);
+					}
 					
 					},false);
 				//custome event listner for mouseenter for different charts
@@ -1062,9 +1048,9 @@ function crossLineCustomEventHandler(listOfCharts)
 						var svgwidth = parseInt(event.target.getAttributeNS(null,"y"));
 						var NS="http://www.w3.org/2000/svg";
 						var cross = document.createElementNS(NS,"line");
-						cross.setAttributeNS(null,"x1",svgwidth);
-						cross.setAttributeNS(null,"x2",svgwidth);
-						cross.setAttributeNS(null,"y1",0);
+						cross.setAttributeNS(null,"x1",svgwidth/9.5);
+						cross.setAttributeNS(null,"x2",svgwidth/9.5);
+						cross.setAttributeNS(null,"y1",svgwidth/8);
 						cross.setAttributeNS(null,"y2",svgheight);
 						cross.setAttributeNS(null,"stroke","red");
 						cross.setAttributeNS(null,"class","cross");
@@ -1261,7 +1247,7 @@ function createXLabel(index,tickCordinate,xLabels,xMapping,hfontsize,width)
 		var NS="http://www.w3.org/2000/svg";	
 		var xLabel = document.createElementNS(NS,"text");
 		xLabel.setAttributeNS(null,"x",(tickCordinate.X)-width/40);
-		xLabel.setAttributeNS(null,"y",tickCordinate.Y+10);
+		xLabel.setAttributeNS(null,"y",tickCordinate.Y+20);
 		//xLabel.setAttributeNS(null,"fill", "#000000");
 		xLabel.style.fontSize=hfontsize;
 		xLabel.textContent = xLabels[index].substring(0,3)+"...";
