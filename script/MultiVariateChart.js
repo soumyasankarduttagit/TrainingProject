@@ -143,12 +143,86 @@ function parseJsonData(json)
     chartObject.chartHeight= json.dataCosmetics.height;
     chartObject.chartWidth= json.dataCosmetics.width;
     chartObject.chartType= json.dataCosmetics.chartType;
+    chartObject.sortType= json.dataCosmetics.sortType;
+    var yAxisDataValues= new Array();
+    for(var index=1;index<=numberOfCharts;index++)
+    {
+    	var sum=0;
+     var yValues = new Object();
+    yValues.yTitle=dataValueProperties[index];
+    yValues.yData= json.dataValues[dataValueProperties[index]].split(",");
+    var ynumval = new Array();
+    for(var k of yValues.yData)
+    {
+    	if(k===""||k===null||typeof k=== undefined||typeof k===NaN)
+    	{
+    			continue;
+    	}
+    	var val = parseFloat(k);
+    	sum+=val;
+    	ynumval.push(val);
+
+
+    }
+   
+  	 yValues.maxVal =Math.max.apply(null,ynumval);
+  	 yValues.minVal= Math.min.apply(null,ynumval);
+  	 yValues.avgVal= sum/yValues.yData.length;
+     yAxisDataValues.push(yValues);
+    }
+    function compareMax(a,b)
+    {
+    	if(a.maxVal>=b.maxVal)
+    		return -1;
+    	if(a.maxVal<b.maxVal)
+    		return 1;
+    	return 0;
+
+    }
+    function compareMin(c,d)
+    {
+    	if(c.minVal>=d.minVal)
+    		return 1;
+    	if(c.minVal<d.minVal)
+    		return -1;
+    	return 0;
+
+    }
+    function compareAvg(e,f)
+    {
+    	if(e.avgVal>=f.avgVal)
+    		return -1;
+    	if(e.avgVal<f.avgVal)
+    		return 1;
+    	return 0;
+
+    }
+    if(chartObject.sortType!=="none"||chartObject.sortType!==null||typeof chartObject.sortType!==undefined)
+    {
+    	if(chartObject.sortType=="max")
+    	{
+    		yAxisDataValues.sort(compareMax);
+    	}
+    	else if(chartObject.sortType=="min")
+    	{
+    		yAxisDataValues.sort(compareMin);
+    	}
+    	else if(chartObject.sortType=="avg")
+    	{
+    		yAxisDataValues.sort(compareAvg);
+    	}
+    
+    
+	}
+
+ 
 	for(var index=1;index<=numberOfCharts;index++)
 	{
+		console.log();
 		var plotData = new Object();
 		var xAxisData = json.dataValues[chartObject.xaxisName].split(",");
-		var yAxisData = json.dataValues[dataValueProperties[index]].split(",");
-		plotData.plotyAxisTitle= dataValueProperties[index];
+		var yAxisData = yAxisDataValues[index-1].yData;
+		plotData.plotyAxisTitle= yAxisDataValues[index-1].yTitle;
 		plotData.data = new Array();
 		for(var interIndex=0; interIndex<xAxisData.length&&interIndex<yAxisData.length;interIndex++)
 		{

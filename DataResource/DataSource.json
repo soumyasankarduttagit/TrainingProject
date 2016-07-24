@@ -4,7 +4,8 @@
 		"subCaption": "Time vs Regional power Consumption",
 		"height":"300",
 		"width":"300",
-		"chartType":"column"
+		"chartType":"line",
+		"sortType":"min"
 	},
 	"dataValues": {
 		"Time": "January,Feb,Mar,Apr,May,Jun,Jul,Aug,Sept,Oct,Nov,Dec",
