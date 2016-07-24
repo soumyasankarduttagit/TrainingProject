@@ -42,7 +42,7 @@ body {
   padding-right: 0%;
   padding-top: .5%;
   padding-left: 0%;
-  padding-bottom:.5%;
+  padding-bottom:0%;
   border: 3px solid #ffffff;
   align-items: center;
   display: block;
@@ -56,7 +56,7 @@ body {
 .xAxisLabels
 {
      fill:#000000;
-    writing-mode: tb-rl;
+
     text-align: center;
     text-decoration: none;
     text-transform: capitalize;
@@ -96,12 +96,18 @@ body {
   stroke:#0040FF;
   fill:#0040FF;
 }
+.colIoolText
+{
 
+}
+.rectTool
+{
+  
+}
 .yAxisTitle
 {
    
      fill:#000000;
-    writing-mode: tb-rl;
     text-align: center;
     text-decoration: none;
     text-transform: capitalize;

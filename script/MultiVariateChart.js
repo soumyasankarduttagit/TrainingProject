@@ -1,3 +1,26 @@
+var chartPositionChecker = function(entireChartObject)
+{
+
+	var screenHight = document.getElementById("entireChart").offsetHeight;
+	var screenWidth = document.getElementById("entireChart").offsetWidth;
+	var multiChartWidth= entireChartObject.chartobject.chartWidth;
+	var multiChartHeight= entireChartObject.chartobject.chartHeight;
+	var numOfChartRowWise = Math.floor(screenWidth/multiChartWidth);
+	var numOfChartColumnWise = Math.floor(screenHight/multiChartHeight);
+	var numOfCharts = entireChartObject.chartobject.plot.length;
+	var evenOdd =true;
+	var divisionValue=numOfCharts/numOfChartRowWise;
+	if((divisionValue-Math.floor(divisionValue))!==0)
+	{
+		evenOdd=false;
+	} 
+	else
+		evenOdd=true;
+
+	
+}
+
+
 /*--------------------------------------------------------------------------------------------
 	Defining function for rendering chart.
 	This function is the starting point of Renderining visual elements.
@@ -7,7 +30,8 @@
 //	@entireChartObject is an input parameter of internal chart Object.
 function renderEngine(entireChartObject)
 	{
-
+		chartPositionChecker(entireChartObject);
+	//console.log(entireChartObject);
 	var computedChartObject=entireChartObject;
 	
 	//Getting caption value.
@@ -310,7 +334,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				var width = chartwidth;
 				var l1x1val = width/8;
  			 	var l1x2val = width/8;
- 			 	var l1y1val = 0;
+ 			 	var l1y1val = width/8;
  			 	var l1y2val = (height*3)/4;
  				var l2x1val= width/8;
  			 	var l2x2val= width-10;
@@ -337,6 +361,13 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				var plotSliceCollection = new Array();
 				//Declaring SVG namespace.
 				var NS="http://www.w3.org/2000/svg";
+				var parentSvg = document.createElementNS(NS,"svg");
+				parentSvg.setAttributeNS(null,"height",height);
+				parentSvg.setAttributeNS(null,"width",width);
+				var childSvg = document.createElementNS(NS,"svg");
+				childSvg.setAttributeNS(null,"height",height/8);
+				childSvg.setAttributeNS(null,"width",width-10);
+				//Creation of SVG object
 				//Creation of SVG object
 				var svg=document.createElementNS(NS,"svg");
  				 svg.setAttributeNS(null,"height",height+"px");
@@ -363,7 +394,7 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				line1.setAttributeNS(null,"class","yAxis");
 				svg.appendChild(line1);
 				//Rendering X-Axis and Y-Axis titles
-				if(i==numOfChart-1)
+			/*	if(i==numOfChart-1)
 					{
 				
 						var text = document.createElementNS(NS,"text");
@@ -374,17 +405,24 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 						text.textContent = xTitle;
 						text.setAttributeNS(null,"class","xAxisTitle");
 						svg.appendChild(text);
-					}
+					}*/
+				var seriesRect = document.createElementNS(NS,"rect");
+				seriesRect.setAttributeNS(null,"x",l1x1val);
+				seriesRect.setAttributeNS(null,"y",0);
+				seriesRect.setAttributeNS(null,"width",width);
+				seriesRect.setAttributeNS(null,"height",height/6);
+				seriesRect.setAttributeNS(null,"fill","#A9E2F3");
+				childSvg.appendChild(seriesRect);
 				var text1 = document.createElementNS(NS,"text");
-				var w =width/50;
-				var h = (height)/4;
+				var w =width/3;
+				var h = 25;
 				text1.setAttributeNS(null,"x",w);
 				text1.setAttributeNS(null,"y",h);
 				text1.setAttributeNS(null,"fill", "#000000");
 				//text1.setAttributeNS(null,"transform","rotate(270 270,100)");
 				text1.style.fontSize=hfontsize;
-				text1.textContent = yTitle;
-				svg.appendChild(text1);
+				text1.textContent = "Series-Name :"+yTitle;
+				childSvg.appendChild(text1);
 				text1.classList.add("yAxisTitle");
 				var divLineValues= yTickDetails.DivLineValues;
 				var niceMaxDivLineValues = yTickDetails.niceMaxExactDivValue;
@@ -456,13 +494,13 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					var xMapping = new Object();
 					xMapping.xCordinate;
 					xMapping.Value;
-					var xLabel = createXLabel(j,tickCordinate,xLabels,xMapping,hfontsize);
+					var xLabel = createXLabel(j,tickCordinate,xLabels,xMapping,hfontsize,width);
 					xCordArr.push(xMapping);
 					svg.appendChild(xTick);
-					if(i==numOfChart-1)
-					{
+					//if(i==numOfChart-1)
+					//{
 						svg.appendChild(xLabel);
-					}
+					//}
 				}
 				for(var t =0,u=1;t<yCordarr.length-1;t++,u++)
 				{
@@ -514,7 +552,10 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
                     svg.appendChild(plotCircle);
 				}
 				//div.appendChild(svg);
-				document.body.appendChild(svg);
+				//document.getElementById("entireChart").appendChild(svg);
+				parentSvg.appendChild(svg);
+				parentSvg.appendChild(childSvg);
+				document.body.appendChild(parentSvg);
 
 				//@crossLineCustomEventHandler -> function for propagating custom events and other events on chart.
 				crossLineCustomEventHandler(document.getElementsByClassName("rect"));
@@ -524,12 +565,14 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 //Function for rendering coulmn chart
 function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart)
 			{
+				//console.log(screen.height);
+				//console.log(screen.width);
 				//variable declarations for X-Axis and Y-Axis.
 				var height =chartheight;
 				var width = chartwidth;
 				var l1x1val = width/8;
  			 	var l1x2val = width/8;
- 			 	var l1y1val = 0;
+ 			 	var l1y1val = height/8;
  			 	var l1y2val = (height*3)/4;
  				var l2x1val= width/8;
  			 	var l2x2val= width-10;
@@ -556,10 +599,16 @@ function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,
 				var plotSliceCollection = new Array();
 				//Declaring SVG namespace.
 				var NS="http://www.w3.org/2000/svg";
+				var parentSvg = document.createElementNS(NS,"svg");
+				parentSvg.setAttributeNS(null,"height",height);
+				parentSvg.setAttributeNS(null,"width",width);
+				var childSvg = document.createElementNS(NS,"svg");
+				childSvg.setAttributeNS(null,"height",height/8);
+				childSvg.setAttributeNS(null,"width",width-10);
 				//Creation of SVG object
 				var svg=document.createElementNS(NS,"svg");
- 				 svg.setAttributeNS(null,"height",height+"px");
- 				 svg.setAttributeNS(null,"width",width+"px");
+ 				 svg.setAttributeNS(null,"height",height);
+ 				 svg.setAttributeNS(null,"width",width);
  				 svg.setAttributeNS(null,"class","chart");
  				 //creating Y-Axis
 				var line = document.createElementNS(NS,"line");
@@ -582,7 +631,7 @@ function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,
 				line1.setAttributeNS(null,"class","yAxis");
 				svg.appendChild(line1);
 				//Rendering X-Axis and Y-Axis titles
-				if(i==numOfChart-1)
+			/*	if(i==numOfChart-1)
 					{
 				
 						var text = document.createElementNS(NS,"text");
@@ -593,17 +642,24 @@ function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,
 						text.textContent = xTitle;
 						text.setAttributeNS(null,"class","xAxisTitle");
 						svg.appendChild(text);
-					}
+					}*/
+				var seriesRect = document.createElementNS(NS,"rect");
+				seriesRect.setAttributeNS(null,"x",l1x1val);
+				seriesRect.setAttributeNS(null,"y",0);
+				seriesRect.setAttributeNS(null,"width",width);
+				seriesRect.setAttributeNS(null,"height",height/6);
+				seriesRect.setAttributeNS(null,"fill","#A9E2F3");
+				childSvg.appendChild(seriesRect);
 				var text1 = document.createElementNS(NS,"text");
-				var w =width/50;
-				var h = (height)/4;
+				var w =width/3;
+				var h = 25;
 				text1.setAttributeNS(null,"x",w);
 				text1.setAttributeNS(null,"y",h);
 				text1.setAttributeNS(null,"fill", "#000000");
 				//text1.setAttributeNS(null,"transform","rotate(270 270,100)");
 				text1.style.fontSize=hfontsize;
-				text1.textContent = yTitle;
-				svg.appendChild(text1);
+				text1.textContent = "Series-Name :"+yTitle;
+				childSvg.appendChild(text1);
 				text1.classList.add("yAxisTitle");
 				var divLineValues= yTickDetails.DivLineValues;
 				var niceMaxDivLineValues = yTickDetails.niceMaxExactDivValue;
@@ -680,13 +736,13 @@ function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,
 					var xMapping = new Object();
 					xMapping.xCordinate;
 					xMapping.Value;
-					var xLabel = createColumnXLabel(j,tickCordinate,xLabels,xMapping,hfontsize);
+					var xLabel = createColumnXLabel(j,tickCordinate,xLabels,xMapping,hfontsize,width);
 					xCordArr.push(xMapping);
-					svg.appendChild(xTick);
-					if(i==numOfChart-1)
-					{
+					//svg.appendChild(xTick);
+					//if(i==numOfChart-1)
+					//{
 						svg.appendChild(xLabel);
-					}
+					//}
 				}
 				for(var t =0,u=1;t<yCordarr.length-1;t++,u++)
 				{
@@ -730,7 +786,12 @@ function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,
                     svg.appendChild(plotCircle);
 				}
 				//div.appendChild(svg);
-				document.body.appendChild(svg);
+				
+				
+				
+				parentSvg.appendChild(svg);
+				parentSvg.appendChild(childSvg);
+				document.body.appendChild(parentSvg);
 
 				//@crossLineCustomEventHandler -> function for propagating custom events and other events on chart.
 				//crossLineCustomEventHandler(document.getElementsByClassName("rect"));
@@ -1100,30 +1161,30 @@ function crossLineCustomEventHandler(listOfCharts)
 	--------------------------------------------------------------------------------------------------------
 */
 
-function createXLabel(index,tickCordinate,xLabels,xMapping,hfontsize)
+function createXLabel(index,tickCordinate,xLabels,xMapping,hfontsize,width)
 	{		
 		var NS="http://www.w3.org/2000/svg";	
 		var xLabel = document.createElementNS(NS,"text");
-		xLabel.setAttributeNS(null,"x",tickCordinate.X);
+		xLabel.setAttributeNS(null,"x",(tickCordinate.X)-width/40);
 		xLabel.setAttributeNS(null,"y",tickCordinate.Y+15);
 		//xLabel.setAttributeNS(null,"fill", "#000000");
 		xLabel.style.fontSize=hfontsize;
-		xLabel.textContent = xLabels[index];
+		xLabel.textContent = xLabels[index].substring(0,3)+"...";
 		//xLabel.setAttribute("transform","rotate(2 "+tickCordinate.X+" "+tickCordinate.Y+10+")");
 		xLabel.classList.add("xAxisLabels");
 		xMapping.Value=xLabels[index];
 		xMapping.xCordinate=tickCordinate.X;
 		return xLabel;
 	}
-		function createColumnXLabel(index,tickCordinate,xLabels,xMapping,hfontsize)
+		function createColumnXLabel(index,tickCordinate,xLabels,xMapping,hfontsize,width)
 	{		
 		var NS="http://www.w3.org/2000/svg";	
 		var xLabel = document.createElementNS(NS,"text");
-		xLabel.setAttributeNS(null,"x",tickCordinate.X);
+		xLabel.setAttributeNS(null,"x",tickCordinate.X-width/40);
 		xLabel.setAttributeNS(null,"y",tickCordinate.Y+15);
 		//xLabel.setAttributeNS(null,"fill", "#000000");
 		xLabel.style.fontSize=hfontsize;
-		xLabel.textContent = xLabels[index-1];
+		xLabel.textContent = xLabels[index-1].substring(0,3)+"...";
 		//xLabel.setAttribute("transform","rotate(2 "+tickCordinate.X+" "+tickCordinate.Y+10+")");
 		xLabel.classList.add("xAxisLabels");
 		xMapping.Value=xLabels[index-1];
