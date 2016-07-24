@@ -1,21 +1,7 @@
 var chartPositionChecker = function(entireChartObject)
 {
 
-	var screenHight = document.getElementById("entireChart").offsetHeight;
-	var screenWidth = document.getElementById("entireChart").offsetWidth;
-	var multiChartWidth= entireChartObject.chartobject.chartWidth;
-	var multiChartHeight= entireChartObject.chartobject.chartHeight;
-	var numOfChartRowWise = Math.floor(screenWidth/multiChartWidth);
-	var numOfChartColumnWise = Math.floor(screenHight/multiChartHeight);
-	var numOfCharts = entireChartObject.chartobject.plot.length;
-	var evenOdd =true;
-	var divisionValue=numOfCharts/numOfChartRowWise;
-	if((divisionValue-Math.floor(divisionValue))!==0)
-	{
-		evenOdd=false;
-	} 
-	else
-		evenOdd=true;
+	
 
 	
 }
@@ -30,7 +16,21 @@ var chartPositionChecker = function(entireChartObject)
 //	@entireChartObject is an input parameter of internal chart Object.
 function renderEngine(entireChartObject)
 	{
-		chartPositionChecker(entireChartObject);
+		var screenHight = document.getElementById("entireChart").offsetHeight;
+	var screenWidth = document.getElementById("entireChart").offsetWidth;
+	var multiChartWidth= entireChartObject.chartobject.chartWidth;
+	var multiChartHeight= entireChartObject.chartobject.chartHeight;
+	var numOfChartRowWise = Math.floor(screenWidth/multiChartWidth);
+	var numOfChartColumnWise = Math.floor(screenHight/multiChartHeight);
+	var numOfCharts = entireChartObject.chartobject.plot.length;
+	var evenOdd =true;
+	var divisionValue=numOfCharts/numOfChartRowWise;
+	if((divisionValue-Math.floor(divisionValue))!==0)
+	{
+		evenOdd=false;
+	} 
+	else
+		evenOdd=true;
 	//console.log(entireChartObject);
 	var computedChartObject=entireChartObject;
 	
@@ -46,14 +46,14 @@ function renderEngine(entireChartObject)
 	if(chartType==="line")
 	{
 	//Rendering graphical elements according to the number of chart created from internal data structure.
-	renderLine(computedChartObject);
+	renderLine(computedChartObject,evenOdd,numOfChartRowWise);
 	}
 	else if(chartType==="column")
 	{
-		renderColumn(computedChartObject);
+		renderColumn(computedChartObject,evenOdd,numOfChartRowWise);
 	}	
 	}
-function renderColumn(computedChartObject)
+function renderColumn(computedChartObject,evenOdd,numOfChartRowWise)
 {
 	//Calculating chart height.
 	
@@ -81,11 +81,11 @@ function renderColumn(computedChartObject)
 			var plotData= plot[i].data;
 			//calling function for rendering all Data-Visualization items
 			
-				svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart);
+				svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart,evenOdd,numOfChartRowWise);
 			
 		}		
 }
-function renderLine(computedChartObject)
+function renderLine(computedChartObject,evenOdd,numOfChartRowWise)
 {
 	//Calculating chart height.
 	
@@ -113,7 +113,7 @@ function renderLine(computedChartObject)
 			var plotData= plot[i].data;
 			//calling function for rendering all Data-Visualization items
 			
-				svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart);
+				svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart,evenOdd,numOfChartRowWise);
 			
 		}		
 }
@@ -133,6 +133,7 @@ function parseJsonData(json)
 	var chartObject = new Object();
 	//attributes defined for intermidiate object.
 	var dataValueProperties = Object.keys(json.dataValues);
+	
 	var numberOfCharts = dataValueProperties.length-1;
 	chartObject.chartCaption=json.dataCosmetics.caption;
 	chartObject.chartSubCption=json.dataCosmetics.subCaption;
@@ -327,8 +328,17 @@ var calculateNiceStepSize = function(range, noOfSteps)
 	@xTitle 	 -> Title of X-Axis.
 -----------------------------------------------------------------------------------------------
 */
-function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart)
+function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart,evenOdd,numOfChartRowWise)
 			{
+				var lastRowFirstChartIndex=0;
+				if(evenOdd)
+				{
+					lastRowFirstChartIndex= (numOfChart- numOfChartRowWise)+1;
+				}
+				else
+				{
+					lastRowFirstChartIndex= (numOfChartRowWise*Math.floor(numOfChart/numOfChartRowWise))+1;
+				}
 				//variable declarations for X-Axis and Y-Axis.
 				var height =chartheight;
 				var width = chartwidth;
@@ -370,8 +380,8 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				//Creation of SVG object
 				//Creation of SVG object
 				var svg=document.createElementNS(NS,"svg");
- 				 svg.setAttributeNS(null,"height",height+"px");
- 				 svg.setAttributeNS(null,"width",width+"px");
+ 				 svg.setAttributeNS(null,"height",(height*3)/4);
+ 				 svg.setAttributeNS(null,"width",width);
  				 svg.setAttributeNS(null,"class","chart");
  				 //creating Y-Axis
 				var line = document.createElementNS(NS,"line");
@@ -496,11 +506,11 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 					xMapping.Value;
 					var xLabel = createXLabel(j,tickCordinate,xLabels,xMapping,hfontsize,width);
 					xCordArr.push(xMapping);
-					svg.appendChild(xTick);
-					//if(i==numOfChart-1)
-					//{
-						svg.appendChild(xLabel);
-					//}
+					//svg.appendChild(xTick);
+					if(i>=lastRowFirstChartIndex-1)
+					{
+						parentSvg.appendChild(xLabel);
+					}
 				}
 				for(var t =0,u=1;t<yCordarr.length-1;t++,u++)
 				{
@@ -553,8 +563,9 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 				}
 				//div.appendChild(svg);
 				//document.getElementById("entireChart").appendChild(svg);
-				parentSvg.appendChild(svg);
+				
 				parentSvg.appendChild(childSvg);
+				parentSvg.appendChild(svg);
 				document.body.appendChild(parentSvg);
 
 				//@crossLineCustomEventHandler -> function for propagating custom events and other events on chart.
@@ -563,8 +574,17 @@ function svgCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle
 			}
 
 //Function for rendering coulmn chart
-function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart)
+function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,yTitle,xTitle,plotData,i,numOfChart,evenOdd,numOfChartRowWise)
 			{
+				var lastRowFirstChartIndex=0;
+				if(evenOdd)
+				{
+					lastRowFirstChartIndex= (numOfChart- numOfChartRowWise)+1;
+				}
+				else
+				{
+					lastRowFirstChartIndex= (numOfChartRowWise*Math.floor(numOfChart/numOfChartRowWise))+1;
+				}
 				//console.log(screen.height);
 				//console.log(screen.width);
 				//variable declarations for X-Axis and Y-Axis.
@@ -607,7 +627,7 @@ function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,
 				childSvg.setAttributeNS(null,"width",width-10);
 				//Creation of SVG object
 				var svg=document.createElementNS(NS,"svg");
- 				 svg.setAttributeNS(null,"height",height);
+ 				 svg.setAttributeNS(null,"height",(height*3)/4);
  				 svg.setAttributeNS(null,"width",width);
  				 svg.setAttributeNS(null,"class","chart");
  				 //creating Y-Axis
@@ -739,10 +759,11 @@ function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,
 					var xLabel = createColumnXLabel(j,tickCordinate,xLabels,xMapping,hfontsize,width);
 					xCordArr.push(xMapping);
 					//svg.appendChild(xTick);
-					//if(i==numOfChart-1)
-					//{
-						svg.appendChild(xLabel);
-					//}
+					if(i>=lastRowFirstChartIndex-1)
+					{
+
+						parentSvg.appendChild(xLabel);
+					}
 				}
 				for(var t =0,u=1;t<yCordarr.length-1;t++,u++)
 				{
@@ -788,9 +809,9 @@ function svgColumnCreate(chartheight,chartwidth,numOfXTick,xLabels,yTickDetails,
 				//div.appendChild(svg);
 				
 				
-				
-				parentSvg.appendChild(svg);
 				parentSvg.appendChild(childSvg);
+				parentSvg.appendChild(svg);
+				
 				document.body.appendChild(parentSvg);
 
 				//@crossLineCustomEventHandler -> function for propagating custom events and other events on chart.
@@ -1166,7 +1187,7 @@ function createXLabel(index,tickCordinate,xLabels,xMapping,hfontsize,width)
 		var NS="http://www.w3.org/2000/svg";	
 		var xLabel = document.createElementNS(NS,"text");
 		xLabel.setAttributeNS(null,"x",(tickCordinate.X)-width/40);
-		xLabel.setAttributeNS(null,"y",tickCordinate.Y+15);
+		xLabel.setAttributeNS(null,"y",tickCordinate.Y+10);
 		//xLabel.setAttributeNS(null,"fill", "#000000");
 		xLabel.style.fontSize=hfontsize;
 		xLabel.textContent = xLabels[index].substring(0,3)+"...";
@@ -1181,7 +1202,7 @@ function createXLabel(index,tickCordinate,xLabels,xMapping,hfontsize,width)
 		var NS="http://www.w3.org/2000/svg";	
 		var xLabel = document.createElementNS(NS,"text");
 		xLabel.setAttributeNS(null,"x",tickCordinate.X-width/40);
-		xLabel.setAttributeNS(null,"y",tickCordinate.Y+15);
+		xLabel.setAttributeNS(null,"y",tickCordinate.Y+10);
 		//xLabel.setAttributeNS(null,"fill", "#000000");
 		xLabel.style.fontSize=hfontsize;
 		xLabel.textContent = xLabels[index-1].substring(0,3)+"...";
