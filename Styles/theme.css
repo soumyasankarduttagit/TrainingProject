@@ -16,7 +16,7 @@ body {
   background: #ffffff;
   align-self: center;
   margin: auto;
-  padding-right: 20%;
+  padding-right: 0%;
   padding-top: .5%;
   padding-left: 0%;
   padding-bottom:0%;
@@ -39,10 +39,10 @@ body {
   background: #ffffff;
   align-self: center;
   margin: auto;
-  padding-right: 20%;
+  padding-right: 0%;
   padding-top: .5%;
   padding-left: 0%;
-  padding-bottom:.5%;
+  padding-bottom:0%;
   border: 3px solid #ffffff;
   align-items: center;
   display: block;
@@ -55,72 +55,85 @@ body {
 }
 .xAxisLabels
 {
-     fill:#298A08;
-    writing-mode: tb-rl;
+     fill:#000000;
+
     text-align: center;
     text-decoration: none;
     text-transform: capitalize;
    font-family: arial, sans-serif;
   font-style: normal;
   font-weight: lighter;
-    stroke: #424242;
+    
 }
 .yAxisLabels
 {
   
-     fill:#298A08;
+    fill:#000000;
     text-align: center;
     text-decoration: none;
     text-transform: capitalize;
    font-family:sans-serif;
   font-style: normal;
   font-weight: lighter;
-    stroke: #424242;
+    
 }
 .xAxisTitle
 {
    
    
-     fill:#298A08;
-
+    
+    fill:#000000;
     text-align: center;
     text-decoration: none;
     text-transform: capitalize;
     font-family:sans-serif;
   font-style: normal;
   font-weight: lighter;
-    stroke: #424242;
+    
+}
+.rectToolTip
+{
+  stroke:#0040FF;
+  fill:#0040FF;
+}
+.colIoolText
+{
+
+}
+.rectTool
+{
+  
 }
 .yAxisTitle
 {
    
-     fill:#298A08;
-    writing-mode: tb-rl;
+     fill:#000000;
     text-align: center;
     text-decoration: none;
     text-transform: capitalize;
     font-family: sans-serif;
   font-style: normal;
   font-weight: lighter;
-    stroke: #424242;
+    
 }
 .xAxis 
 {
-  stroke: #424242;
+  stroke: #000000;
   stroke-linecap:square;
   stroke-width:1;
 
 }
 .yAxis
 {
-  stroke: #424242;
+  stroke: #000000;
   stroke-linecap:square;
-  stroke-width :0;
+  stroke-width :1;
 
 }
 .xAxisDivLine
 {
-  stroke: #424242;
+  stroke-width :1;
+  stroke: #000000;
 
   stroke-linecap:square;
 
@@ -129,7 +142,7 @@ body {
 {
   stroke-width :1;
   
-  stroke: #424242;
+  stroke: #000000;
   stroke-linecap:square;
 }
 .chart 
@@ -157,7 +170,7 @@ body {
 {
 	stroke:#0174DF;
 	fill: #ffffff;
-  r:7;
+  r:5;
 }
 .chartContainer
 {
